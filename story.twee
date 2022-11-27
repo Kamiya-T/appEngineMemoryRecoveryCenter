@@ -1,0 +1,110 @@
+:: Story JavaScript [script]
+
+
+if (document.location.href.toLowerCase().includes("/temp/") || document.location.href.toLowerCase().includes("/private/") || hasOwnProperty.call(window, "storyFormat")) {
+	// Change this to the path where the HTML file is
+	// located if you want to run this from inside Twine.
+	setup.Path = "C:/Games/MyGame/";  // Running inside Twine application
+} else {
+	setup.Path = "client/";  // Running in a browser
+}
+setup.JSLoaded = false;
+var lockID = LoadScreen.lock();  // Lock loading screen
+importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(function() {
+    importScripts(setup.Path + "tg_client.js").then(function() {
+		setup.JSLoaded = true;
+		// Reload current passage since imported scripts can function now.
+		Engine.play(passage(), true);
+		LoadScreen.unlock(lockID);  // Unlock loading screen
+//*******************************BIND HERE**************************
+    TwineGang.bind("newRoom", (data)=>{
+      setup.RoomNum = data;
+    });
+    TwineGang.bind("newList", (data)=>{
+      setup.MemberList = data;
+    });
+//*******************************BIND  END**************************
+		}).catch(function(error) {
+		  alert(error);
+	  });
+  }
+);
+
+
+:: StoryTitle
+記憶回復センター
+
+:: Start
+あなたの氏名を入力してください. 
+<<textbox "$name" "" "Login">>
+<<button "次へ" "Login">><</button>>
+
+:: Login
+<<set $RoomID to 0>>
+サーバーへの接続方法を選択してください。
+進行方法
+1.GM、又は進行役の方が新規ルームを作製するをクリック
+2.新規ルームに接続されるので表示されている部屋番号をプレイヤー全員と共有
+3.他プレイヤーは部屋番号を用いて既存ルームへ接続
+<span id="RoomIdDisplay"></span>
+		<<button '新規ルームを作成する'>>
+    		<<script>>
+    			  TwineGang.createNewRoom(State.variables.name);
+    		<</script>>
+			<<timed 100ms>>
+				<<set $RoomID to setup.RoomNum>>
+			    <<script>>
+					Engine.play("ルームロビー")
+    			<</script>>
+			<</timed>>
+		<</button>>
+
+
+
+  部屋番号:<<numberbox "$seconds" 0>>
+	<<button '既存ルームに接続する'>>
+			<<script>>
+        		TwineGang.joinExistRoom(State.variables.seconds, setup.callback);
+			<</script>>
+		<</button>>
+    <span id="hidbtn" style="display: none">
+		<<button 'What did you do there back then?'>>
+        	<<run $('#hidbtn').css('display', 'initial')>>
+				<<replace '#cap_name'>>
+					Fished with me father. Ran up and down the cover all summer, and sat at the lighthouse watching storms all winter. Back then it was ... peaceful.
+				<</replace>>
+		<</button>>
+	</span>
+:: ルームロビー
+  部屋番号：<<print $RoomID>>
+  <ul id="memberlist" class="sample1"></ul>
+    <<script>>
+    $(document).one(':passagedisplay', function (ev) {
+        for (const member of setup.MemberList) {
+            const li = document.createElement('li');
+            li.textContent = member;
+            document.getElementById('memberlist').appendChild(li);
+        }
+    });
+    <</script>>
+    <<timed 5s>><<script>>
+					  const li = document.createElement('li');
+            li.textContent = "権太権太楼";
+            document.getElementById('memberlist').appendChild(li);
+    <</script>><</timed>>
+  参加者全員のログインが確認できましたら、次に進んでください.
+  <<button "次へ" "管理官の質問">><</button>>
+
+:: 管理官の質問
+うぇーい。
+
+:: Next3
+4th passage
+[[Next4]]
+
+:: StoryData
+{
+"ifid": "623A713C-4D15-437C-8CA1-23EF109ED1A1",
+"format": "SugarCube",
+"format-version": "2.36.1"
+}
