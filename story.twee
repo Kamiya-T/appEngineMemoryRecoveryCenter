@@ -13,16 +13,21 @@ var lockID = LoadScreen.lock();  // Lock loading screen
 importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(function() {
     importScripts(setup.Path + "tg_client.js").then(function() {
 		setup.JSLoaded = true;
+		setup.memberUpdate = false;
 		// Reload current passage since imported scripts can function now.
 		Engine.play(passage(), true);
 		LoadScreen.unlock(lockID);  // Unlock loading screen
 //*******************************BIND HERE**************************
-    TwineGang.bind("newRoom", (data)=>{
+    TwineGang.bind("roomInfo", (data)=>{
       setup.RoomNum = data;
     });
     TwineGang.bind("newList", (data)=>{
       setup.MemberList = data;
     });
+	TwineGang.bind("newMember", (data)=>{
+		setup.MemberList.push(data);
+		setup.memberUpdate = true;
+	});
 //*******************************BIND  END**************************
 		}).catch(function(error) {
 		  alert(error);
@@ -64,34 +69,42 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
   部屋番号:<<numberbox "$seconds" 0>>
 	<<button '既存ルームに接続する'>>
 			<<script>>
-        		TwineGang.joinExistRoom(State.variables.seconds, setup.callback);
+        		TwineGang.joinExistRoom(State.variables.seconds, State.variables.name, setup.callback);
 			<</script>>
+			<<timed 100ms>>
+				<<set $RoomID to setup.RoomNum>>
+			    <<script>>
+					Engine.play("ルームロビー")
+    			<</script>>
+			<</timed>>
 		<</button>>
-    <span id="hidbtn" style="display: none">
-		<<button 'What did you do there back then?'>>
-        	<<run $('#hidbtn').css('display', 'initial')>>
-				<<replace '#cap_name'>>
-					Fished with me father. Ran up and down the cover all summer, and sat at the lighthouse watching storms all winter. Back then it was ... peaceful.
-				<</replace>>
-		<</button>>
-	</span>
+
 :: ルームロビー
   部屋番号：<<print $RoomID>>
-  <ul id="memberlist" class="sample1"></ul>
+  <ul id="memberlist"></ul>
     <<script>>
     $(document).one(':passagedisplay', function (ev) {
-        for (const member of setup.MemberList) {
-            const li = document.createElement('li');
+        for (let member of setup.MemberList) {
+            let li = document.createElement('li');
             li.textContent = member;
             document.getElementById('memberlist').appendChild(li);
         }
     });
     <</script>>
-    <<timed 5s>><<script>>
-					  const li = document.createElement('li');
-            li.textContent = "権太権太楼";
-            document.getElementById('memberlist').appendChild(li);
-    <</script>><</timed>>
+	<<silently>><<repeat 1s>><<script>>
+		if(setup.memberUpdate){
+			setup.memberUpdate = false;
+			let element = document.getElementById('memberlist');
+			while(element.firstChild){
+				element.removeChild(element.firstChild);
+			}
+           	for (let member of setup.MemberList) {
+           		let li = document.createElement('li');
+           		li.textContent = member;
+           		document.getElementById('memberlist').appendChild(li);
+        	}
+        }
+	<</script>><</repeat>><</silently>>
   参加者全員のログインが確認できましたら、次に進んでください.
   <<button "次へ" "管理官の質問">><</button>>
 

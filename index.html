@@ -212,16 +212,21 @@ var lockID = LoadScreen.lock();  // Lock loading screen
 importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(function() {
     importScripts(setup.Path + "tg_client.js").then(function() {
 		setup.JSLoaded = true;
+		setup.memberUpdate = false;
 		// Reload current passage since imported scripts can function now.
 		Engine.play(passage(), true);
 		LoadScreen.unlock(lockID);  // Unlock loading screen
 //*******************************BIND HERE**************************
-    TwineGang.bind("newRoom", (data)=>{
+    TwineGang.bind("roomInfo", (data)=>{
       setup.RoomNum = data;
     });
     TwineGang.bind("newList", (data)=>{
       setup.MemberList = data;
     });
+	TwineGang.bind("newMember", (data)=>{
+		setup.MemberList.push(data);
+		setup.memberUpdate = true;
+	});
 //*******************************BIND  END**************************
 		}).catch(function(error) {
 		  alert(error);
@@ -253,33 +258,39 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
   部屋番号:&lt;&lt;numberbox &quot;$seconds&quot; 0&gt;&gt;
 	&lt;&lt;button &#39;既存ルームに接続する&#39;&gt;&gt;
 			&lt;&lt;script&gt;&gt;
-        		TwineGang.joinExistRoom(State.variables.seconds, setup.callback);
+        		TwineGang.joinExistRoom(State.variables.seconds, State.variables.name, setup.callback);
 			&lt;&lt;/script&gt;&gt;
-		&lt;&lt;/button&gt;&gt;
-    &lt;span id=&quot;hidbtn&quot; style=&quot;display: none&quot;&gt;
-		&lt;&lt;button &#39;What did you do there back then?&#39;&gt;&gt;
-        	&lt;&lt;run $(&#39;#hidbtn&#39;).css(&#39;display&#39;, &#39;initial&#39;)&gt;&gt;
-				&lt;&lt;replace &#39;#cap_name&#39;&gt;&gt;
-					Fished with me father. Ran up and down the cover all summer, and sat at the lighthouse watching storms all winter. Back then it was ... peaceful.
-				&lt;&lt;/replace&gt;&gt;
-		&lt;&lt;/button&gt;&gt;
-	&lt;/span&gt;</tw-passagedata><tw-passagedata pid="3" name="ルームロビー" tags="" position="350,100" size="100,100">部屋番号：&lt;&lt;print $RoomID&gt;&gt;
-  &lt;ul id=&quot;memberlist&quot; class=&quot;sample1&quot;&gt;&lt;/ul&gt;
+			&lt;&lt;timed 100ms&gt;&gt;
+				&lt;&lt;set $RoomID to setup.RoomNum&gt;&gt;
+			    &lt;&lt;script&gt;&gt;
+					Engine.play(&quot;ルームロビー&quot;)
+    			&lt;&lt;/script&gt;&gt;
+			&lt;&lt;/timed&gt;&gt;
+		&lt;&lt;/button&gt;&gt;</tw-passagedata><tw-passagedata pid="3" name="ルームロビー" tags="" position="350,100" size="100,100">部屋番号：&lt;&lt;print $RoomID&gt;&gt;
+  &lt;ul id=&quot;memberlist&quot;&gt;&lt;/ul&gt;
     &lt;&lt;script&gt;&gt;
     $(document).one(&#39;:passagedisplay&#39;, function (ev) {
-        for (const member of setup.MemberList) {
-            const li = document.createElement(&#39;li&#39;);
+        for (let member of setup.MemberList) {
+            let li = document.createElement(&#39;li&#39;);
             li.textContent = member;
             document.getElementById(&#39;memberlist&#39;).appendChild(li);
         }
     });
     &lt;&lt;/script&gt;&gt;
-    &lt;&lt;timed 5s&gt;&gt;&lt;&lt;script&gt;&gt;
-					  const li = document.createElement(&#39;li&#39;);
-            li.textContent = &quot;権太権太楼&quot;;
-            document.getElementById(&#39;memberlist&#39;).appendChild(li);
-    &lt;&lt;/script&gt;&gt;&lt;&lt;/timed&gt;&gt;
-
+	&lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
+		if(setup.memberUpdate){
+			setup.memberUpdate = false;
+			let element = document.getElementById(&#39;memberlist&#39;);
+			while(element.firstChild){
+				element.removeChild(element.firstChild);
+			}
+           	for (let member of setup.MemberList) {
+           		let li = document.createElement(&#39;li&#39;);
+           		li.textContent = member;
+           		document.getElementById(&#39;memberlist&#39;).appendChild(li);
+        	}
+        }
+	&lt;&lt;/script&gt;&gt;&lt;&lt;/repeat&gt;&gt;&lt;&lt;/silently&gt;&gt;
   参加者全員のログインが確認できましたら、次に進んでください.
   &lt;&lt;button &quot;次へ&quot; &quot;管理官の質問&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;</tw-passagedata><tw-passagedata pid="4" name="管理官の質問" tags="" position="475,100" size="100,100">うぇーい。</tw-passagedata><tw-passagedata pid="5" name="Next3" tags="" position="600,100" size="100,100">4th passage
 [[Next4]]</tw-passagedata></tw-storydata>

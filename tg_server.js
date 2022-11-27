@@ -23,10 +23,10 @@ io.on('connection', (socket) => {
     console.log('イベント発生、createRoomNameを受信しました.');
     roomName = createRoomName();
     joinRoom(socket, roomName, userName);
-    socket.emit("newRoomInfo", roomName);
+    socket.emit("roomInfo", roomName);
   })
 
-  socket.on('joinExistRoom', function(room, callback) {
+  socket.on('joinExistRoom', function(room, name, callback) {
     console.log('接続要求を確認、クライアントの部屋入室を試みます.');
     callback = callback || function(){};
     // New room has to exist.
@@ -35,8 +35,9 @@ io.on('connection', (socket) => {
       callback(false);
       return;
     }
-    switchRooms(socket, roomName, room);
+    switchRooms(socket, roomName, room, name);
     roomName = room;
+    socket.emit("roomInfo", roomName);
     callback(true);
   });
 
@@ -75,14 +76,14 @@ function createRoomName() {
   return Math.floor(Math.random() * 9999);
 }
 
-function switchRooms(socket, oldRoom, newRoom) {
+function switchRooms(socket, oldRoom, newRoom, userName) {
   console.log('部屋を移動します.');
   if (!(oldRoom in rooms)) {
     console.log('元々の部屋は存在しませんでした、');
-    joinRoom(socket, newRoom);
+    joinRoom(socket, newRoom, userName);
   }else{
     leaveRoom(socket, oldRoom);
-    joinRoom(socket, newRoom);
+    joinRoom(socket, newRoom, userName);
   }
 }
 
@@ -104,17 +105,19 @@ function joinRoom(socket, roomName, userName) {
     console.log('ClientとしてJoinしました.');
     // Join as client
     socket.join(roomName);
+    socket.emit('newList', rooms[roomName]);
     rooms[roomName].push(userName);
     socket.isServer = false;
+    console.log('自分の名前をルーム内に送信します');
+    io.in(roomName).emit('newMember', userName);
   } else {
     console.log('ServerとしてJoinしました.');
     // Join as server
     socket.join(roomName);
     rooms[roomName] = [userName];
+    socket.emit('newList', rooms[roomName]);
     socket.isServer = true;
   }
-  console.log('newListをルーム内に送信します');
-  io.in(roomName).emit('newList', rooms[roomName]);
 }
 
 var port = process.env.PORT || 8080;
