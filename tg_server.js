@@ -117,7 +117,7 @@ function joinRoom(socket, roomName, userName) {
   io.in(roomName).emit('newList', rooms[roomName]);
 }
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 8080;
 console.log('Start Listening');
 server.listen(port);
 
