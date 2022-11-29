@@ -17,7 +17,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		setup.passageGoNumber = Array(10);
 		setup.passageGoNumber.fill(0)
 		setup.memberNumber = 0;
-		setup.answerNumber = 0;
+		setup.correctAnswer = 0;
+		setup.wrongAnswer = 0;
 		// Reload current passage since imported scripts can function now.
 		Engine.play(passage(), true);
 		LoadScreen.unlock(lockID);  // Unlock loading screen
@@ -34,6 +35,14 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	});
 	TwineGang.bind("userClickButton", (id)=>{
 		setup.passageGoNumber[id]++;
+	});
+	TwineGang.bind("otherAnswer", (id)=>{
+		if(id == 0){
+			setup.correctAnswer++;
+		}
+		else{
+			setup.wrongAnswer++;
+		}
 	});
 //*******************************BIND  END**************************
 	}).catch(function(error) {
@@ -128,12 +137,13 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		<<replace '#passageGoNumber'>>\
 			2. 被験者全員の準備が出来次第、検査官との面談を実施する。
 			<<print setup.passageGoNumber[0]>> / <<print setup.memberNumber>>
-		<</replace>>
+		<</replace>>\
 	<</repeat>><</silently>>
 	<span id="message">1. 被験者全員のログインを確認する。</span>
 	<span id="passageGoNumber">\
 	2. 被験者全員の準備が出来次第、検査官との面談を実施する。
-	<<print setup.passageGoNumber[0]>> / <<print setup.memberNumber>></span>
+	<<print setup.passageGoNumber[0]>> / <<print setup.memberNumber>>
+	</span>\
 	<span id="hidbtn" style="display: initial">\
 		  <<button "次へ">>
 		  	<<script>>
@@ -177,6 +187,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 <<button "回答" "質問フェーズ">><</button>>
 </div>
 </div>
+
 :: 質問フェーズ
 <div class = "text" id = "center">\
 <div class="clock">\
@@ -190,49 +201,82 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		countdown.start();
 	});
 <</script>>
-<span id="question">\
-<font size="5">\
-
-『あなたにとってその『死んだフリをしている』男……
-　死体と呼んでいるその人は何者ですか？』</font>
-</span>\
-<span id="hidans" style="display: initial">\
-<<textarea "$answer" "">>
-</span>\
-<<timed 185s>>
+<<silently>><<repeat 1s>>
 	<<script>>
-	$('#hidans').css('display', 'none');
-	TwineGang.sendAnswer(State.variables.answer, 1);
-	setup.answerNumber++;
-	<</script>>
-<</timed>>
-
-<<silently>><<repeat 100ms>><<script>>
-	if(setup.passageGoNumber[1] == setup.memberNumber){
+	if(setup.correctAnswer + setup.wrongAnswer == setup.memberNumber){
 		Engine.play("エンディング判定");
 	}
 	<</script>>
-	<<replace 'question'>>\
-		全員の回答を集計しています。お待ちください。
-		<<print setup.passageGoNumber[1]>> / <<print setup.memberNumber>>
+	<<replace "#waiter">>
+		<<print setup.correctAnswer + setup.wrongAnswer>> / <<print setup.memberNumber>>
 	<</replace>>
-<</repeat>><</silently>>
-<<button "回答する" "エンディング分岐">>
+	<</repeat>><</silently>>
+
+<font size="5">\
+『あなたにとってその『死んだフリをしている』男……
+　死体と呼んでいるその人は何者ですか？』</font>
+
+回答を集計しています。お待ちください。
+<span id="waiter">\
+<<print setup.correctAnswer + setup.wrongAnswer>> / <<print setup.memberNumber>>
+</span>\
+<span id="hidans" style="display: initial">\
+<<textarea "$answer" "">>
+
+<<button "回答する">>
 	<<script>>
 		$('#hidans').css('display', 'none');
 		TwineGang.sendAnswer(State.variables.answer, 1);
-		setup.answerNumber++;
+		if(State.variables.answer == ""){
+			setup.correctAnswer++;
+		}else{
+			setup.wrongAnswer++;
+		}
 	<</script>>
 <</button>>
-:: エンディング分岐
-[[END A]]
-[[END B]]
-[[END C]]
-[[END B-1]]
-[[END B-2]]
-[[END B-3]]
-[[END D]]
-[[END E]]
+</span>\
+<<timed 185s>>
+	<<script>>
+		$('#hidans').css('display', 'none');
+		TwineGang.sendAnswer(State.variables.answer, 1);
+		if(State.variables.answer == ""){
+			setup.correctAnswer++;
+		}else{
+			setup.wrongAnswer++;
+		}
+	<</script>>
+<</timed>>
+
+:: エンディング判定
+<div class = "text" id = "center">\
+<<if setup.wrongAnswer gt 0>>
+	[[END A]]
+<<else>>
+	[[通気口から脱出している人がいるならこちら|END B]]
+
+	[[いない場合はこちら|END C]]
+<</if>>
+</div>
+:: END A
+<div class = "text" id = "center">\
+<a href="https://drive.google.com/uc?id=1Q-CS3-w2OQLiiWKEO4dv1PF5tJUrDV41" target="_blank">ENDING A</a>
+</div>
+:: END B
+<div class = "text" id = "center">\
+<a href="https://drive.google.com/uc?id=1zQ4GzArjYOApMpnlXvQJAjKLXNVabZiy" target="_blank">ENDING B</a>
+
+脱出したのは誰ですか？
+<a href="report.pdf" target="_blank">ENDING B-1</a>
+<a href="report.pdf" target="_blank">ENDING A</a>
+<a href="report.pdf" target="_blank">ENDING A</a>
+</div>
+:: END C
+<div class = "text" id = "center">\
+<a href="https://drive.google.com/uc?id=13wGZ-uaF-S4cox03t7h597wZuCj3tifL" target="_blank">ENDING C</a>
+
+ENDING C を読み終わったら追加ENDを選択してください。
+<a href="https://drive.google.com/uc?id=15Juh74UF3ij4zj4SkwLE529V_E8usvLg" target="_blank">ED:D</a>
+<a href="https://drive.google.com/file/d/1wNwBNRcgnyICkkzo8-TTKVv7GpHMaS0m/view?usp=share_link" target="_blank">ED:E</a>
 </div>
 
 :: StoryData

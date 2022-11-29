@@ -56,6 +56,16 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('sendAnswer', (answer, id) =>{
+    if(answer == ""){
+      socket.broadcast.to(roomName).emit('otherAnswer', 0);
+    }
+    else{
+      socket.broadcast.to(roomName).emit('otherAnswer', 1);
+    }
+    console.log("回答を受けました：　" + answer);
+  });
+
 
 
   socket.on('disconnect', function() {

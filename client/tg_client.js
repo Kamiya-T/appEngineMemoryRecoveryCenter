@@ -43,6 +43,9 @@
       console.log('arrive: ' + id);
     });
     
+    socket.on('otherAnswer', function(id) {
+      self.trigger("otherAnswer", id);
+    });
     this._socket = socket;
     console.log("End of TGClient function");
   };
