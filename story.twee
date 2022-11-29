@@ -138,7 +138,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		  	<<script>>
 				$('#hidbtn').css('display', 'none');
 				TwineGang.clickButton(0);
-				setup.passageGoNumber[0]
+				setup.passageGoNumber[0]++;
 			<</script>>
 		  <</button>>
 	</span>\
