@@ -1,4 +1,5 @@
 var express = require('express');
+const { emit } = require('process');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
@@ -64,6 +65,11 @@ io.on('connection', (socket) => {
     }else{
       console.log("切断しましたが、部屋は移動しません.");
     }
+  });
+
+  socket.on('clickButton', function(id) {
+    console.log('ユーザのボタン押下を検知しました。');
+    socket.to(roomName).emit('userClickButton', id);
   });
   //********************BIND END*************************/
 });

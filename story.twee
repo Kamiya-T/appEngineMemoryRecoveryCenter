@@ -1,6 +1,6 @@
 :: Story JavaScript [script]
 
-
+UIBar.destroy()
 if (document.location.href.toLowerCase().includes("/temp/") || document.location.href.toLowerCase().includes("/private/") || hasOwnProperty.call(window, "storyFormat")) {
 	// Change this to the path where the HTML file is
 	// located if you want to run this from inside Twine.
@@ -14,24 +14,31 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
     importScripts(setup.Path + "tg_client.js").then(function() {
 		setup.JSLoaded = true;
 		setup.memberUpdate = false;
+		setup.passageGoNumber = Array(10);
+		setup.passageGoNumber.fill(0)
+		setup.memberNumber = 0;
+		setup.answerNumber = 0;
 		// Reload current passage since imported scripts can function now.
 		Engine.play(passage(), true);
 		LoadScreen.unlock(lockID);  // Unlock loading screen
 //*******************************BIND HERE**************************
     TwineGang.bind("roomInfo", (data)=>{
-      setup.RoomNum = data;
+      	setup.RoomNum = data;
     });
     TwineGang.bind("newList", (data)=>{
-      setup.MemberList = data;
+      	setup.MemberList = data;
     });
 	TwineGang.bind("newMember", (data)=>{
 		setup.MemberList.push(data);
 		setup.memberUpdate = true;
 	});
+	TwineGang.bind("userClickButton", (id)=>{
+		setup.passageGoNumber[id]++;
+	});
 //*******************************BIND  END**************************
-		}).catch(function(error) {
-		  alert(error);
-	  });
+	}).catch(function(error) {
+		alert(error);
+	});
   }
 );
 
@@ -39,18 +46,21 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 :: StoryTitle
 記憶回復センター
 
-:: Start
-あなたの氏名を入力してください. 
+:: Start [mv]
+<div class = "text" id = "center">
+<font size="5">被験者は氏名を入力してください。</font>
 <<textbox "$name" "" "Login">>
+<div class="btn-group">
 <<button "次へ" "Login">><</button>>
-
+</div>\
+</div>\
 :: Login
+<div class = "text" id = "center">
 <<set $RoomID to 0>>
-サーバーへの接続方法を選択してください。
-進行方法
-1.GM、又は進行役の方が新規ルームを作製するをクリック
-2.新規ルームに接続されるので表示されている部屋番号をプレイヤー全員と共有
-3.他プレイヤーは部屋番号を用いて既存ルームへ接続
+進行マニュアル
+1.GM、又は進行役が新規ルームを作成する。
+2.画面に表示される部屋番号をプレイヤーと共有。
+3.他プレイヤーは部屋番号を用いて既存ルームに接続
 <span id="RoomIdDisplay"></span>
 		<<button '新規ルームを作成する'>>
     		<<script>>
@@ -66,7 +76,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 
 
-  部屋番号:<<numberbox "$seconds" 0>>
+  部屋番号⇒<<numberbox "$seconds" 0>>
+
 	<<button '既存ルームに接続する'>>
 			<<script>>
         		TwineGang.joinExistRoom(State.variables.seconds, State.variables.name, setup.callback);
@@ -78,13 +89,16 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
     			<</script>>
 			<</timed>>
 		<</button>>
-
+</div>
 :: ルームロビー
-  部屋番号：<<print $RoomID>>
-  <ul id="memberlist"></ul>
+<div class = "text">
+<font size="7">	部屋番号：<<print $RoomID>></font>
+  	<ul id="memberlist"></ul>
     <<script>>
     $(document).one(':passagedisplay', function (ev) {
+		setup.memberNumber = 0;
         for (let member of setup.MemberList) {
+			setup.memberNumber++;
             let li = document.createElement('li');
             li.textContent = member;
             document.getElementById('memberlist').appendChild(li);
@@ -94,26 +108,123 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	<<silently>><<repeat 1s>><<script>>
 		if(setup.memberUpdate){
 			setup.memberUpdate = false;
+			setup.memberNumber = 0;
 			let element = document.getElementById('memberlist');
 			while(element.firstChild){
 				element.removeChild(element.firstChild);
 			}
            	for (let member of setup.MemberList) {
+				setup.memberNumber++;
            		let li = document.createElement('li');
            		li.textContent = member;
            		document.getElementById('memberlist').appendChild(li);
         	}
         }
-	<</script>><</repeat>><</silently>>
-  参加者全員のログインが確認できましたら、次に進んでください.
-  <<button "次へ" "管理官の質問">><</button>>
+		if(setup.passageGoNumber[0] == setup.memberNumber){
+			Engine.play("検査官の質問")
+		}
+		<</script>>
+		<<replace '#passageGoNumber'>>\
+			2. 被験者全員の準備が出来次第、検査官との面談を実施する。
+			<<print setup.passageGoNumber[0]>> / <<print setup.memberNumber>>
+		<</replace>>
+	<</repeat>><</silently>>
+	<span id="message">1. 被験者全員のログインを確認する。</span>
+	<span id="passageGoNumber">\
+	2. 被験者全員の準備が出来次第、検査官との面談を実施する。
+	<<print setup.passageGoNumber[0]>> / <<print setup.memberNumber>></span>
+	<span id="hidbtn" style="display: initial">\
+		  <<button "次へ">>
+		  	<<script>>
+				$('#hidbtn').css('display', 'none');
+				TwineGang.clickButton(0);
+				setup.passageGoNumber[0]
+			<</script>>
+		  <</button>>
+	</span>\
+</div>
 
-:: 管理官の質問
-うぇーい。
+:: 検査官の質問
+<<script>>
+	$(document).one(":typingcomplete", function (ev) {
+		  setTimeout(function(){
+			Engine.play("質問フェーズ");
+  		},10000);
+	});
+<</script>>
+<div class = "text">
+<<type 40ms none>>
+個室に戻り、ドアを閉める。
+ドアの閉まる音が、やけに重く響いた。
 
-:: Next3
-4th passage
-[[Next4]]
+検査官がモニター越しにこちらを見ている。
+
+「………………」
+「さて、心の準備は出来ましたか」
+「では、お聞きしますね」
+
+『あなたにとってその『死んだフリをしている』男……
+　死体と呼んでいるその人は何者ですか？』
+どくん。
+<font size="4">どくん。</font>
+<font size="7">どくん。
+鼓動が大きくなる。
+
+検査官の質問に対する答えを3分以内に回答すること。</font>
+<</type>>
+
+<<button "回答" "質問フェーズ">><</button>>
+</div>
+:: 質問フェーズ
+<div class = "text" id = "center">
+<div class="clock">
+	<p class="clock-time" id="time">00:00.00</p>
+</div>
+<<script>>
+	$(document).one(':passagedisplay', function (ev) {
+		var span = document.getElementById('time');
+		var countdown = new Countdown(span, 181);
+		countdown.init();
+		countdown.start();
+	});
+<</script>>
+<span id="question">\
+<font size="5">
+『あなたにとってその『死んだフリをしている』男……
+　死体と呼んでいるその人は何者ですか？』</font>
+</span>\
+<span id="hidans" style="display: initial">\
+<<textarea "$answer" "">>
+</span>\
+<<timed 185s>>
+	<<script>>
+	TwineGang.sendAnswer(State.variables.answer, 1);
+	setup.answerNumber++;
+	<</script>>
+<</timed>>
+
+<<silently>><<repeat 1s>><<script>>
+	if(setup.passageGoNumber[1] == setup.memberNumber){
+		Engine.play("エンディング判定");
+	}
+	$('#hidans').css('display', 'none');
+	<</script>>
+	<<replace 'question'>>\
+		全員の回答を集計しています。お待ちください。
+		<<print setup.passageGoNumber[1]>> / <<print setup.memberNumber>>
+	<</replace>>
+<</repeat>><</silently>>
+<<button "回答する" "エンディング分岐">><</button>>
+:: エンディング分岐
+[[END A]]
+[[END B]]
+[[END C]]
+[[END B-1]]
+[[END B-2]]
+[[END B-3]]
+[[END D]]
+[[END E]]
+</div>
 
 :: StoryData
 {
@@ -121,3 +232,35 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 "format": "SugarCube",
 "format-version": "2.36.1"
 }
+
+:: PassageFooter [nobr]
+<<if !tags().includes("bbar")>>
+<div id="bottombar">
+<div id="bbblock">
+<div id="bbtext" align="left">
+<span id="restart" class="inline">
+<<button '<span class="sc-icon sc-power" style="display: inline-block;"></span> やり直す'>>
+	<<script>>
+		Dialog.setup("初めからやり直す");
+		Dialog.wiki('本当に初めからやり直しますか？
+		<<button "はい">><<run Engine.restart()>><</button>>
+		<<run Dialog.open()>>');
+	<</script>>
+<</button>>
+</span>
+<span id="backbtn" class="inline">
+<<button '<span class="sc-icon sc-backward" style="display: inline-block;"></span> 一つ戻る'>>
+<<run Engine.backward()>>
+<</button>>
+</span>
+
+<<script>>
+$(document).one(":passagedisplay", function (event) {
+	if (State.length < 2) {
+		$("#backbtn button").prop("disabled", true);
+	}
+});
+
+<</script>>
+</div></div></div>
+<</if>>

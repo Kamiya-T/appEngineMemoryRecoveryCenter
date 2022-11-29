@@ -1,102 +1,253 @@
 @charset "utf8";
-
-/*-------------------------
- * STEP2
- *-------------------------*/
-#inputmyname{
-  display:none;
-}
-#txt-myname{
-  width: 300px;
-  font-size: 14pt;
-  padding: 4px;
-}
-#frm-myname button{
-  width: 80px;
-  height: 30px;
-  font-size: 12pt;
-}
-
-/*-------------------------
- * STEP3
- *-------------------------*/
-#chat{
-  display:none;
-}
-#chat-main{
-  display:flex;
-}
-#msglist{
-  width: 500px;
-  height: 300px;
-  overflow-y: scroll;
-  list-style-type:none;
-  border: 1px solid gray;
-  padding: 5px;
-}
-#myname{
-  font-weight: bold;
-}
-#msg{
-  width: 500px;
-  font-size: 14pt;
-  padding: 4px;
-}
-#frm-post button{
-  width: 80px;
-  height: 30px;
-  font-size: 12pt;
-}
-
-.msg-me{
-  color:blue;
-}
-.msg-master{
-  color: red;
-}
-.name{
-  font-weight:bold;
-}
-
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 ul.sample1{
-    font: 14px/1.6 'arial narrow', sans-serif;
-    list-style: none;
-    padding: 0.5em 0.7em;
-    border: solid 2px #5c9ee7;
-    border-radius: 5px;
-  }
-  ul.sample1 li{
-    position: relative;
-    color: #5c9ee7;
-    margin-bottom:5px;
-    padding-left: 30px;
-    line-height: 30px;
-    font-size: 15px;
-    font-weight: bold;
-    border-bottom: 1px dashed #5c9ee7;
-  }
-  ul.sample1 li:last-child{
-    border:none;
-    margin: 0;
-  }
-  ul.sample1 li:before{
-    font-family: FontAwesome;
-    content: "\f054";
-    position: absolute;
-    left: 5px;
-    font-size: 1.2em;
-    -webkit-transition: all 0.8s ease-in-out;
-    transition: all 0.8s ease-in-out;
-    background-position: bottom;
-  }
-  ul.sample1 li:hover:before{
-    -webkit-transform:rotateY(-360deg);
-    transform:rotateY(-360deg);
-    color: red;
-  }
-  
-#frm-quit button{
-  width: 100px;
-  height: 30px;
-  font-size: 12pt;
+font: 14px/1.6 'arial narrow', sans-serif;
+list-style: none;
+padding: 0.5em 0.7em;
+border: solid 2px #5c9ee7;
+border-radius: 5px;
 }
+ul.sample1 li{
+position: relative;
+color: #5c9ee7;
+margin-bottom:5px;
+padding-left: 30px;
+line-height: 30px;
+font-size: 15px;
+font-weight: bold;
+border-bottom: 1px dashed #5c9ee7;
+}
+ul.sample1 li:last-child{
+border:none;
+margin: 0;
+}
+ul.sample1 li:before{
+font-family: FontAwesome;
+content: "\f054";
+position: absolute;
+left: 5px;
+font-size: 1.2em;
+-webkit-transition: all 0.8s ease-in-out;
+transition: all 0.8s ease-in-out;
+background-position: bottom;
+}
+ul.sample1 li:hover:before{
+-webkit-transform:rotateY(-360deg);
+transform:rotateY(-360deg);
+color: red;
+}
+/* 時計の共通スタイル */
+.clock {
+  font-family: 'Share Tech Mono', monospace;
+  color: #000; /* 文字の色 */
+  text-shadow: 0 0 20px #0aafe6; /* 文字を発光させる */
+  line-height: 1.2; /* 文字の高さ */
+  text-align: center; /* 文字を中央に寄せる */
+}
+/* 日付のスタイル */
+.clock-date {
+  font-size: 25px;
+}
+
+/* 時間のスタイル */
+.clock-time {
+  font-size: 100px;
+}
+
+/* 文字サイズ調整 */
+@media screen and (max-width: 500px) {
+  .clock-date {
+    font-size: 5vw;
+  }
+  .clock-time {
+    font-size: 20vw;
+  }
+}
+/* テキスト入力 */
+input:not(:disabled):focus, input:not(:disabled):hover, select:not(:disabled):focus, select:not(:disabled):hover, textarea:not(:disabled):focus, textarea:not(:disabled):hover {
+  background-color: white;
+  border-color: black;
+  color:#000
+}
+input[type="text"] {
+	background-color: white;
+  color:#000
+}
+input[type="text"]:hover {
+	background-color: white;
+  color:#000
+}
+input[type="text"]:focus {
+	background-color: white;
+  color:#000
+}
+input[type="number"]{
+  background-color: white;
+  color:#000
+}
+input[type="number"]:hover {
+	background-color: white;
+  color:#000
+}
+input[type="number"]:focus{
+  background-color: white;
+  color:#000
+}
+.macro-textarea{
+  background-color: white;
+  color:#000;
+  padding: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  margin:auto;
+}
+.macro-textarea:hover{
+  background-color: white;
+  color:#000
+}
+.macro-textarea:focus{
+  background-color: white;
+  color:#000
+}
+/*
+textarea {
+  background-color: white;
+  border: 1px solid #000;
+  color: #080303;
+  padding: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  margin: auto;
+}
+*/
+/*
+textarea:hover{
+  background-color:#fff8dc;
+}
+textarea:not(:disabled):hover {
+  background-color:#fff8dc;
+  border-color: #eee;
+}
+textarea:focus{
+  background-color:#fff8dc;
+}
+input{
+  color: #080303
+}
+
+
+
+*/
+/* 背景、全体 */
+body {
+  background-image: url("https://drive.google.com/uc?id=1AmA4XyXI0pB-wi4c0rvnkxCTw7Fybebr");
+  background-attachment: fixed; 
+  background-repeat: repeat;
+  min-height: 90vh;
+  font-size: 110%;
+}
+
+#passages{
+  max-width: 80vw;
+  min-height: 80vh;
+}
+
+.text{
+  border: 7px solid white;
+  color: #444444;
+  padding-right: 10em;
+  padding-left: 10em;
+  backdrop-filter: blur(3px);
+  height:80vh;
+}
+
+#center{
+  text-align: center;
+  align-items: center;
+  height: 80vh;
+}
+.btn-group button {
+	text-align: center;
+	margin: auto;
+}
+/* Bottom Bar styling - Start */
+#bottombar {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: transparent;
+	z-index: 40;
+}
+#bbblock {
+	margin-left: 2.5em;
+	margin-right: 2.5em;
+	-o-transition: margin .2s ease-in;
+    transition: margin .2s ease-in;
+}
+#bbtext {
+	text-align: left;
+    max-width: 25em;
+}
+#ui-bar.stowed~#story #bbblock {
+	margin-left: 4.5em;
+}
+@media screen and (max-width: 1136px) {
+	#bbblock {
+		margin-left: 1.5em;
+		margin-right: 1.5em;
+	}
+	#ui-bar.stowed~#story #bbblock {
+		margin-left: 1.5em;
+	}
+}
+@media screen and (max-width: 768px) {
+	#bbblock {
+		margin-left: 1.5em;
+	}
+}
+/* Bottom Bar styling - End */
+
+/* SugarCube's built-in Font Awesome icons - Start */
+.sc-fa {
+	font-family: tme-fa-icons;
+	font-style: normal;
+	font-weight: 400;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	speak: none;
+}
+.sc-icon {
+	padding-left: 4px;
+}
+.sc-icon::before {
+	font-family: tme-fa-icons;
+	font-style: normal;
+	font-weight: 400;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	speak: none;
+}
+.sc-power::before {
+	content: "\e82c\00a0";
+}
+.sc-backward::before {
+	content: "\e845\00a0";
+}
+/* SugarCube's built-in Font Awesome icons - End */
+
+.macro-button {
+	background-color: #ddd;
+	color: black;
+	border: none;
+	border-radius: 16px;
+	padding: 10px 20px;
+	text-align: left;
+	margin-right: 1em;
+}
+button:disabled {
+    background-color: #444;
+    border: 0px;
+}
+
