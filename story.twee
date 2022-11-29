@@ -266,9 +266,9 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 <a href="https://drive.google.com/uc?id=1zQ4GzArjYOApMpnlXvQJAjKLXNVabZiy" target="_blank">ENDING B</a>
 
 脱出したのは誰ですか？
-<a href="report.pdf" target="_blank">ENDING B-1</a>
-<a href="report.pdf" target="_blank">ENDING A</a>
-<a href="report.pdf" target="_blank">ENDING A</a>
+<a href="https://drive.google.com/uc?id=1AsmuXjSkRdQPiApjijBGxQS987Lxp8jk" target="_blank">ひだまり</a>
+<a href="https://drive.google.com/uc?id=1AxLuklXiVuTrNgBshDkg6IRCQUHjZ99V" target="_blank">ふしぐも</a>
+<a href="https://drive.google.com/uc?id=1BAwoCfDI_0Ry7RW4pVYuLA7848jKg_KF" target="_blank">ENDING A</a>
 </div>
 :: END C
 <div class = "text" id = "center">\
