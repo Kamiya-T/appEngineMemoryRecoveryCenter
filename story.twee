@@ -61,7 +61,6 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 <<textbox "$name" "" "Login">>
 <div class="btn-group">
 <<button "次へ" "Login">><</button>>
-[[検査官の質問]]
 </div>\
 </div>\
 :: Login
@@ -156,13 +155,6 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 </div>
 
 :: 検査官の質問
-<<script>>
-	$(document).one(":typingcomplete", function (ev) {
-		setTimeout(function(){
-			Engine.play("質問フェーズ");
-  		},60000);
-	});
-<</script>>
 <div class = "text">
 <<type 100ms none>>\
 個室に戻り、ドアを閉める。
