@@ -142,28 +142,31 @@ body {
   background-image: url("https://drive.google.com/uc?id=1AmA4XyXI0pB-wi4c0rvnkxCTw7Fybebr");
   background-attachment: fixed; 
   background-repeat: repeat;
+  height:auto;
   min-height: 90vh;
   font-size: 110%;
 }
 
 #passages{
-  max-width: 80vw;
+  height:auto;
+  width:auto;
+  min-width: 80vw;
   min-height: 80vh;
 }
 
 .text{
   border: 7px solid white;
   color: #444444;
-  padding-right: 10em;
-  padding-left: 10em;
+  padding-right: 5em;
+  padding-left: 5em;
   backdrop-filter: blur(3px);
-  height:80vh;
+  min-height:80vh;
+  height:auto;
 }
 
 #center{
   text-align: center;
   align-items: center;
-  height: 80vh;
 }
 .btn-group button {
 	text-align: center;
@@ -171,12 +174,17 @@ body {
 }
 /* Bottom Bar styling - Start */
 #bottombar {
-	position: absolute;
+	position: fixed;
 	left: 0;
 	bottom: 0;
 	width: 100%;
 	background-color: transparent;
 	z-index: 40;
+}
+.bottomdiv{
+  position:absolute;
+  bottom:0;
+  left:auto;
 }
 #bbblock {
 	margin-left: 2.5em;

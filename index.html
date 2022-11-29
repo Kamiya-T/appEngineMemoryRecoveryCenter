@@ -235,28 +235,31 @@ body {
   background-image: url("https://drive.google.com/uc?id=1AmA4XyXI0pB-wi4c0rvnkxCTw7Fybebr");
   background-attachment: fixed; 
   background-repeat: repeat;
+  height:auto;
   min-height: 90vh;
   font-size: 110%;
 }
 
 #passages{
-  max-width: 80vw;
+  height:auto;
+  width:auto;
+  min-width: 80vw;
   min-height: 80vh;
 }
 
 .text{
   border: 7px solid white;
   color: #444444;
-  padding-right: 10em;
-  padding-left: 10em;
+  padding-right: 5em;
+  padding-left: 5em;
   backdrop-filter: blur(3px);
-  height:80vh;
+  min-height:80vh;
+  height:auto;
 }
 
 #center{
   text-align: center;
   align-items: center;
-  height: 80vh;
 }
 .btn-group button {
 	text-align: center;
@@ -264,12 +267,17 @@ body {
 }
 /* Bottom Bar styling - Start */
 #bottombar {
-	position: absolute;
+	position: fixed;
 	left: 0;
 	bottom: 0;
 	width: 100%;
 	background-color: transparent;
 	z-index: 40;
+}
+.bottomdiv{
+  position:absolute;
+  bottom:0;
+  left:auto;
 }
 #bbblock {
 	margin-left: 2.5em;
@@ -398,6 +406,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 &lt;&lt;textbox &quot;$name&quot; &quot;&quot; &quot;Login&quot;&gt;&gt;
 &lt;div class=&quot;btn-group&quot;&gt;
 &lt;&lt;button &quot;次へ&quot; &quot;Login&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
+[[検査官の質問]]
 &lt;/div&gt;\
 &lt;/div&gt;\</tw-passagedata><tw-passagedata pid="2" name="Login" tags="" position="225,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;
 &lt;&lt;set $RoomID to 0&gt;&gt;
@@ -480,19 +489,19 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		  	&lt;&lt;script&gt;&gt;
 				$(&#39;#hidbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
 				TwineGang.clickButton(0);
-				setup.passageGoNumber[0]
+				setup.passageGoNumber[0]++;
 			&lt;&lt;/script&gt;&gt;
 		  &lt;&lt;/button&gt;&gt;
 	&lt;/span&gt;\
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="検査官の質問" tags="" position="475,100" size="100,100">&lt;&lt;script&gt;&gt;
 	$(document).one(&quot;:typingcomplete&quot;, function (ev) {
 		  setTimeout(function(){
-			Engine.play(&quot;質問フェーズ&quot;);
+			//Engine.play(&quot;質問フェーズ&quot;);
   		},10000);
 	});
 &lt;&lt;/script&gt;&gt;
 &lt;div class = &quot;text&quot;&gt;
-&lt;&lt;type 40ms none&gt;&gt;
+&lt;&lt;type 100ms none&gt;&gt;\
 個室に戻り、ドアを閉める。
 ドアの閉まる音が、やけに重く響いた。
 
@@ -505,14 +514,15 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 『あなたにとってその『死んだフリをしている』男……
 　死体と呼んでいるその人は何者ですか？』
 どくん。
-&lt;font size=&quot;4&quot;&gt;どくん。&lt;/font&gt;
-&lt;font size=&quot;7&quot;&gt;どくん。
+&lt;font size=&quot;5&quot;&gt;どくん。&lt;/font&gt;
+&lt;font size=&quot;6&quot;&gt;どくん。
 鼓動が大きくなる。
 
-検査官の質問に対する答えを3分以内に回答すること。&lt;/font&gt;
+検査官の質問に対し、3分以内に回答すること。&lt;/font&gt;
 &lt;&lt;/type&gt;&gt;
-
+&lt;div class = &quot;bottomdiv&quot;&gt;
 &lt;&lt;button &quot;回答&quot; &quot;質問フェーズ&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="質問フェーズ" tags="" position="600,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;
 &lt;div class=&quot;clock&quot;&gt;
 	&lt;p class=&quot;clock-time&quot; id=&quot;time&quot;&gt;00:00.00&lt;/p&gt;
@@ -540,7 +550,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	&lt;&lt;/script&gt;&gt;
 &lt;&lt;/timed&gt;&gt;
 
-&lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
+&lt;&lt;silently&gt;&gt;&lt;&lt;repeat 100ms&gt;&gt;&lt;&lt;script&gt;&gt;
 	if(setup.passageGoNumber[1] == setup.memberNumber){
 		Engine.play(&quot;エンディング判定&quot;);
 	}

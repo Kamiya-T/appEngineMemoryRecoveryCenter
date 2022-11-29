@@ -52,6 +52,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 <<textbox "$name" "" "Login">>
 <div class="btn-group">
 <<button "次へ" "Login">><</button>>
+[[検査官の質問]]
 </div>\
 </div>\
 :: Login
@@ -147,13 +148,13 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 :: 検査官の質問
 <<script>>
 	$(document).one(":typingcomplete", function (ev) {
-		  setTimeout(function(){
+		setTimeout(function(){
 			Engine.play("質問フェーズ");
-  		},10000);
+  		},60000);
 	});
 <</script>>
 <div class = "text">
-<<type 40ms none>>
+<<type 100ms none>>\
 個室に戻り、ドアを閉める。
 ドアの閉まる音が、やけに重く響いた。
 
@@ -166,20 +167,21 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 『あなたにとってその『死んだフリをしている』男……
 　死体と呼んでいるその人は何者ですか？』
 どくん。
-<font size="4">どくん。</font>
-<font size="7">どくん。
+<font size="5">どくん。</font>
+<font size="6">どくん。
 鼓動が大きくなる。
 
-検査官の質問に対する答えを3分以内に回答すること。</font>
+検査官の質問に対し、3分以内に回答すること。</font>
 <</type>>
-
+<div class = "bottomdiv">
 <<button "回答" "質問フェーズ">><</button>>
 </div>
-:: 質問フェーズ
-<div class = "text" id = "center">
-<div class="clock">
-	<p class="clock-time" id="time">00:00.00</p>
 </div>
+:: 質問フェーズ
+<div class = "text" id = "center">\
+<div class="clock">\
+<p class="clock-time" id="time">00:00.00</p>\
+</div>\
 <<script>>
 	$(document).one(':passagedisplay', function (ev) {
 		var span = document.getElementById('time');
@@ -189,7 +191,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	});
 <</script>>
 <span id="question">\
-<font size="5">
+<font size="5">\
+
 『あなたにとってその『死んだフリをしている』男……
 　死体と呼んでいるその人は何者ですか？』</font>
 </span>\
@@ -198,23 +201,29 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 </span>\
 <<timed 185s>>
 	<<script>>
+	$('#hidans').css('display', 'none');
 	TwineGang.sendAnswer(State.variables.answer, 1);
 	setup.answerNumber++;
 	<</script>>
 <</timed>>
 
-<<silently>><<repeat 1s>><<script>>
+<<silently>><<repeat 100ms>><<script>>
 	if(setup.passageGoNumber[1] == setup.memberNumber){
 		Engine.play("エンディング判定");
 	}
-	$('#hidans').css('display', 'none');
 	<</script>>
 	<<replace 'question'>>\
 		全員の回答を集計しています。お待ちください。
 		<<print setup.passageGoNumber[1]>> / <<print setup.memberNumber>>
 	<</replace>>
 <</repeat>><</silently>>
-<<button "回答する" "エンディング分岐">><</button>>
+<<button "回答する" "エンディング分岐">>
+	<<script>>
+		$('#hidans').css('display', 'none');
+		TwineGang.sendAnswer(State.variables.answer, 1);
+		setup.answerNumber++;
+	<</script>>
+<</button>>
 :: エンディング分岐
 [[END A]]
 [[END B]]
