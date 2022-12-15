@@ -483,13 +483,13 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 			Engine.play(&quot;検査官の質問&quot;)
 		}
 		&lt;&lt;/script&gt;&gt;
-		&lt;&lt;replace &#39;#passageGoNumber&#39;&gt;&gt;\
+		&lt;&lt;replace &#39;#passageStartQuestion&#39;&gt;&gt;\
 			2. 被験者全員の準備が出来次第、検査官との面談を実施する。
 			&lt;&lt;print setup.passageGoNumber[0]&gt;&gt; / &lt;&lt;print setup.memberNumber&gt;&gt;
 		&lt;&lt;/replace&gt;&gt;\
 	&lt;&lt;/repeat&gt;&gt;&lt;&lt;/silently&gt;&gt;
 	&lt;span id=&quot;message&quot;&gt;1. 被験者全員のログインを確認する。&lt;/span&gt;
-	&lt;span id=&quot;passageGoNumber&quot;&gt;\
+	&lt;span id=&quot;passageStartQuestion&quot;&gt;\
 	2. 被験者全員の準備が出来次第、検査官との面談を実施する。
 	&lt;&lt;print setup.passageGoNumber[0]&gt;&gt; / &lt;&lt;print setup.memberNumber&gt;&gt;
 	&lt;/span&gt;\
@@ -502,7 +502,16 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 			&lt;&lt;/script&gt;&gt;
 		  &lt;&lt;/button&gt;&gt;
 	&lt;/span&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="検査官の質問" tags="" position="475,100" size="100,100">&lt;div class = &quot;text&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="検査官の質問" tags="" position="475,100" size="100,100">&lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
+		if(setup.passageGoNumber[1] == setup.memberNumber){
+			Engine.play(&quot;質問フェーズ&quot;)
+		}
+		&lt;&lt;/script&gt;&gt;
+		&lt;&lt;replace &#39;#passageAnswerQuestion&#39;&gt;&gt;\
+			&lt;&lt;print setup.passageGoNumber[1]&gt;&gt; / &lt;&lt;print setup.memberNumber&gt;&gt;
+		&lt;&lt;/replace&gt;&gt;\
+	&lt;&lt;/repeat&gt;&gt;&lt;&lt;/silently&gt;&gt;
+&lt;div class = &quot;text&quot;&gt;
 &lt;&lt;type 100ms none&gt;&gt;\
 個室に戻り、ドアを閉める。
 ドアの閉まる音が、やけに重く響いた。
@@ -523,7 +532,18 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 検査官の質問に対し、3分以内に回答すること。&lt;/font&gt;
 &lt;&lt;/type&gt;&gt;
 &lt;div class = &quot;bottomdiv&quot;&gt;
-&lt;&lt;button &quot;回答&quot; &quot;質問フェーズ&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;span id=&quot;passageAnswerQuestion&quot;&gt;\
+&lt;&lt;print setup.passageGoNumber[1]&gt;&gt; / &lt;&lt;print setup.memberNumber&gt;&gt;
+	&lt;/span&gt;\
+	&lt;span id=&quot;hidbtn&quot; style=&quot;display: initial&quot;&gt;\
+		  &lt;&lt;button &quot;回答する&quot;&gt;&gt;
+		  	&lt;&lt;script&gt;&gt;
+				TwineGang.clickButton(1);
+				setup.passageGoNumber[1]++;
+				$(&#39;#hidbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
+			&lt;&lt;/script&gt;&gt;
+		  &lt;&lt;/button&gt;&gt;
+	&lt;/span&gt;\
 &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="質問フェーズ" tags="" position="600,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
 &lt;div class=&quot;clock&quot;&gt;\
@@ -532,7 +552,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 &lt;&lt;script&gt;&gt;
 	$(document).one(&#39;:passagedisplay&#39;, function (ev) {
 		var span = document.getElementById(&#39;time&#39;);
-		var countdown = new Countdown(span, 181);
+		var countdown = new Countdown(span, 11);
 		countdown.init();
 		countdown.start();
 	});
@@ -571,7 +591,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	&lt;&lt;/script&gt;&gt;
 &lt;&lt;/button&gt;&gt;
 &lt;/span&gt;\
-&lt;&lt;timed 185s&gt;&gt;
+&lt;&lt;timed 10s&gt;&gt;
 	&lt;&lt;script&gt;&gt;
 		$(&#39;#hidans&#39;).css(&#39;display&#39;, &#39;none&#39;);
 		TwineGang.sendAnswer(State.variables.answer, 1);
