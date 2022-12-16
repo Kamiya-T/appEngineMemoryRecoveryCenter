@@ -56,14 +56,17 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('sendAnswer', (answer, id) =>{
+  socket.on('sendAnswer', (answer, name) =>{
     if(answer == ""){
       socket.broadcast.to(roomName).emit('otherAnswer', 0);
+    }
+    else if(answer == "SEVENSUN"){
+      socket.broadcast.to(roomName).emit('escapeAnswer', name);
     }
     else{
       socket.broadcast.to(roomName).emit('otherAnswer', 1);
     }
-    console.log("回答を受けました：　" + answer);
+    console.log("回答を受けました:" + answer);
   });
 
 

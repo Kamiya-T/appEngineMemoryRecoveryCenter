@@ -145,8 +145,12 @@ body {
   height:auto;
   min-height: 90vh;
   font-size: 110%;
+  will-change: transform;
 }
 
+#ui-overlay{
+  height :auto;
+}
 #passages{
   height:auto;
   width:auto;
@@ -157,11 +161,12 @@ body {
 .text{
   border: 7px solid white;
   color: #444444;
+  background-color: white;
   padding-right: 5em;
   padding-left: 5em;
-  backdrop-filter: blur(3px);
   min-height:80vh;
   height:auto;
+  will-change: transform;
 }
 
 #center{
@@ -176,13 +181,11 @@ body {
 #bottombar {
 	position: fixed;
 	left: 0;
-	bottom: 0;
 	width: 100%;
 	background-color: transparent;
-	z-index: 40;
 }
 .bottomdiv{
-  position:absolute;
+  position:fixed;
   bottom:0;
   left:auto;
 }
@@ -259,3 +262,21 @@ button:disabled {
     border: 0px;
 }
 
+img.fusigumo{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=174gSwck4_3rZvDVdh3xEFgAKmZrSK4Fz);
+  width:100px;height:100px;
+}
+img.hidamari{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=10-XMsYUZPxVy4Cm9B4CsaLfq-bBxAEpu);
+  width:100px;height:100px;
+}
+img.minn{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=14xHD82svrvdeTbri7x3mXmUEi_rUDKI8);
+  width:100px;height:100px;
+}

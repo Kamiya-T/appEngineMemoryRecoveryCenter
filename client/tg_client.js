@@ -18,7 +18,7 @@
       console.log("socket.on roomInfoを受信しました.");
       self.roomName = room;
       console.log(room + "がRoomNumberです.")
-      console.log("newRoomイベントを発信します.")
+      console.log("roomInfoイベントを発信します.")
       self.trigger('roomInfo', room);
     });
 
@@ -46,6 +46,10 @@
     socket.on('otherAnswer', function(id) {
       self.trigger("otherAnswer", id);
     });
+    socket.on('escapeAnswer', function(id) {
+      self.trigger("escapeAnswer", id);
+    });
+
     this._socket = socket;
     console.log("End of TGClient function");
   };
@@ -77,9 +81,9 @@
     // console.log('emitted click');
   };
 
-  TGClient.prototype.sendAnswer = function(answer, id) {
+  TGClient.prototype.sendAnswer = function(answer, name) {
     console.log("TGClient.sendAnswer");
-    this._socket.emit('sendAnswer', answer, id);
+    this._socket.emit('sendAnswer', answer, name);
     // console.log('emitted click');
   };
   TGClient.prototype.arrive = function(id) {
@@ -134,7 +138,12 @@ function Countdown(elem, seconds) {
     }
   };
 
-
+  that.stop = function(){
+    if(!that.timer){
+      clearInterval(that.timer);
+    }
+  }
+  
   that.fillZero = function(num) {
     return num < 10 ? '0' + num : num;
   };

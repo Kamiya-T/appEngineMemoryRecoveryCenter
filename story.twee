@@ -19,6 +19,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		setup.memberNumber = 0;
 		setup.correctAnswer = 0;
 		setup.wrongAnswer = 0;
+		setup.escapeName = "";
 		// Reload current passage since imported scripts can function now.
 		Engine.play(passage(), true);
 		LoadScreen.unlock(lockID);  // Unlock loading screen
@@ -31,10 +32,24 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
     });
 	TwineGang.bind("newMember", (data)=>{
 		setup.MemberList.push(data);
-		setup.memberUpdate = true;
+		setup.memberNumber = 0;
+		let element = document.getElementById('memberlist');
+		while(element.firstChild){
+			element.removeChild(element.firstChild);
+		}
+		for (let member of setup.MemberList) {
+			setup.memberNumber++;
+			let li = document.createElement('li');
+			li.textContent = member;
+			document.getElementById('memberlist').appendChild(li);
+		}
+		$("#passageMemberNumber").text(setup.memberNumber);
+		$("#passageGoNumber").text(setup.passageGoNumber[0]);
 	});
 	TwineGang.bind("userClickButton", (id)=>{
 		setup.passageGoNumber[id]++;
+		$("#passageGoNumber").text(setup.passageGoNumber[id]);
+		$("#passageMemberNumber").text(setup.memberNumber);
 	});
 	TwineGang.bind("otherAnswer", (id)=>{
 		if(id == 0){
@@ -43,6 +58,12 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		else{
 			setup.wrongAnswer++;
 		}
+		$("#passageGoNumber").text(setup.correctAnswer+setup.wrongAnswer);
+		$("#passageMemberNumber").text(setup.memberNumber);
+	});
+	TwineGang.bind("escapeAnswer", (name)=>{
+		setup.escapeName = name;
+		setup.correctAnswer++;
 	});
 //*******************************BIND  END**************************
 	}).catch(function(error) {
@@ -57,19 +78,19 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 :: Start [mv]
 <div class = "text" id = "center">
-<font size="5">被験者は氏名を入力してください。</font>
-<<textbox "$name" "" "Login">>
-<div class="btn-group">
-<<button "次へ" "Login">><</button>>
-</div>\
-</div>\
+<font size="5">被験者はログインするアカウントを選択してください</font>
+<span><a data-passage="Login" data-setter="$name to 'ヒダマリ'"><img class="hidamari"></a>\     
+		<a data-passage="Login" data-setter="$name to 'フシグモ'"><img class="fusigumo"></a>\
+		<a data-passage="Login" data-setter="$name to 'ミン'"><img class="minn"></a></span>\
+</div>
+
 :: Login
 <div class = "text" id = "center">
 <<set $RoomID to 0>>
 進行マニュアル
-1.GM、又は進行役が新規ルームを作成する。
-2.画面に表示される部屋番号をプレイヤーと共有。
-3.他プレイヤーは部屋番号を用いて既存ルームに接続
+1.進行役が新規ルームを作成する。
+2.画面に表示される部屋番号を他被験者と共有する。
+3.他被験者は共有された部屋番号を用いて既存ルームに接続する。
 <span id="RoomIdDisplay"></span>
 		<<button '新規ルームを作成する'>>
     		<<script>>
@@ -112,58 +133,33 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
             li.textContent = member;
             document.getElementById('memberlist').appendChild(li);
         }
+		$("#passageMemberNumber").text(setup.memberNumber);
+		$("#passageGoNumber").text(setup.passageGoNumber[0]);
     });
     <</script>>
-	<<silently>><<repeat 1s>><<script>>
-		if(setup.memberUpdate){
-			setup.memberUpdate = false;
-			setup.memberNumber = 0;
-			let element = document.getElementById('memberlist');
-			while(element.firstChild){
-				element.removeChild(element.firstChild);
-			}
-           	for (let member of setup.MemberList) {
-				setup.memberNumber++;
-           		let li = document.createElement('li');
-           		li.textContent = member;
-           		document.getElementById('memberlist').appendChild(li);
-        	}
-        }
-		if(setup.passageGoNumber[0] == setup.memberNumber){
-			Engine.play("検査官の質問")
-		}
-		<</script>>
-		<<replace '#passageStartQuestion'>>\
-			2. 被験者全員の準備が出来次第、検査官との面談を実施する。
-			<<print setup.passageGoNumber[0]>> / <<print setup.memberNumber>>
-		<</replace>>\
-	<</repeat>><</silently>>
-	<span id="message">1. 被験者全員のログインを確認する。</span>
-	<span id="passageStartQuestion">\
-	2. 被験者全員の準備が出来次第、検査官との面談を実施する。
-	<<print setup.passageGoNumber[0]>> / <<print setup.memberNumber>>
-	</span>\
+	<span id="message">1. 被験者全員のログインを確認する。
+	2. 被験者全員の準備が出来次第、検査官との面談を実施する。</span>
+	<span id="passageGoNumber">0</span> / <span id="passageMemberNumber">0</span>
+
 	<span id="hidbtn" style="display: initial">\
 		  <<button "次へ">>
 		  	<<script>>
 				$('#hidbtn').css('display', 'none');
 				TwineGang.clickButton(0);
 				setup.passageGoNumber[0]++;
+				$("#passageMemberNumber").text(setup.memberNumber);
+				$("#passageGoNumber").text(setup.passageGoNumber[0]);
 			<</script>>
 		  <</button>>
 	</span>\
+	<<silently>><<repeat 1s>><<script>>
+		if(setup.passageGoNumber[0] == setup.memberNumber){
+			Engine.play("検査官の質問");
+		}
+	<</script>><</repeat>><</silently>>
 </div>
 
 :: 検査官の質問
-<<silently>><<repeat 1s>><<script>>
-		if(setup.passageGoNumber[1] == setup.memberNumber){
-			Engine.play("質問フェーズ")
-		}
-		<</script>>
-		<<replace '#passageAnswerQuestion'>>\
-			<<print setup.passageGoNumber[1]>> / <<print setup.memberNumber>>
-		<</replace>>\
-	<</repeat>><</silently>>
 <div class = "text">
 <<type 100ms none>>\
 個室に戻り、ドアを閉める。
@@ -184,111 +180,438 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 検査官の質問に対し、3分以内に回答すること。</font>
 <</type>>
+
 <div class = "bottomdiv">
-<span id="passageAnswerQuestion">\
-<<print setup.passageGoNumber[1]>> / <<print setup.memberNumber>>
+<span id="passageGoNumber">0</span> / <span id="passageMemberNumber">0</span>
+<span id="hidbtn" style="display: initial">\
+	<<button "次へ">>
+		<<script>>
+			$('#hidbtn').css('display', 'none');
+			TwineGang.clickButton(1);
+			setup.passageGoNumber[1]++;
+			$("#passageMemberNumber").text(setup.memberNumber);
+			$("#passageGoNumber").text(setup.passageGoNumber[1]);
+		<</script>>
+		<</button>>
 	</span>\
-	<span id="hidbtn" style="display: initial">\
-		  <<button "回答する">>
-		  	<<script>>
-				TwineGang.clickButton(1);
-				setup.passageGoNumber[1]++;
-				$('#hidbtn').css('display', 'none');
-			<</script>>
-		  <</button>>
-	</span>\
+	<<silently>><<repeat 1s>><<script>>
+		if(setup.passageGoNumber[1] == setup.memberNumber){
+			Engine.play("質問フェーズ");
+		}
+	<</script>><</repeat>><</silently>>
 </div>
+<<script>>
+    $(document).one(':passagedisplay', function (ev) {
+		$("#passageMemberNumber").text(setup.memberNumber);
+		$("#passageGoNumber").text(setup.passageGoNumber[1]);
+    });
+<</script>>
 </div>
 
 :: 質問フェーズ
 <div class = "text" id = "center">\
-<div class="clock">\
-<p class="clock-time" id="time">00:00.00</p>\
-</div>\
+<div class="clock"><p class="clock-time" id="time">00:00.00</p></div>\
 <<script>>
 	$(document).one(':passagedisplay', function (ev) {
-		var span = document.getElementById('time');
-		var countdown = new Countdown(span, 11);
-		countdown.init();
-		countdown.start();
+		//var span = document.getElementById('time');
+		//setup.countdown = new Countdown(span, 181);
+		//setup.countdown.init();
+		//setup.countdown.start();
 	});
 <</script>>
-<<silently>><<repeat 1s>>
-	<<script>>
-	if(setup.correctAnswer + setup.wrongAnswer == setup.memberNumber){
-		Engine.play("エンディング判定");
-	}
-	<</script>>
-	<<replace "#waiter">>
-		<<print setup.correctAnswer + setup.wrongAnswer>> / <<print setup.memberNumber>>
-	<</replace>>
-	<</repeat>><</silently>>
 
 <font size="5">\
 『あなたにとってその『死んだフリをしている』男……
 　死体と呼んでいるその人は何者ですか？』</font>
 
-回答を集計しています。お待ちください。
-<span id="waiter">\
-<<print setup.correctAnswer + setup.wrongAnswer>> / <<print setup.memberNumber>>
-</span>\
-<span id="hidans" style="display: initial">\
-<<textarea "$answer" "">>
 
+
+
+<span id="passageGoNumber">0</span> / <span id="passageMemberNumber">0</span>
+<span id="hidans" style="display: initial"><<textarea "$answer" "">></span>
+<span id="hidansbtn" style="display: initial">\
 <<button "回答する">>
 	<<script>>
 		$('#hidans').css('display', 'none');
-		TwineGang.sendAnswer(State.variables.answer, 1);
+		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
 		if(State.variables.answer == ""){
 			setup.correctAnswer++;
-		}else{
+		}
+		else{
 			setup.wrongAnswer++;
 		}
+		$("#passageGoNumber").text(setup.correctAnswer+setup.wrongAnswer);
+		$("#passageMemberNumber").text(setup.memberNumber);
 	<</script>>
 <</button>>
 </span>\
-<<timed 10s>>
-	<<script>>
-		$('#hidans').css('display', 'none');
-		TwineGang.sendAnswer(State.variables.answer, 1);
-		if(State.variables.answer == ""){
+<span id="hidesc" style="display: none">\
+<<button "* 換気口から脱出する *">>
+	<<script>>	
+	$('#hidans').css('display', 'none');
+		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
+		if(State.variables.answer == "SEVENSUN"){
+			setup.escapeName = State.variables.name;
 			setup.correctAnswer++;
-		}else{
+		}
+		else{
 			setup.wrongAnswer++;
 		}
+		$("#passageGoNumber").text(setup.correctAnswer+setup.wrongAnswer);
+		$("#passageMemberNumber").text(setup.memberNumber);
+	<</script>>
+<</button>>
+</span>\
+<<timed 182s>>
+	<<script>>
+		$('#hidans').css('display', 'none');
 	<</script>>
 <</timed>>
+<<silently>><<repeat 1s>><<script>>
+	if(setup.correctAnswer + setup.wrongAnswer == setup.memberNumber){
+		Engine.play("エンディング判定");
+		setup.countdown.stop();
+	}
+<</script>><</repeat>><</silently>>
+<<script>>
+	$(document).one(':passagedisplay', function (ev) {
+		const textareaElem = document.getElementById("textarea-answer");
+		textareaElem.addEventListener('input', (event) => {
+			if(event.target.value == "SEVENSUN"){
+				$('#hidansbtn').css('display', 'none');
+				$('#hidesc').css('display', 'inline');
+			}
+			else{
+				$('#hidansbtn').css('display', 'inline');
+				$('#hidesc').css('display', 'none');
+			}
+		});
+		$("#passageGoNumber").text(setup.correctAnswer+setup.wrongAnswer);
+		$("#passageMemberNumber").text(setup.memberNumber);
+	});
+<</script>>
+</div>\
+
+
 
 :: エンディング判定
 <div class = "text" id = "center">\
 <<if setup.wrongAnswer gt 0>>
-	[[END A]]
+	[[エンディングへ|END A]]
+<<elseif setup.escapeName != "">>
+	[[エンディングへ|END B]]
 <<else>>
-	[[通気口から脱出している人がいるならこちら|END B]]
-
-	[[いない場合はこちら|END C]]
+	[[エンディングへ|END C]]
 <</if>>
 </div>
 :: END A
-<div class = "text" id = "center">\
-<a href="https://drive.google.com/uc?id=1Q-CS3-w2OQLiiWKEO4dv1PF5tJUrDV41" target="_blank">ENDING A</a>
-</div>
-:: END B
-<div class = "text" id = "center">\
-<a href="https://drive.google.com/uc?id=1zQ4GzArjYOApMpnlXvQJAjKLXNVabZiy" target="_blank">ENDING B</a>
+<div class = "text">\
 
-脱出したのは誰ですか？
-<a href="https://drive.google.com/uc?id=1AsmuXjSkRdQPiApjijBGxQS987Lxp8jk" target="_blank">ひだまり</a>
-<a href="https://drive.google.com/uc?id=1AxLuklXiVuTrNgBshDkg6IRCQUHjZ99V" target="_blank">ふしぐも</a>
-<a href="https://drive.google.com/uc?id=1BAwoCfDI_0Ry7RW4pVYuLA7848jKg_KF" target="_blank">ENDING A</a>
+あなたがたはモニター越しの検査官を睨みつける。
+
+「んん～？
+　違くないですか？」
+
+「もしかして、まだ分かっていないんですか？」
+
+「違い、ますよね。あなた方にとって。
+　彼は、セブンサンは。」
+
+「神ですよね？救いですよね？
+　絶対に覆らない真実ですよね？
+　自分よりも信じられるものですよね？
+　癒しですよね？水のうるおいですよね？
+　いつでもそこにあり、私達を見ているものですよね？
+　命綱ですよね？抜けない杭ですよね？
+　許されるものですよね？
+　割れた仮面ですよね？
+　砂糖のように甘いものですよね？
+　朝ですよね？硬くて柔らかいものですよね？
+　心の柱ですよね？裏表のない鏡ですよね？
+　なのにどうして？　どうして？」
+
+「どうしてあなた達の言葉には
+　これっぽっちも敬意が感じられないんですか？」
+
+ぐるぐる。
+検査官は瞬きをしないまま。
+乾いた瞳でこちらを見つめ返す。
+
+「……改めまして、私は検査官です。」
+
+「マニュアル23p、7項の項目『被験者が服従を示さない場合』
+　のプロセスに則り、記憶消去を実行します。」
+
+ばちり。脳に嫌な音が響く。
+
+嫌だ。
+いやだ。
+
+「どうして私の気持ちに共感してくれないんですか？」
+
+「もう、昔のことなんて覚えていないけれど……」
+
+「私とあなた達は、とっても似ていると思ったのに……」
+
+頭蓋骨の中で音が反響する。
+音が跳ねるたびに記憶が、消しゴムで擦られているかのように消えていく。
+
+「セブンサン様、次こそは彼らにお導きを……」
+
+Aエンド
+「記憶回復は続く」
+
+<a href="https://drive.google.com/uc?id=1Q-CS3-w2OQLiiWKEO4dv1PF5tJUrDV41" target="_blank">エラー時はこちらを参照ください。</a>
 </div>
+
+
+:: END B
+<div class = "text">
+
+あなたがたはモニター越しの検査官を睨みつけていた。
+
+「………………」
+
+突然。
+まるで金属を激しくぶつけ合わせたかのような音が鳴り響く。
+警報だ。検査官の表情が険しくなる。
+
+「脱走！？どうしてそんなことを！？」
+
+「しばらく待っていてください。脱走者を鎮圧します！」
+
+白衣を翻し、検査官はモニターから姿を消した。
+
+<<if setup.escapeName == "ヒダマリ">>
+ヒダマリは狭い空気口を潜り抜けた。
+
+<img class="hidamari">「わっせ　わっせ」
+
+「どうして逃げてしまうんですか？」
+
+通気口を抜けた先は出口の前。
+そこには検査官が仁王立ちで彼女を待っていた。
+
+<img class="hidamari">「んにに　　あんまりカロリーがない状態で戦いたくないんだけどにゃあ」
+
+<img class="hidamari">「でも、邪魔するなら押しとおるよ」
+
+「……出来るものなら」
+
+<img class="hidamari">「出来るんだよ」
+
+交差。
+ヒダマリは一瞬のうちに検査官を吹き飛ばす。
+検査官は壁に全身を打ちながら崩れた。
+
+<img class="hidamari">「……とりあえず逃げないと」
+
+ヒダマリは逃げ続けた。ヒダマリは何も信用出来なかった。
+ミンも、フシグモも、自分自身の記憶でさえも。
+問題の解決から逃げることを選択したが、
+いつか追いつかれ『君』はばらばらになるだろう。
+それでも、今は何も考えたくなかった。
+
+ヒダマリ追加エンド
+「運命からは逃れられない」
+
+<</if>>
+<<if setup.escapeName == "フシグモ">>
+フシグモは脱走した。
+
+「待ってください！」
+
+検査官は必死に追いかけるが、体力はフシグモほどは無いようだ。
+
+<img class="fusigumo">「……ふぅん」
+
+それからしばらく……。
+
+「いたい　くるしい」
+
+<img class="fusigumo">「この毒はまだ有害性を上げられるな」
+
+検査官は実験台にされていた。
+
+「むり　いたい　だって　うぅ」
+
+<img class="fusigumo">「まだ痛みを訴える余裕があるな。もうあと2段階上げてみよう。」
+
+「たすけて　セブンサンさま」
+
+<img class="fusigumo">「……いずれ会わせてやるさ」
+
+検査官の目に希望の光が灯る。
+希望をチラつかせただけで……なんて哀れな生き物なんだ。
+フシグモは、そんな希望の光を乱暴にかき消すところを想像し
+口角が上がってしまうのを必死でこらえた。
+
+フシグモ追加エンド
+「『地獄で会えるぞ』」
+
+<</if>>
+
+<<if setup.escapeName == "ミン">>
+ミンが通気口を通る。
+
+<img class="minn">「とりあえずは撤退だ…」
+
+通気口から出ると、そこには絶望が広がっていた。
+
+「どこに行こうというんですか？」
+
+二本の刀を持った検査官。
+『ラスト・リゾート』がミンを殺す為に待っていた。
+
+<img class="minn">「まぁ、そうか」
+
+一閃。瞬きの間におびただしいほどの風が切り裂かれた。
+
+<img class="minn">「ボクだけが助かるってのは　ズルすぎるか」
+
+「……やっぱり、殺しは良い……」
+
+検査官は刀に付いた血をぬぐうと、そのまま扉から外に出た。
+
+……もうそこに検査官としての面影はない。
+いるのはただの人殺しだ。
+
+ミン追加エンド
+「一人勝ちは無し」
+
+<</if>>
+静寂………。
+………………。
+
+どれくらいの時間が経っただろうか。
+3時間、1日、あるいはそれ以上か。
+脱走者も、検査官も。
+どちらも帰ってくる気配はない。
+止まない警報が、正気をどんどん奪っていく。
+
+だれか　たすけてくれ
+
+必死に絞り出した声は
+警報にかき消され
+誰にも届くことはなかった。
+
+Bエンド
+「死体を誰が見つける？」
+
+
+<a href="https://drive.google.com/uc?id=1zQ4GzArjYOApMpnlXvQJAjKLXNVabZiy" target="_blank">エラー時はこちらを参照ください。</a>
+
+
+
+<a href="https://drive.google.com/uc?id=1AsmuXjSkRdQPiApjijBGxQS987Lxp8jk" target="_blank">ヒダマリ逃走END</a>
+<a href="https://drive.google.com/uc?id=1AxLuklXiVuTrNgBshDkg6IRCQUHjZ99V" target="_blank">フシグモ逃走END</a>
+<a href="https://drive.google.com/uc?id=1BAwoCfDI_0Ry7RW4pVYuLA7848jKg_KF" target="_blank">ミン脱走END</a>
+</div>
+
 :: END C
-<div class = "text" id = "center">\
+<div class = "text">
+
+何も言わなかった。
+
+「……………………」
+
+「あれ、聞こえてますよね？」
+
+ぱたぱたと手を振る検査官。
+何も言わなかった。
+
+「あれぇ………故障かなぁ……えぇ…っと……」
+
+何も言わなかった。
+何も言わなかった。
+何も言わなかった。
+……無言のまま数十分が過ぎた。
+
+「セブンサン様、こういうときはどうすればよろしいのでしょうか
+　死体のフリをしているのは承知です。どうか、お導きください。」
+
+何も言わなかった。
+
+「セブンサン様？」
+
+死体は喋らない。
+
+「え？うそ、ウソですよね？
+　あれ、おかしいですよね？そんな、え？」
+
+「導いてくれるって言ったじゃないですか
+　救いになるって言ってくれたじゃないですか
+　どうして？どうして死んでいるんですか？
+　本当に死んでいるんですか？」
+
+死体は喋らない。
+
+「え、うそ、うそうそうそ！
+　なんで勝手に死んでいるんですか？
+　あたしは、一人にされたんですか？え、あ」
+
+検査官は髪をかきむしりながら、必死にモニターを覗き込む。
+……それでも、死体は死んでいる。
+
+「あ/あぁ！見捨てられ/た
+　神は違っ/た/私を/救っ/たわけじゃ/なかったんだ」
+
+検査官はそのまま机を両手で持ち上げた。
+モニターの映像がぐらぐらと揺れ、何も映らなくなる。
+
+「神/のいないこの世界/私もすぐ行きま/すからね」
+
+警報が部屋に鳴り響く。
+モニターからは検査官が椅子を投げ、壁を蹴りつけ、泣きわめき、
+気の、狂いのままに暴れる音が鳴り響いていた。
+……そして、偶然か。
+それとも必然か。
+
+鉄格子が音を立ててゆっくりと上がっていく。
+脱出だ。
+
+三人は、警報の鳴り響く廊下を駆け抜ける。
+
+「ひゃー☆　こんなにうまくいくなんてねっ！」
+
+「全く非合理的だ。もっといい策はいくらでもあっただろう」
+
+「とりあえず地上にさえ出れば何とかなるはず！
+　進め！ボクが怪我しないように前を！」
+
+必死に廊下を走っていた3人は
+『EXIT』
+出口と書かれたドアの前でふと、足を止めた。
+そのドアの横にもう一つ。
+『監視室』と書かれたドアがあったからだ。
+
+「あら～」
+
+「中には検査官、か」
+
+「どうする～？
+　あの感じだと自分で脱出とかはする気無さそうだけどにぃ」
+
+※
+ここから3分間
+検査官を「助ける」か「助けない」かを話し合う。
+結果はチャットで一斉に送信し
+一人でも「助けない」を選択した場合、「助けない」へ分岐する。
+
+[[助ける|END D]]
+[[助けない|END E]]
 <a href="https://drive.google.com/uc?id=13wGZ-uaF-S4cox03t7h597wZuCj3tifL" target="_blank">ENDING C</a>
 
-ENDING C を読み終わったら追加ENDを選択してください。
-<a href="https://drive.google.com/uc?id=15Juh74UF3ij4zj4SkwLE529V_E8usvLg" target="_blank">ED:D</a>
-<a href="https://drive.google.com/file/d/1wNwBNRcgnyICkkzo8-TTKVv7GpHMaS0m/view?usp=share_link" target="_blank">ED:E</a>
+
+
+</div>\
+:: END D
+<div class = "text" id = "center">\
+<a href="https://drive.google.com/uc?id=15Juh74UF3ij4zj4SkwLE529V_E8usvLg" target="_blank">ENDING D</a>
+</div>
+:: END E
+<div class = "text" id = "center">\
+<a href="https://drive.google.com/uc?id=1wNwBNRcgnyICkkzo8-TTKVv7GpHMaS0m" target="_blank">ENDING E</a>
 </div>
 
 :: StoryData
