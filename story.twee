@@ -1,5 +1,8 @@
 :: Story JavaScript [script]
-
+// preload.min.js, for SugarCube 2, by Chapel
+// v1.0.0, 2021-04-20, 53d1a20e9321b3782a303cf7dbe00f5c51e947db
+;!function(){"use strict";function t(t,e){var n=0,r=t.length;t.forEach((function(t){!function(t,e){var n=new Image;n.onload=e,n.onerror=e,n.src=t}(t,(function(){++n===r&&e()}))}))}function e(){return State.length<=0}function n(){var n=[].slice.call(arguments).flatten(),r=!!e()&&LoadScreen.lock();return t(n,(function(){r&&LoadScreen.unlock(r)})),r}setup.preload=n,setup.preload.force=!1,Macro.add("preload",{handler:function(){if(!e()&&!setup.preload.force)return this.error("Attempting to preload images outside of `StoryInit` or similar can cause performance issues. Set `setup.preload.force` to `true` if you want to do it anyway.");n(this.args.flatten().filter((function(t){return"string"==typeof t})))}})}();
+// end preload.min.js
 UIBar.destroy()
 if (document.location.href.toLowerCase().includes("/temp/") || document.location.href.toLowerCase().includes("/private/") || hasOwnProperty.call(window, "storyFormat")) {
 	// Change this to the path where the HTML file is
@@ -79,9 +82,9 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 :: Start [mv]
 <div class = "text" id = "center">
 <font size="5">被験者はログインするアカウントを選択してください</font>
-<span><a data-passage="Login" data-setter="$name to 'ヒダマリ'"><img class="hidamari"></a>\     
-		<a data-passage="Login" data-setter="$name to 'フシグモ'"><img class="fusigumo"></a>\
-		<a data-passage="Login" data-setter="$name to 'ミン'"><img class="minn"></a></span>\
+<span><a data-passage="Login" data-setter="$name to 'ヒダマリ'"><img class="hidamarib"></a>\     
+		<a data-passage="Login" data-setter="$name to 'フシグモ'"><img class="fusigumob"></a>\
+		<a data-passage="Login" data-setter="$name to 'ミン'"><img class="minnb"></a></span>\
 </div>
 
 :: Login
@@ -351,15 +354,19 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 あなたがたはモニター越しの検査官を睨みつける。
 
-「んん～？
-　違くないですか？」
+<img class="kensa">\
+<p class="side_text">「んん～？
+　違くないですか？」</p>
 
-「もしかして、まだ分かっていないんですか？」
+<img class="kensa">\
+<p class="side_text">「もしかして、まだ分かっていないんですか？」</p>
 
-「違い、ますよね。あなた方にとって。
-　彼は、セブンサンは。」
+<img class="kensa">\
+<p class="side_text">「違い、ますよね。あなた方にとって。
+　彼は、セブンサンは。」</p>
 
-「神ですよね？救いですよね？
+<img class="kensa">\
+<p class="side_text">「神ですよね？救いですよね？
 　絶対に覆らない真実ですよね？
 　自分よりも信じられるものですよね？
 　癒しですよね？水のうるおいですよね？
@@ -370,35 +377,42 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 　砂糖のように甘いものですよね？
 　朝ですよね？硬くて柔らかいものですよね？
 　心の柱ですよね？裏表のない鏡ですよね？
-　なのにどうして？　どうして？」
+　なのにどうして？　どうして？」</p>
 
-「どうしてあなた達の言葉には
-　これっぽっちも敬意が感じられないんですか？」
+<img class="kensa">\
+<p class="side_text">「どうしてあなた達の言葉には
+　これっぽっちも敬意が感じられないんですか？」</p>
 
 ぐるぐる。
 検査官は瞬きをしないまま。
 乾いた瞳でこちらを見つめ返す。
 
-「……改めまして、私は検査官です。」
+<img class="kensa">\
+<p class="side_text">「……改めまして、私は検査官です。」</p>
 
-「マニュアル23p、7項の項目『被験者が服従を示さない場合』
-　のプロセスに則り、記憶消去を実行します。」
+<img class="kensa">\
+<p class="side_text">「マニュアル23p、7項の項目『被験者が服従を示さない場合』
+　のプロセスに則り、記憶消去を実行します。」</p>
 
 ばちり。脳に嫌な音が響く。
 
 嫌だ。
 いやだ。
 
-「どうして私の気持ちに共感してくれないんですか？」
+<img class="kensa">\
+<p class="side_text">「どうして私の気持ちに共感してくれないんですか？」</p>
 
-「もう、昔のことなんて覚えていないけれど……」
+<img class="kensa">\
+<p class="side_text">「もう、昔のことなんて覚えていないけれど……」</p>
 
-「私とあなた達は、とっても似ていると思ったのに……」
+<img class="kensa">\
+<p class="side_text">「私とあなた達は、とっても似ていると思ったのに……」</p>
 
 頭蓋骨の中で音が反響する。
 音が跳ねるたびに記憶が、消しゴムで擦られているかのように消えていく。
 
-「セブンサン様、次こそは彼らにお導きを……」
+<img class="kensa">\
+<p class="side_text">「セブンサン様、次こそは彼らにお導きを……」</p>
 
 Aエンド
 「記憶回復は続く」
@@ -412,41 +426,52 @@ Aエンド
 
 あなたがたはモニター越しの検査官を睨みつけていた。
 
-「………………」
+<img class="kensa">\
+<p class="side_text">「………………」</p>
 
 突然。
 まるで金属を激しくぶつけ合わせたかのような音が鳴り響く。
 警報だ。検査官の表情が険しくなる。
 
-「脱走！？どうしてそんなことを！？」
+<img class="kensa">\
+<p class="side_text">「脱走！？どうしてそんなことを！？」</p>
 
-「しばらく待っていてください。脱走者を鎮圧します！」
+<img class="kensa">\
+<p class="side_text">「しばらく待っていてください。脱走者を鎮圧します！」</p>
 
 白衣を翻し、検査官はモニターから姿を消した。
 
 <<if setup.escapeName == "ヒダマリ">>
 ヒダマリは狭い空気口を潜り抜けた。
 
-<img class="hidamari">「わっせ　わっせ」
+<img class="hidamari">\
+<p class="side_text">「わっせ　わっせ」</p>
 
-「どうして逃げてしまうんですか？」
+<img class="kensa">\
+<p class="side_text">「どうして逃げてしまうんですか？」</p>
 
 通気口を抜けた先は出口の前。
 そこには検査官が仁王立ちで彼女を待っていた。
 
-<img class="hidamari">「んにに　　あんまりカロリーがない状態で戦いたくないんだけどにゃあ」
+<img class="hidamari">\
+<p class="side_text">「んにに　　
+　あんまりカロリーがない状態で戦いたくないんだけどにゃあ」</p>
 
-<img class="hidamari">「でも、邪魔するなら押しとおるよ」
+<img class="hidamari">\
+<p class="side_text">「でも、邪魔するなら押しとおるよ」</p>
 
-「……出来るものなら」
+<img class="kensa">\
+<p class="side_text">「……出来るものなら」</p>
 
-<img class="hidamari">「出来るんだよ」
+<img class="hidamari">\
+<p class="side_text">「出来るんだよ」</p>
 
 交差。
 ヒダマリは一瞬のうちに検査官を吹き飛ばす。
 検査官は壁に全身を打ちながら崩れた。
 
-<img class="hidamari">「……とりあえず逃げないと」
+<img class="hidamari">\
+<p class="side_text">「……とりあえず逃げないと」</p>
 
 ヒダマリは逃げ続けた。ヒダマリは何も信用出来なかった。
 ミンも、フシグモも、自分自身の記憶でさえも。
@@ -461,27 +486,35 @@ Aエンド
 <<if setup.escapeName == "フシグモ">>
 フシグモは脱走した。
 
-「待ってください！」
+<img class="kensa">\
+<p class="side_text">「待ってください！」</p>
 
 検査官は必死に追いかけるが、体力はフシグモほどは無いようだ。
 
-<img class="fusigumo">「……ふぅん」
+<img class="fusigumo">\
+<p class="side_text">「……ふぅん」</p>
 
 それからしばらく……。
 
-「いたい　くるしい」
+<img class="kensa">\
+<p class="side_text">「いたい　くるしい」</p>
 
-<img class="fusigumo">「この毒はまだ有害性を上げられるな」
+<img class="fusigumo">\
+<p class="side_text">「この毒はまだ有害性を上げられるな」</p>
 
 検査官は実験台にされていた。
 
-「むり　いたい　だって　うぅ」
+<img class="kensa">\
+<p class="side_text">「むり　いたい　だって　うぅ」</p>
 
-<img class="fusigumo">「まだ痛みを訴える余裕があるな。もうあと2段階上げてみよう。」
+<img class="fusigumo">\
+<p class="side_text">「まだ痛みを訴える余裕があるな。もうあと2段階上げてみよう。」</p>
 
-「たすけて　セブンサンさま」
+<img class="kensa">\
+<p class="side_text">「たすけて　セブンサンさま」</p>
 
-<img class="fusigumo">「……いずれ会わせてやるさ」
+<img class="fusigumo">\
+<p class="side_text">「……いずれ会わせてやるさ」</p>
 
 検査官の目に希望の光が灯る。
 希望をチラつかせただけで……なんて哀れな生き物なんだ。
@@ -496,22 +529,27 @@ Aエンド
 <<if setup.escapeName == "ミン">>
 ミンが通気口を通る。
 
-<img class="minn">「とりあえずは撤退だ…」
+<img class="minn">\
+<p class="side_text">「とりあえずは撤退だ…」</p>
 
 通気口から出ると、そこには絶望が広がっていた。
 
-「どこに行こうというんですか？」
+<img class="kensa">\
+<p class="side_text">「どこに行こうというんですか？」</p>
 
 二本の刀を持った検査官。
 『ラスト・リゾート』がミンを殺す為に待っていた。
 
-<img class="minn">「まぁ、そうか」
+<img class="minn">\
+<p class="side_text">「まぁ、そうか」</p>
 
 一閃。瞬きの間におびただしいほどの風が切り裂かれた。
 
-<img class="minn">「ボクだけが助かるってのは　ズルすぎるか」
+<img class="minn">\
+<p class="side_text">「ボクだけが助かるってのは　ズルすぎるか」</p>
 
-「……やっぱり、殺しは良い……」
+<img class="kensa">\
+<p class="side_text">「……やっぱり、殺しは良い……」</p>
 
 検査官は刀に付いた血をぬぐうと、そのまま扉から外に出た。
 
@@ -555,53 +593,63 @@ Bエンド
 
 何も言わなかった。
 
-「……………………」
+<img class="kensa">\
+<p class="side_text">「……………………」</p>
 
-「あれ、聞こえてますよね？」
+<img class="kensa">\
+<p class="side_text">「あれ、聞こえてますよね？」</p>
 
 ぱたぱたと手を振る検査官。
 何も言わなかった。
 
-「あれぇ………故障かなぁ……えぇ…っと……」
+<img class="kensa">\
+<p class="side_text">「あれぇ………故障かなぁ……えぇ…っと……」</p>
 
 何も言わなかった。
 何も言わなかった。
 何も言わなかった。
 ……無言のまま数十分が過ぎた。
 
-「セブンサン様、こういうときはどうすればよろしいのでしょうか
-　死体のフリをしているのは承知です。どうか、お導きください。」
+<img class="kensa">\
+<p class="side_text">「セブンサン様、こういうときはどうすればよろしいのでしょうか
+　死体のフリをしているのは承知です。どうか、お導きください。」</p>
 
 何も言わなかった。
 
-「セブンサン様？」
+<img class="kensa">\
+<p class="side_text">「セブンサン様？」</p>
 
 死体は喋らない。
 
-「え？うそ、ウソですよね？
-　あれ、おかしいですよね？そんな、え？」
+<img class="kensa">\
+<p class="side_text">「え？うそ、ウソですよね？
+　あれ、おかしいですよね？そんな、え？」</p>
 
-「導いてくれるって言ったじゃないですか
+<img class="kensa">\
+<p class="side_text">「導いてくれるって言ったじゃないですか
 　救いになるって言ってくれたじゃないですか
 　どうして？どうして死んでいるんですか？
-　本当に死んでいるんですか？」
+　本当に死んでいるんですか？」</p>
 
 死体は喋らない。
 
-「え、うそ、うそうそうそ！
+<img class="kensa">\
+<p class="side_text">「え、うそ、うそうそうそ！
 　なんで勝手に死んでいるんですか？
-　あたしは、一人にされたんですか？え、あ」
+　あたしは、一人にされたんですか？え、あ」</p>
 
 検査官は髪をかきむしりながら、必死にモニターを覗き込む。
 ……それでも、死体は死んでいる。
 
-「あ/あぁ！見捨てられ/た
-　神は違っ/た/私を/救っ/たわけじゃ/なかったんだ」
+<img class="kensa">\
+<p class="side_text">「あ/あぁ！見捨てられ/た
+　神は違っ/た/私を/救っ/たわけじゃ/なかったんだ」</p>
 
 検査官はそのまま机を両手で持ち上げた。
 モニターの映像がぐらぐらと揺れ、何も映らなくなる。
 
-「神/のいないこの世界/私もすぐ行きま/すからね」
+<img class="kensa">\
+<p class="side_text">「神/のいないこの世界/私もすぐ行きま/すからね」</p>
 
 警報が部屋に鳴り響く。
 モニターからは検査官が椅子を投げ、壁を蹴りつけ、泣きわめき、
@@ -614,12 +662,15 @@ Bエンド
 
 三人は、警報の鳴り響く廊下を駆け抜ける。
 
-「ひゃー☆　こんなにうまくいくなんてねっ！」
+<img class="hidamari">\
+<p class="side_text">「ひゃー☆　こんなにうまくいくなんてねっ！」</p>
 
-「全く非合理的だ。もっといい策はいくらでもあっただろう」
+<img class="fusigumo">\
+<p class="side_text">「全く非合理的だ。もっといい策はいくらでもあっただろう」</p>
 
-「とりあえず地上にさえ出れば何とかなるはず！
-　進め！ボクが怪我しないように前を！」
+<img class="minn">\
+<p class="side_text">「とりあえず地上にさえ出れば何とかなるはず！
+　進め！ボクが怪我しないように前を！」</p>
 
 必死に廊下を走っていた3人は
 『EXIT』
@@ -627,12 +678,15 @@ Bエンド
 そのドアの横にもう一つ。
 『監視室』と書かれたドアがあったからだ。
 
-「あら～」
+<img class="minn">\
+<p class="side_text">「あら～」</p>
 
-「中には検査官、か」
+<img class="fusigumo">\
+<p class="side_text">「中には検査官、か」</p>
 
-「どうする～？
-　あの感じだと自分で脱出とかはする気無さそうだけどにぃ」
+<img class="hidamari">\
+<p class="side_text">「どうする～？
+　あの感じだと自分で脱出とかはする気無さそうだけどにぃ」</p>
 
 ※
 ここから3分間
@@ -642,7 +696,9 @@ Bエンド
 
 [[助ける|END D]]
 [[助けない|END E]]
-<a href="https://drive.google.com/uc?id=13wGZ-uaF-S4cox03t7h597wZuCj3tifL" target="_blank">ENDING C</a>
+
+
+<a href="https://drive.google.com/uc?id=13wGZ-uaF-S4cox03t7h597wZuCj3tifL" target="_blank">エラー時はこちらを参照ください。</a>
 
 
 
@@ -694,3 +750,9 @@ $(document).one(":passagedisplay", function (event) {
 <</script>>
 </div></div></div>
 <</if>>
+
+:: StoryInit
+<<preload "https://drive.google.com/uc?id=1BJ-L0M9PVctUgoTRvhVQdnZ53Eo3dxWO" 
+"https://drive.google.com/uc?id=1BPfQaJAInwwQgKQ4pYecfIVAWcHW8tF0" 
+"https://drive.google.com/uc?id=1BHQWP3o_OYnl2qpMN0bf9cvNZm05_U0e" 
+"https://drive.google.com/uc?id=1BLEKL2foEZKwgZ6-DILSBftJFI8_o2jc">>
