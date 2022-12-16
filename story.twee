@@ -213,10 +213,10 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 <div class="clock"><p class="clock-time" id="time">00:00.00</p></div>\
 <<script>>
 	$(document).one(':passagedisplay', function (ev) {
-		//var span = document.getElementById('time');
-		//setup.countdown = new Countdown(span, 181);
-		//setup.countdown.init();
-		//setup.countdown.start();
+		var span = document.getElementById('time');
+		setup.countdown = new Countdown(span, 181);
+		setup.countdown.init();
+		setup.countdown.start();
 	});
 <</script>>
 
@@ -233,6 +233,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 <<button "回答する">>
 	<<script>>
 		$('#hidans').css('display', 'none');
+		$('#hidansbtn').css('display', 'none');
 		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
 		if(State.variables.answer == ""){
 			setup.correctAnswer++;
@@ -249,8 +250,33 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 <<button "* 換気口から脱出する *">>
 	<<script>>	
 	$('#hidans').css('display', 'none');
+	$('#hidesc').css('display', 'none');
 		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
-		if(State.variables.answer == "SEVENSUN"){
+		if(State.variables.answer == ""){
+			setup.correctAnswer++;
+		}
+		else if(State.variables.answer == "SEVENSUN"){
+			setup.escapeName = State.variables.name;
+			setup.correctAnswer++;
+		}
+		else{
+			setup.wrongAnswer++;
+		}
+		$("#passageGoNumber").text(setup.correctAnswer+setup.wrongAnswer);
+		$("#passageMemberNumber").text(setup.memberNumber);
+	<</script>>
+<</button>>
+</span>\
+<span id="hidquiet" style="display: none">\
+<<button "* 何も答えない *">>
+	<<script>>	
+	$('#hidans').css('display', 'none');
+	$('#hidquiet').css('display', 'none');
+		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
+		if(State.variables.answer == ""){
+			setup.correctAnswer++;
+		}
+		else if(State.variables.answer == "SEVENSUN"){
 			setup.escapeName = State.variables.name;
 			setup.correctAnswer++;
 		}
@@ -267,6 +293,15 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		$('#hidans').css('display', 'none');
 	<</script>>
 <</timed>>
+<<timed 30s>>
+	<<script>>
+		if(State.variables.answer == ""){
+			$('#hidansbtn').css('display', 'none');
+			$('#hidesc').css('display', 'none');
+			$('#hidquiet').css('display', 'inline');
+		}
+	<</script>>
+<</timed>>
 <<silently>><<repeat 1s>><<script>>
 	if(setup.correctAnswer + setup.wrongAnswer == setup.memberNumber){
 		Engine.play("エンディング判定");
@@ -280,10 +315,17 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 			if(event.target.value == "SEVENSUN"){
 				$('#hidansbtn').css('display', 'none');
 				$('#hidesc').css('display', 'inline');
+				$('#hidquiet').css('display', 'none');
+			}
+			else if (event.target.value == ""){
+				$('#hidansbtn').css('display', 'none');
+				$('#hidesc').css('display', 'none');
+				$('#hidquiet').css('display', 'inline');
 			}
 			else{
 				$('#hidansbtn').css('display', 'inline');
 				$('#hidesc').css('display', 'none');
+				$('#hidquiet').css('display', 'none');
 			}
 		});
 		$("#passageGoNumber").text(setup.correctAnswer+setup.wrongAnswer);

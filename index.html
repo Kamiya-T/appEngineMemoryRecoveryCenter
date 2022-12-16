@@ -274,7 +274,6 @@ body {
 #bottombar {
 	position: fixed;
 	left: 0;
-	bottom: 0;
 	width: 100%;
 	background-color: transparent;
 }
@@ -579,10 +578,10 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 &lt;div class=&quot;clock&quot;&gt;&lt;p class=&quot;clock-time&quot; id=&quot;time&quot;&gt;00:00.00&lt;/p&gt;&lt;/div&gt;\
 &lt;&lt;script&gt;&gt;
 	$(document).one(&#39;:passagedisplay&#39;, function (ev) {
-		//var span = document.getElementById(&#39;time&#39;);
-		//setup.countdown = new Countdown(span, 181);
-		//setup.countdown.init();
-		//setup.countdown.start();
+		var span = document.getElementById(&#39;time&#39;);
+		setup.countdown = new Countdown(span, 181);
+		setup.countdown.init();
+		setup.countdown.start();
 	});
 &lt;&lt;/script&gt;&gt;
 
@@ -599,6 +598,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 &lt;&lt;button &quot;回答する&quot;&gt;&gt;
 	&lt;&lt;script&gt;&gt;
 		$(&#39;#hidans&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#hidansbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
 		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
 		if(State.variables.answer == &quot;&quot;){
 			setup.correctAnswer++;
@@ -615,8 +615,33 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 &lt;&lt;button &quot;* 換気口から脱出する *&quot;&gt;&gt;
 	&lt;&lt;script&gt;&gt;	
 	$(&#39;#hidans&#39;).css(&#39;display&#39;, &#39;none&#39;);
+	$(&#39;#hidesc&#39;).css(&#39;display&#39;, &#39;none&#39;);
 		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
-		if(State.variables.answer == &quot;SEVENSUN&quot;){
+		if(State.variables.answer == &quot;&quot;){
+			setup.correctAnswer++;
+		}
+		else if(State.variables.answer == &quot;SEVENSUN&quot;){
+			setup.escapeName = State.variables.name;
+			setup.correctAnswer++;
+		}
+		else{
+			setup.wrongAnswer++;
+		}
+		$(&quot;#passageGoNumber&quot;).text(setup.correctAnswer+setup.wrongAnswer);
+		$(&quot;#passageMemberNumber&quot;).text(setup.memberNumber);
+	&lt;&lt;/script&gt;&gt;
+&lt;&lt;/button&gt;&gt;
+&lt;/span&gt;\
+&lt;span id=&quot;hidquiet&quot; style=&quot;display: none&quot;&gt;\
+&lt;&lt;button &quot;* 何も答えない *&quot;&gt;&gt;
+	&lt;&lt;script&gt;&gt;	
+	$(&#39;#hidans&#39;).css(&#39;display&#39;, &#39;none&#39;);
+	$(&#39;#hidquiet&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
+		if(State.variables.answer == &quot;&quot;){
+			setup.correctAnswer++;
+		}
+		else if(State.variables.answer == &quot;SEVENSUN&quot;){
 			setup.escapeName = State.variables.name;
 			setup.correctAnswer++;
 		}
@@ -633,6 +658,15 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		$(&#39;#hidans&#39;).css(&#39;display&#39;, &#39;none&#39;);
 	&lt;&lt;/script&gt;&gt;
 &lt;&lt;/timed&gt;&gt;
+&lt;&lt;timed 30s&gt;&gt;
+	&lt;&lt;script&gt;&gt;
+		if(State.variables.answer == &quot;&quot;){
+			$(&#39;#hidansbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
+			$(&#39;#hidesc&#39;).css(&#39;display&#39;, &#39;none&#39;);
+			$(&#39;#hidquiet&#39;).css(&#39;display&#39;, &#39;inline&#39;);
+		}
+	&lt;&lt;/script&gt;&gt;
+&lt;&lt;/timed&gt;&gt;
 &lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
 	if(setup.correctAnswer + setup.wrongAnswer == setup.memberNumber){
 		Engine.play(&quot;エンディング判定&quot;);
@@ -646,10 +680,17 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 			if(event.target.value == &quot;SEVENSUN&quot;){
 				$(&#39;#hidansbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
 				$(&#39;#hidesc&#39;).css(&#39;display&#39;, &#39;inline&#39;);
+				$(&#39;#hidquiet&#39;).css(&#39;display&#39;, &#39;none&#39;);
+			}
+			else if (event.target.value == &quot;&quot;){
+				$(&#39;#hidansbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
+				$(&#39;#hidesc&#39;).css(&#39;display&#39;, &#39;none&#39;);
+				$(&#39;#hidquiet&#39;).css(&#39;display&#39;, &#39;inline&#39;);
 			}
 			else{
 				$(&#39;#hidansbtn&#39;).css(&#39;display&#39;, &#39;inline&#39;);
 				$(&#39;#hidesc&#39;).css(&#39;display&#39;, &#39;none&#39;);
+				$(&#39;#hidquiet&#39;).css(&#39;display&#39;, &#39;none&#39;);
 			}
 		});
 		$(&quot;#passageGoNumber&quot;).text(setup.correctAnswer+setup.wrongAnswer);
@@ -956,7 +997,11 @@ Bエンド
 
 
 
-&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="10" name="END D" tags="" position="1225,100" size="100,100">&lt;a href=&quot;https://drive.google.com/uc?id=15Juh74UF3ij4zj4SkwLE529V_E8usvLg&quot; target=&quot;_blank&quot;&gt;ENDING D&lt;/a&gt;</tw-passagedata><tw-passagedata pid="11" name="END E" tags="" position="100,225" size="100,100">&lt;a href=&quot;https://drive.google.com/uc?id=1wNwBNRcgnyICkkzo8-TTKVv7GpHMaS0m&quot; target=&quot;_blank&quot;&gt;ENDING E&lt;/a&gt;</tw-passagedata><tw-passagedata pid="12" name="PassageFooter" tags="nobr" position="225,225" size="100,100">&lt;&lt;if !tags().includes(&quot;bbar&quot;)&gt;&gt;
+&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="10" name="END D" tags="" position="1225,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
+&lt;a href=&quot;https://drive.google.com/uc?id=15Juh74UF3ij4zj4SkwLE529V_E8usvLg&quot; target=&quot;_blank&quot;&gt;ENDING D&lt;/a&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="11" name="END E" tags="" position="100,225" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
+&lt;a href=&quot;https://drive.google.com/uc?id=1wNwBNRcgnyICkkzo8-TTKVv7GpHMaS0m&quot; target=&quot;_blank&quot;&gt;ENDING E&lt;/a&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="12" name="PassageFooter" tags="nobr" position="225,225" size="100,100">&lt;&lt;if !tags().includes(&quot;bbar&quot;)&gt;&gt;
 &lt;div id=&quot;bottombar&quot;&gt;
 &lt;div id=&quot;bbblock&quot;&gt;
 &lt;div id=&quot;bbtext&quot; align=&quot;left&quot;&gt;
