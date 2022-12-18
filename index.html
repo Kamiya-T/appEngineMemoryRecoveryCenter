@@ -92,45 +92,13 @@ var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
 <style id="style-ui-bar" type="text/css">#story{margin-left:20em;-webkit-transition:margin-left .2s ease-in;-o-transition:margin-left .2s ease-in;transition:margin-left .2s ease-in}#ui-bar.stowed~#story{margin-left:4.5em}@media screen and (max-width:1136px){#story{margin-left:19em}#ui-bar.stowed~#story{margin-left:3.5em}}@media screen and (max-width:768px){#story{margin-left:3.5em}}#ui-bar{position:fixed;z-index:50;top:0;left:0;width:17.5em;height:100%;margin:0;padding:0;-webkit-transition:left .2s ease-in;-o-transition:left .2s ease-in;transition:left .2s ease-in}#ui-bar.stowed{left:-15.5em}#ui-bar-tray{position:absolute;top:.2em;left:0;right:0}#ui-bar-body{height:90%;height:calc(100% - 2.5em);margin:2.5em 0;padding:0 1.5em}#ui-bar.stowed #ui-bar-body,#ui-bar.stowed #ui-bar-history{visibility:hidden;-webkit-transition:visibility .2s step-end;-o-transition:visibility .2s step-end;transition:visibility .2s step-end}@media (prefers-reduced-motion:reduce){#story{-webkit-transition:margin-left 0s;-o-transition:margin-left 0s;transition:margin-left 0s}#ui-bar{-webkit-transition:left 0s;-o-transition:left 0s;transition:left 0s}}#ui-bar{background-color:#222;border-right:1px solid #444;text-align:center}#ui-bar a{text-decoration:none}#ui-bar hr{border-color:#444}#ui-bar-history [id|=history],#ui-bar-toggle{font-size:1.2em;line-height:inherit;color:#eee;background-color:transparent;border:1px solid #444}#ui-bar-toggle{display:block;position:absolute;top:0;right:0;border-right:none;padding:.3em .45em .25em}#ui-bar.stowed #ui-bar-toggle{padding:.3em .35em .25em .55em}#ui-bar-toggle:hover{background-color:#444;border-color:#eee}#ui-bar-history{margin:0 auto}#ui-bar-history [id|=history]{padding:.2em .45em .35em}#ui-bar-history #history-jumpto{padding:.2em .665em .35em}#ui-bar-history [id|=history]:not(:first-child){margin-left:1.2em}#ui-bar-history [id|=history]:hover{background-color:#444;border-color:#eee}#ui-bar-history [id|=history]:disabled{color:#444;background-color:transparent;border-color:#444}#ui-bar-body{line-height:1.5;overflow:auto}#ui-bar-body>:not(:first-child){margin-top:2em}#story-title{margin:0;font-size:162.5%}#story-author{margin-top:2em;font-weight:700}#menu ul{margin:1em 0 0;padding:0;list-style:none;border:1px solid #444}#menu ul:empty{display:none}#menu li{margin:0}#menu li:not(:first-child){border-top:1px solid #444}#menu li a{display:block;padding:.25em .75em;border:1px solid transparent;color:#eee;text-transform:uppercase}#menu li a:hover{background-color:#444;border-color:#eee}#menu a,#ui-bar-history [id|=history],#ui-bar-toggle{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}#menu-core li[id|=menu-item] a:before,#ui-bar-history [id|=history],#ui-bar-toggle:before{font-family:tme-fa-icons!important;font-style:normal;font-weight:900;font-variant:normal;line-height:1;speak:never;text-rendering:auto;text-transform:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}#ui-bar-toggle:before{content:"\e81d"}#ui-bar.stowed #ui-bar-toggle:before{content:"\e81e"}#menu-item-saves a:before{content:"\e82b\00a0"}#menu-item-settings a:before{content:"\e82d\00a0"}#menu-item-restart a:before{content:"\e82c\00a0"}#menu-item-share a:before{content:"\e82f\00a0"}</style>
 <style id="style-ui-debug" type="text/css">#debug-bar{background-color:#222;border-left:1px solid #444;border-top:1px solid #444;bottom:0;margin:0;max-height:75%;padding:.5em;position:fixed;right:0;z-index:99900}#debug-bar>div:not([id])+div{margin-top:.5em}#debug-bar>div>label{margin-right:.5em}#debug-bar>div>input[type=text]{min-width:0;width:8em}#debug-bar>div>select{width:15em}#debug-bar-toggle{color:#eee;background-color:#222;border:1px solid #444;height:101%;height:calc(100% + 1px);left:-2em;left:calc(-2em - 1px);position:absolute;top:-1px;width:2em}#debug-bar-toggle:hover{background-color:#333;border-color:#eee}#debug-bar-hint{bottom:.175em;font-size:4.5em;opacity:.33;pointer-events:none;position:fixed;right:.6em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;white-space:nowrap}#debug-bar-watch{background-color:#222;border-left:1px solid #444;border-top:1px solid #444;bottom:102%;bottom:calc(100% + 1px);font-size:.9em;left:-1px;max-height:650%;max-height:65vh;position:absolute;overflow-x:hidden;overflow-y:scroll;right:0;z-index:99800}#debug-bar-watch[hidden]{display:none}#debug-bar-watch div{color:#999;font-style:italic;margin:1em auto;text-align:center}#debug-bar-watch table{width:100%}#debug-bar-watch tr:nth-child(2n){background-color:rgba(127,127,127,.15)}#debug-bar-watch td{padding:.2em 0}#debug-bar-watch td:first-child+td{padding:.2em .3em .2em .1em}#debug-bar-watch .watch-delete{background-color:transparent;border:none;color:#c00}#debug-bar-watch-all,#debug-bar-watch-none{margin-left:.5em}#debug-bar-views-toggle,#debug-bar-watch-toggle{color:#eee;background-color:transparent;border:1px solid #444;margin-right:1em;padding:.4em}#debug-bar-views-toggle:hover,#debug-bar-watch-toggle:hover{background-color:#333;border-color:#eee}#debug-bar-watch:not([hidden])~div #debug-bar-watch-toggle,html[data-debug-view] #debug-bar-views-toggle{background-color:#282;border-color:#4a4}#debug-bar-watch:not([hidden])~div #debug-bar-watch-toggle:hover,html[data-debug-view] #debug-bar-views-toggle:hover{background-color:#4a4;border-color:#6c6}#debug-bar-hint:after,#debug-bar-toggle:before,#debug-bar-views-toggle:after,#debug-bar-watch .watch-delete:before,#debug-bar-watch-add:before,#debug-bar-watch-all:before,#debug-bar-watch-none:before,#debug-bar-watch-toggle:after{font-family:tme-fa-icons!important;font-style:normal;font-weight:900;font-variant:normal;line-height:1;speak:never;text-rendering:auto;text-transform:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}#debug-bar-toggle:before{content:"\e838"}#debug-bar-hint:after{content:"\e838\202f\e822"}#debug-bar-watch .watch-delete:before{content:"\e804"}#debug-bar-watch-add:before{content:"\e805"}#debug-bar-watch-all:before{content:"\e83a"}#debug-bar-watch-none:before{content:"\e827"}#debug-bar-views-toggle:after,#debug-bar-watch-toggle:after{content:"\00a0\00a0\e830"}#debug-bar-watch:not([hidden])~div #debug-bar-watch-toggle:after,html[data-debug-view] #debug-bar-views-toggle:after{content:"\00a0\00a0\e831"}html[data-debug-view] .debug{padding:.25em;background-color:#234}html[data-debug-view] .debug[title]{cursor:help}html[data-debug-view] .debug.block{display:inline-block;vertical-align:middle}html[data-debug-view] .debug.invalid{text-decoration:line-through}html[data-debug-view] .debug.hidden,html[data-debug-view] .debug.hidden .debug{background-color:#555}html:not([data-debug-view]) .debug.hidden{display:none}html[data-debug-view] .debug[data-name][data-type].nonvoid:after,html[data-debug-view] .debug[data-name][data-type]:before{background-color:rgba(0,0,0,.25);font-family:monospace,monospace;white-space:pre}html[data-debug-view] .debug[data-name][data-type]:before{content:attr(data-name)}html[data-debug-view] .debug[data-name][data-type|=macro]:before{content:"<<" attr(data-name) ">>"}html[data-debug-view] .debug[data-name][data-type|=macro].nonvoid:after{content:"<</" attr(data-name) ">>"}html[data-debug-view] .debug[data-name][data-type|=html]:before{content:"<" attr(data-name) ">"}html[data-debug-view] .debug[data-name][data-type|=html].nonvoid:after{content:"</" attr(data-name) ">"}html[data-debug-view] .debug[data-name][data-type]:not(:empty):before{margin-right:.25em}html[data-debug-view] .debug[data-name][data-type].nonvoid:not(:empty):after{margin-left:.25em}html[data-debug-view] .debug[data-name][data-type|=special],html[data-debug-view] .debug[data-name][data-type|=special]:before{display:block}</style>
 <style id="style-module-style" type="text/css">@charset "utf8";
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-ul.sample1{
-font: 14px/1.6 'arial narrow', sans-serif;
-list-style: none;
-padding: 0.5em 0.7em;
-border: solid 2px #5c9ee7;
-border-radius: 5px;
-}
-ul.sample1 li{
-position: relative;
-color: #5c9ee7;
-margin-bottom:5px;
-padding-left: 30px;
-line-height: 30px;
-font-size: 15px;
-font-weight: bold;
-border-bottom: 1px dashed #5c9ee7;
-}
-ul.sample1 li:last-child{
-border:none;
-margin: 0;
-}
-ul.sample1 li:before{
-font-family: FontAwesome;
-content: "\f054";
-position: absolute;
-left: 5px;
-font-size: 1.2em;
--webkit-transition: all 0.8s ease-in-out;
-transition: all 0.8s ease-in-out;
-background-position: bottom;
-}
-ul.sample1 li:hover:before{
--webkit-transform:rotateY(-360deg);
-transform:rotateY(-360deg);
-color: red;
-}
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Share+Tech+Mono&display=swap');
+
 /* 時計の共通スタイル */
+#escapeClock.clock{
+  text-shadow: 0 0 0 #000000; /* 文字を発光させる */
+  font-family: 'Open Sans'
+}
 .clock {
   font-family: 'Share Tech Mono', monospace;
   color: #000; /* 文字の色 */
@@ -146,6 +114,11 @@ color: red;
 /* 時間のスタイル */
 .clock-time {
   font-size: 100px;
+}
+.base-timer {
+  position: relative;
+  width: 300px;
+  height: 300px;
 }
 
 /* 文字サイズ調整 */
@@ -202,34 +175,7 @@ input[type="number"]:focus{
   background-color: white;
   color:#000
 }
-/*
-textarea {
-  background-color: white;
-  border: 1px solid #000;
-  color: #080303;
-  padding: 8px;
-  font-family: 'Share Tech Mono', monospace;
-  margin: auto;
-}
-*/
-/*
-textarea:hover{
-  background-color:#fff8dc;
-}
-textarea:not(:disabled):hover {
-  background-color:#fff8dc;
-  border-color: #eee;
-}
-textarea:focus{
-  background-color:#fff8dc;
-}
-input{
-  color: #080303
-}
 
-
-
-*/
 /* 背景、全体 */
 body {
   background-image: url("https://drive.google.com/uc?id=1AmA4XyXI0pB-wi4c0rvnkxCTw7Fybebr");
@@ -238,7 +184,6 @@ body {
   height:auto;
   min-height: 90vh;
   font-size: 110%;
-  will-change: transform;
 }
 
 #ui-overlay{
@@ -259,7 +204,6 @@ body {
   padding-left: 5em;
   min-height:80vh;
   height:auto;
-  will-change: transform;
 }
 
 #center{
@@ -274,11 +218,12 @@ body {
 #bottombar {
 	position: fixed;
 	left: 0;
+  bottom: 0;
 	width: 100%;
 	background-color: transparent;
+  z-index: 40;
 }
 .bottomdiv{
-  position:fixed;
   bottom:0;
   left:auto;
 }
@@ -392,15 +337,31 @@ img.minnb{
   content:url(https://drive.google.com/uc?id=1BLEKL2foEZKwgZ6-DILSBftJFI8_o2jc);
   width:200px;height:200px;
 }
-img.kensa{
+
+img.kanri{
   display:inline-block;
   vertical-align: middle;
   content:url(https://drive.google.com/uc?id=1BPfQaJAInwwQgKQ4pYecfIVAWcHW8tF0);
   width:100px;height:100px;
 }
+
+img.kanrib{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1BPfQaJAInwwQgKQ4pYecfIVAWcHW8tF0);
+  width:200px;height:200px;
+}
 p.side_text{
   display: inline-block;
   vertical-align: middle;
+}
+
+.passage table {
+  margin :auto;
+}
+
+div.box{
+  text-align: center;
 }</style>
 <script id="script-module-modernizr_custom" type="text/javascript">/*! modernizr 3.6.0 (Custom Build) | MIT *
  * https://modernizr.com/download/?-setclasses !*/
@@ -436,6 +397,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		setup.correctAnswer = 0;
 		setup.wrongAnswer = 0;
 		setup.escapeName = "";
+		setup.answer = "";
 		// Reload current passage since imported scripts can function now.
 		Engine.play(passage(), true);
 		LoadScreen.unlock(lockID);  // Unlock loading screen
@@ -459,13 +421,11 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 			li.textContent = member;
 			document.getElementById('memberlist').appendChild(li);
 		}
-		$("#passageMemberNumber").text(setup.memberNumber);
-		$("#passageGoNumber").text(setup.passageGoNumber[0]);
+		$("#passageGoCheck").text(setup.passageGoNumber[0]+" / "+setup.memberNumber);
 	});
 	TwineGang.bind("userClickButton", (id)=>{
 		setup.passageGoNumber[id]++;
-		$("#passageGoNumber").text(setup.passageGoNumber[id]);
-		$("#passageMemberNumber").text(setup.memberNumber);
+		$("#passageGoCheck").text(setup.passageGoNumber[id]+" / "+setup.memberNumber);
 	});
 	TwineGang.bind("otherAnswer", (id)=>{
 		if(id == 0){
@@ -474,12 +434,23 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		else{
 			setup.wrongAnswer++;
 		}
-		$("#passageGoNumber").text(setup.correctAnswer+setup.wrongAnswer);
-		$("#passageMemberNumber").text(setup.memberNumber);
+		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
 	});
 	TwineGang.bind("escapeAnswer", (name)=>{
 		setup.escapeName = name;
 		setup.correctAnswer++;
+	});
+
+	TwineGang.bind("returnHelp", (help)=>{
+		if(help){
+			State.variables.helpnum++;
+			State.variables.nohelpnum--;
+		}else{
+			State.variables.nohelpnum++;
+			if(State.variables.helpnum >= 0){
+				State.variables.helpnum--;
+			}
+		}
 	});
 //*******************************BIND  END**************************
 	}).catch(function(error) {
@@ -488,17 +459,20 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
   }
 );</script><tw-passagedata pid="1" name="Start" tags="mv" position="100,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;
 &lt;font size=&quot;5&quot;&gt;被験者はログインするアカウントを選択してください&lt;/font&gt;
-&lt;span&gt;&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;ヒダマリ&#39;&quot;&gt;&lt;img class=&quot;hidamarib&quot;&gt;&lt;/a&gt;\     
+&lt;span&gt;	&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;ヒダマリ&#39;&quot;&gt;&lt;img class=&quot;hidamarib&quot;&gt;&lt;/a&gt;\     
 		&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;フシグモ&#39;&quot;&gt;&lt;img class=&quot;fusigumob&quot;&gt;&lt;/a&gt;\
-		&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;ミン&#39;&quot;&gt;&lt;img class=&quot;minnb&quot;&gt;&lt;/a&gt;&lt;/span&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="2" name="Login" tags="" position="225,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;
+		&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;ミン&#39;&quot;&gt;&lt;img class=&quot;minnb&quot;&gt;&lt;/a&gt;\
+		&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;検査官&#39;&quot;&gt;&lt;img class=&quot;kanrib&quot;&gt;&lt;/a&gt;
+		&lt;/span&gt;\
+&lt;/div&gt;
+[[ENDDorE]]</tw-passagedata><tw-passagedata pid="2" name="Login" tags="" position="225,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;
 &lt;&lt;set $RoomID to 0&gt;&gt;
 進行マニュアル
-1.進行役が新規ルームを作成する。
+1.進行役が『新規ルーム作成』をすること。
 2.画面に表示される部屋番号を他被験者と共有する。
-3.他被験者は共有された部屋番号を用いて既存ルームに接続する。
+3.他被験者は共有された部屋番号を用いて『既存ルームに接続』する。
 &lt;span id=&quot;RoomIdDisplay&quot;&gt;&lt;/span&gt;
-		&lt;&lt;button &#39;新規ルームを作成する&#39;&gt;&gt;
+		&lt;&lt;button &#39;新規ルーム作成&#39;&gt;&gt;
     		&lt;&lt;script&gt;&gt;
     			  TwineGang.createNewRoom(State.variables.name);
     		&lt;&lt;/script&gt;&gt;
@@ -537,13 +511,14 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
             li.textContent = member;
             document.getElementById(&#39;memberlist&#39;).appendChild(li);
         }
-		$(&quot;#passageMemberNumber&quot;).text(setup.memberNumber);
-		$(&quot;#passageGoNumber&quot;).text(setup.passageGoNumber[0]);
+		$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[0]+&quot; / &quot;+setup.memberNumber);
+		
+		$(&quot;#hidbtn button&quot;).prop(&quot;disabled&quot;, true);
     });
     &lt;&lt;/script&gt;&gt;
 	&lt;span id=&quot;message&quot;&gt;1. 被験者全員のログインを確認する。
 	2. 被験者全員の準備が出来次第、検査官との面談を実施する。&lt;/span&gt;
-	&lt;span id=&quot;passageGoNumber&quot;&gt;0&lt;/span&gt; / &lt;span id=&quot;passageMemberNumber&quot;&gt;0&lt;/span&gt;
+	&lt;span id=&quot;passageGoCheck&quot;&gt;0/0&lt;/span&gt;
 
 	&lt;span id=&quot;hidbtn&quot; style=&quot;display: initial&quot;&gt;\
 		  &lt;&lt;button &quot;次へ&quot;&gt;&gt;
@@ -551,14 +526,16 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 				$(&#39;#hidbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
 				TwineGang.clickButton(0);
 				setup.passageGoNumber[0]++;
-				$(&quot;#passageMemberNumber&quot;).text(setup.memberNumber);
-				$(&quot;#passageGoNumber&quot;).text(setup.passageGoNumber[0]);
+				$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[0]+&quot; / &quot;+setup.memberNumber);
 			&lt;&lt;/script&gt;&gt;
 		  &lt;&lt;/button&gt;&gt;
 	&lt;/span&gt;\
 	&lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
 		if(setup.passageGoNumber[0] == setup.memberNumber){
 			Engine.play(&quot;検査官の質問&quot;);
+		}
+		if(setup.memberNumber &gt;= 1){
+			$(&quot;#hidbtn button&quot;).prop(&quot;disabled&quot;, false);
 		}
 	&lt;&lt;/script&gt;&gt;&lt;&lt;/repeat&gt;&gt;&lt;&lt;/silently&gt;&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="検査官の質問" tags="" position="475,100" size="100,100">&lt;div class = &quot;text&quot;&gt;
@@ -572,8 +549,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 「さて、心の準備は出来ましたか」
 「では、お聞きしますね」
 
-『あなたにとってその『死んだフリをしている』男……
-　死体と呼んでいるその人は何者ですか？』
+「あなたにとってその『死んだフリをしている』男……
+　死体と呼んでいるその人は何者ですか？」」
 どくん。
 &lt;font size=&quot;5&quot;&gt;どくん。&lt;/font&gt;
 &lt;font size=&quot;6&quot;&gt;どくん。
@@ -583,28 +560,32 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 &lt;&lt;/type&gt;&gt;
 
 &lt;div class = &quot;bottomdiv&quot;&gt;
-&lt;span id=&quot;passageGoNumber&quot;&gt;0&lt;/span&gt; / &lt;span id=&quot;passageMemberNumber&quot;&gt;0&lt;/span&gt;
+&lt;span id=&quot;passageGoCheck&quot;&gt;0/0&lt;/span&gt;
 &lt;span id=&quot;hidbtn&quot; style=&quot;display: initial&quot;&gt;\
 	&lt;&lt;button &quot;次へ&quot;&gt;&gt;
 		&lt;&lt;script&gt;&gt;
 			$(&#39;#hidbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
 			TwineGang.clickButton(1);
 			setup.passageGoNumber[1]++;
-			$(&quot;#passageMemberNumber&quot;).text(setup.memberNumber);
-			$(&quot;#passageGoNumber&quot;).text(setup.passageGoNumber[1]);
+			$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[1]+&quot; / &quot;+setup.memberNumber);
 		&lt;&lt;/script&gt;&gt;
 		&lt;&lt;/button&gt;&gt;
 	&lt;/span&gt;\
 	&lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
 		if(setup.passageGoNumber[1] == setup.memberNumber){
-			Engine.play(&quot;質問フェーズ&quot;);
+			if(State.variables.name == &#39;検査官&#39;){
+				Engine.play(&quot;監視フェーズ&quot;);
+			}
+			else{
+				Engine.play(&quot;質問フェーズ&quot;);
+			}
+
 		}
 	&lt;&lt;/script&gt;&gt;&lt;&lt;/repeat&gt;&gt;&lt;&lt;/silently&gt;&gt;
 &lt;/div&gt;
 &lt;&lt;script&gt;&gt;
     $(document).one(&#39;:passagedisplay&#39;, function (ev) {
-		$(&quot;#passageMemberNumber&quot;).text(setup.memberNumber);
-		$(&quot;#passageGoNumber&quot;).text(setup.passageGoNumber[1]);
+		$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[1]+&quot; / &quot;+setup.memberNumber);
     });
 &lt;&lt;/script&gt;&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="質問フェーズ" tags="" position="600,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
@@ -625,13 +606,17 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 
 
-&lt;span id=&quot;passageGoNumber&quot;&gt;0&lt;/span&gt; / &lt;span id=&quot;passageMemberNumber&quot;&gt;0&lt;/span&gt;
-&lt;span id=&quot;hidans&quot; style=&quot;display: initial&quot;&gt;&lt;&lt;textarea &quot;$answer&quot; &quot;&quot;&gt;&gt;&lt;/span&gt;
-&lt;span id=&quot;hidansbtn&quot; style=&quot;display: initial&quot;&gt;\
+&lt;span id=&quot;answerTest&quot;&gt;&lt;/span&gt;
+&lt;span id=&quot;ans&quot; style=&quot;display: initial&quot;&gt;&lt;&lt;textarea &quot;$answer&quot; &quot;&quot;&gt;&gt;&lt;/span&gt;
+&lt;div class=&quot;box&quot;&gt;&lt;span id=&quot;passageGoCheck&quot;&gt;0/0&lt;/span&gt;&lt;/div&gt;
+&lt;span id=&quot;ansbtn&quot; style=&quot;display: inline-block&quot;&gt;\
 &lt;&lt;button &quot;回答する&quot;&gt;&gt;
 	&lt;&lt;script&gt;&gt;
-		$(&#39;#hidans&#39;).css(&#39;display&#39;, &#39;none&#39;);
-		$(&#39;#hidansbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#ans&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#escape&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#quiet&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#ansbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#escapeChoice&#39;).css(&#39;display&#39;, &#39;none&#39;);
 		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
 		if(State.variables.answer == &quot;&quot;){
 			setup.correctAnswer++;
@@ -639,64 +624,101 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		else{
 			setup.wrongAnswer++;
 		}
-		$(&quot;#passageGoNumber&quot;).text(setup.correctAnswer+setup.wrongAnswer);
-		$(&quot;#passageMemberNumber&quot;).text(setup.memberNumber);
+		$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+&quot; / &quot;+setup.memberNumber);
 	&lt;&lt;/script&gt;&gt;
 &lt;&lt;/button&gt;&gt;
 &lt;/span&gt;\
-&lt;span id=&quot;hidesc&quot; style=&quot;display: none&quot;&gt;\
-&lt;&lt;button &quot;* 換気口から脱出する *&quot;&gt;&gt;
+&lt;span id=&quot;quiet&quot; style=&quot;display: none&quot;&gt;\
+&lt;&lt;button &quot;何も答えない&quot;&gt;&gt;
 	&lt;&lt;script&gt;&gt;	
-	$(&#39;#hidans&#39;).css(&#39;display&#39;, &#39;none&#39;);
-	$(&#39;#hidesc&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#ans&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#escape&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#quiet&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#ansbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#escapeChoice&#39;).css(&#39;display&#39;, &#39;none&#39;);
 		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
 		if(State.variables.answer == &quot;&quot;){
-			setup.correctAnswer++;
-		}
-		else if(State.variables.answer == &quot;SEVENSUN&quot;){
-			setup.escapeName = State.variables.name;
 			setup.correctAnswer++;
 		}
 		else{
 			setup.wrongAnswer++;
 		}
-		$(&quot;#passageGoNumber&quot;).text(setup.correctAnswer+setup.wrongAnswer);
-		$(&quot;#passageMemberNumber&quot;).text(setup.memberNumber);
+		$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+&quot; / &quot;+setup.memberNumber);
+	&lt;&lt;/script&gt;&gt;
+&lt;&lt;/button&gt;&gt;
+&lt;/span&gt;
+
+&lt;span id=&quot;escape&quot; style=&quot;display: initial&quot;&gt;\
+&lt;&lt;button &quot;脱出を試みる&quot;&gt;&gt;
+	&lt;&lt;script&gt;&gt;
+	$(&#39;#escape&#39;).css(&#39;display&#39;, &#39;none&#39;);
+	$(&#39;#escapeChoice&#39;).css(&#39;display&#39;, &#39;inline&#39;);
 	&lt;&lt;/script&gt;&gt;
 &lt;&lt;/button&gt;&gt;
 &lt;/span&gt;\
-&lt;span id=&quot;hidquiet&quot; style=&quot;display: none&quot;&gt;\
-&lt;&lt;button &quot;* 何も答えない *&quot;&gt;&gt;
-	&lt;&lt;script&gt;&gt;	
-	$(&#39;#hidans&#39;).css(&#39;display&#39;, &#39;none&#39;);
-	$(&#39;#hidquiet&#39;).css(&#39;display&#39;, &#39;none&#39;);
-		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
-		if(State.variables.answer == &quot;&quot;){
-			setup.correctAnswer++;
-		}
-		else if(State.variables.answer == &quot;SEVENSUN&quot;){
-			setup.escapeName = State.variables.name;
-			setup.correctAnswer++;
-		}
-		else{
-			setup.wrongAnswer++;
-		}
-		$(&quot;#passageGoNumber&quot;).text(setup.correctAnswer+setup.wrongAnswer);
-		$(&quot;#passageMemberNumber&quot;).text(setup.memberNumber);
-	&lt;&lt;/script&gt;&gt;
-&lt;&lt;/button&gt;&gt;
+
+&lt;span id = &quot;escapeChoice&quot; style=&quot;display:none&quot;&gt;
+&lt;table&gt;\
+&lt;tr&gt;\
+&lt;&lt;button &#39;天井から脱出する&#39;&gt;&gt;&lt;&lt;script&gt;&gt;
+	$(&#39;#escapeChoice&#39;).css(&#39;display&#39;, &#39;none&#39;);
+	$(&#39;#escapeResultTrue&#39;).css(&#39;display&#39;, &#39;inline&#39;);
+&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button &#39;通路から脱出する&#39;&gt;&gt;&lt;&lt;script&gt;&gt;
+	$(&#39;#escapeChoice&#39;).css(&#39;display&#39;, &#39;none&#39;);
+	$(&#39;#escapeResultText&#39;).text(&quot;通路の鉄格子は硬く、非常な力をもってしても開きそうにない。脱出の手掛かりはなさそうだ。&quot;);
+	$(&#39;#escapeResultText&#39;).css(&#39;display&#39;, &#39;inline&#39;);
+&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button &#39;床から脱出する&#39;&gt;&gt;&lt;&lt;script&gt;&gt;
+	$(&#39;#escapeChoice&#39;).css(&#39;display&#39;, &#39;none&#39;);
+	$(&#39;#escapeResultText&#39;).text(&quot;床にはほこりもなくある程度清潔だ。しかし、脱出の手掛かりはなさそうだ。&quot;);
+	$(&#39;#escapeResultText&#39;).css(&#39;display&#39;, &#39;inline&#39;);
+&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;button &#39;モニターから脱出する&#39;&gt;&gt;&lt;&lt;script&gt;&gt;
+	$(&#39;#escapeChoice&#39;).css(&#39;display&#39;, &#39;none&#39;);
+	$(&#39;#escapeResultText&#39;).text(&quot;脱出の窓にならないだろうか？ウィンドウズだけに。脱出の手掛かりはなさそうだ。&quot;);
+	$(&#39;#escapeResultText&#39;).css(&#39;display&#39;, &#39;inline&#39;);
+&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;/tr&gt;\
+&lt;/table&gt;\
 &lt;/span&gt;\
+&lt;span id=&quot;escapeResultTrue&quot; style=&quot;display:none&quot;&gt;
+貴方は天井の通気口を見つけ、潜り込んだ…
+だが、鉄格子に阻まれ進むことができない。
+パスワードを入力しなければ開かなそうだ。
+	&lt;&lt;textbox &quot;$password&quot; &quot;&quot;&gt;&gt;　&lt;&lt;button &quot;入力&quot;&gt;&gt;&lt;&lt;script&gt;&gt;
+	TwineGang.sendEscape(State.variables.password, State.variables.name);
+	if(State.variables.password == &quot;SEVENSUN&quot;){
+		setup.escapeName = State.variables.name;
+		setup.correctAnswer++;
+		$(&#39;#ans&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#escape&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#quiet&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#ansbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#escapeChoice&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#escapeResultTrue&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#escapeResultText&#39;).css(&#39;display&#39;, &#39;inline&#39;);
+		$(&#39;#escapeResultText&#39;).text(&quot;鉄格子が開いた！貴方は必死に通気口を進む…&quot;)
+	}
+	else{
+		$(&#39;#escapeChoice&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#escapeResultTrue&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#escapeResultText&#39;).css(&#39;display&#39;, &#39;inline&#39;);
+		$(&#39;#escapeResultText&#39;).text(&quot;パスワードが違ったようだ…もうなにも反応しない。&quot;)
+	}
+	$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+&quot; / &quot;+setup.memberNumber);
+	&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;/span&gt;\
+&lt;span id=&quot;escapeResultText&quot; style=&quot;display:none&quot;&gt;&lt;/span&gt;\
 &lt;&lt;timed 182s&gt;&gt;
 	&lt;&lt;script&gt;&gt;
-		$(&#39;#hidans&#39;).css(&#39;display&#39;, &#39;none&#39;);
+		$(&#39;#ans&#39;).css(&#39;display&#39;, &#39;none&#39;);
 	&lt;&lt;/script&gt;&gt;
 &lt;&lt;/timed&gt;&gt;
-&lt;&lt;timed 30s&gt;&gt;
+&lt;&lt;timed 60s&gt;&gt;
 	&lt;&lt;script&gt;&gt;
-		if(State.variables.answer == &quot;&quot;){
-			$(&#39;#hidansbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
-			$(&#39;#hidesc&#39;).css(&#39;display&#39;, &#39;none&#39;);
-			$(&#39;#hidquiet&#39;).css(&#39;display&#39;, &#39;inline&#39;);
+		if(setup.answer == &quot;&quot;){
+			$(&#39;#quiet&#39;).css(&#39;display&#39;, &#39;inline-block&#39;);
 		}
 	&lt;&lt;/script&gt;&gt;
 &lt;&lt;/timed&gt;&gt;
@@ -710,12 +732,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	$(document).one(&#39;:passagedisplay&#39;, function (ev) {
 		const textareaElem = document.getElementById(&quot;textarea-answer&quot;);
 		textareaElem.addEventListener(&#39;input&#39;, (event) =&gt; {
-			if(event.target.value == &quot;SEVENSUN&quot;){
-				$(&#39;#hidansbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
-				$(&#39;#hidesc&#39;).css(&#39;display&#39;, &#39;inline&#39;);
-				$(&#39;#hidquiet&#39;).css(&#39;display&#39;, &#39;none&#39;);
-			}
-			else if (event.target.value == &quot;&quot;){
+			setup.answer = event.target.value;
+			if (event.target.value == &quot;&quot;){
 				$(&#39;#hidansbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
 				$(&#39;#hidesc&#39;).css(&#39;display&#39;, &#39;none&#39;);
 				$(&#39;#hidquiet&#39;).css(&#39;display&#39;, &#39;inline&#39;);
@@ -725,12 +743,12 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 				$(&#39;#hidesc&#39;).css(&#39;display&#39;, &#39;none&#39;);
 				$(&#39;#hidquiet&#39;).css(&#39;display&#39;, &#39;none&#39;);
 			}
+			$(&quot;#answerTest&quot;).text(setup.answer);
 		});
-		$(&quot;#passageGoNumber&quot;).text(setup.correctAnswer+setup.wrongAnswer);
-		$(&quot;#passageMemberNumber&quot;).text(setup.memberNumber);
 	});
 &lt;&lt;/script&gt;&gt;
 &lt;/div&gt;\</tw-passagedata><tw-passagedata pid="6" name="エンディング判定" tags="" position="725,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
+&lt;font size=&quot;6&quot;&gt;通話チャンネルの休憩室にお戻りください。&lt;/font&gt;
 &lt;&lt;if setup.wrongAnswer gt 0&gt;&gt;
 	[[エンディングへ|END A]]
 &lt;&lt;elseif setup.escapeName != &quot;&quot;&gt;&gt;
@@ -1069,25 +1087,84 @@ Bエンド
 &lt;p class=&quot;side_text&quot;&gt;「どうする～？
 　あの感じだと自分で脱出とかはする気無さそうだけどにぃ」&lt;/p&gt;
 
-※
-ここから3分間
-検査官を「助ける」か「助けない」かを話し合う。
-結果はチャットで一斉に送信し
-一人でも「助けない」を選択した場合、「助けない」へ分岐する。
 
-[[助ける|END D]]
-[[助けない|END E]]
-
+[[次へ|ENDDorE]]
 
 &lt;a href=&quot;https://drive.google.com/uc?id=13wGZ-uaF-S4cox03t7h597wZuCj3tifL&quot; target=&quot;_blank&quot;&gt;エラー時はこちらを参照ください。&lt;/a&gt;
 
 
 
-&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="10" name="END D" tags="" position="1225,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
+&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="10" name="ENDDorE" tags="" position="1225,100" size="100,100">&lt;div class=&quot;text&quot;&gt;\
+&lt;div class=&quot;clock&quot; id=&quot;escapeClock&quot;&gt;&lt;p class=&quot;clock-time&quot; id=&quot;time&quot;&gt;00:00&lt;/p&gt;&lt;/div&gt;\
+
+
+3分間
+検査官を「助ける」か「助けない」かを話し合う。
+一人でも「助けない」を選択した場合、「助けない」へ分岐する。
+&lt;&lt;script&gt;&gt;
+	$(document).one(&#39;:passagedisplay&#39;, function (ev) {
+		var span = document.getElementById(&#39;time&#39;);
+		setup.countdown = new Countdown(span, 200);
+		setup.countdown.init();
+		setup.countdown.easystart();
+		State.variables.helpnum = 0;
+		State.variables.nohelpnum = setup.memberNumber;
+		$(&#39;#helpnum&#39;).text(State.variables.helpnum);
+		$(&#39;#nohelpnum&#39;).text(State.variables.nohelpnum);
+		if(State.variables.name!=&#39;検査官&#39;){
+			$(&#39;input[type=radio][name=radiobutton-help]&#39;).on(&#39;change&#39;, function(event) {
+				TwineGang.sendHelp(State.variables.help);
+				switch (State.variables.help) {
+					case &#39;help&#39;:
+						State.variables.helpnum++;
+						State.variables.nohelpnum--;
+						break;
+					case &#39;nohelp&#39;:
+						State.variables.nohelpnum++;
+						if(State.variables.helpnum &gt;= 0){
+							State.variables.helpnum--;
+						}
+						break;
+				}
+				$(&#39;#helpnum&#39;).text(State.variables.helpnum);
+				$(&#39;#nohelpnum&#39;).text(State.variables.nohelpnum);
+			});
+		}
+	});
+
+&lt;&lt;/script&gt;&gt;
+&lt;div id = &quot;helpDecision&quot;&gt;
+検査官を「助ける」？
+&lt;label&gt;&lt;&lt;radiobutton &quot;$help&quot; &#39;help&#39; &gt;&gt; 助ける　&lt;/label&gt;　&lt;span id=&quot;helpnum&quot;&gt;&lt;/span&gt;
+&lt;label&gt;&lt;&lt;radiobutton &quot;$help&quot; &#39;nohelp&#39; checked&gt;&gt; 助けない&lt;/label&gt;　&lt;span id=&quot;nohelpnum&quot;&gt;&lt;/span&gt;
+
+&lt;span id=&quot;passageGoCheck&quot;&gt;0 / 0&lt;/span&gt;
+&lt;span id=&quot;hidbtn&quot; style=&quot;display: initial&quot;&gt;\
+		&lt;&lt;button &quot;決断する&quot;&gt;&gt;
+		&lt;&lt;script&gt;&gt;
+			$(&#39;#hidbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
+			$(&#39;#helpDecision&#39;).css(&#39;display&#39;, &#39;none&#39;);
+			TwineGang.clickButton(2);
+			setup.passageGoNumber[2]++;
+			$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[2]+&quot; / &quot;+setup.memberNumber);
+		&lt;&lt;/script&gt;&gt;
+		&lt;&lt;/button&gt;&gt;
+&lt;/span&gt;\
+&lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
+	if(setup.passageGoNumber[2] == setup.memberNumber){
+		if(State.variables.nohelp != 0){
+			Engine.play(&quot;END E&quot;);
+		}else{
+			Engine.play(&quot;END D&quot;);
+		}
+	}
+&lt;&lt;/script&gt;&gt;&lt;&lt;/repeat&gt;&gt;&lt;&lt;/silently&gt;&gt;
+&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="11" name="END D" tags="" position="100,225" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
 &lt;a href=&quot;https://drive.google.com/uc?id=15Juh74UF3ij4zj4SkwLE529V_E8usvLg&quot; target=&quot;_blank&quot;&gt;ENDING D&lt;/a&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="11" name="END E" tags="" position="100,225" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="12" name="END E" tags="" position="225,225" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
 &lt;a href=&quot;https://drive.google.com/uc?id=1wNwBNRcgnyICkkzo8-TTKVv7GpHMaS0m&quot; target=&quot;_blank&quot;&gt;ENDING E&lt;/a&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="12" name="PassageFooter" tags="nobr" position="225,225" size="100,100">&lt;&lt;if !tags().includes(&quot;bbar&quot;)&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="13" name="PassageFooter" tags="nobr" position="350,225" size="100,100">&lt;&lt;if !tags().includes(&quot;bbar&quot;)&gt;&gt;
 &lt;div id=&quot;bottombar&quot;&gt;
 &lt;div id=&quot;bbblock&quot;&gt;
 &lt;div id=&quot;bbtext&quot; align=&quot;left&quot;&gt;
@@ -1116,7 +1193,7 @@ $(document).one(&quot;:passagedisplay&quot;, function (event) {
 
 &lt;&lt;/script&gt;&gt;
 &lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="13" name="StoryInit" tags="" position="350,225" size="100,100">&lt;&lt;preload &quot;https://drive.google.com/uc?id=1BJ-L0M9PVctUgoTRvhVQdnZ53Eo3dxWO&quot; 
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="14" name="StoryInit" tags="" position="475,225" size="100,100">&lt;&lt;preload &quot;https://drive.google.com/uc?id=1BJ-L0M9PVctUgoTRvhVQdnZ53Eo3dxWO&quot; 
 &quot;https://drive.google.com/uc?id=1BPfQaJAInwwQgKQ4pYecfIVAWcHW8tF0&quot; 
 &quot;https://drive.google.com/uc?id=1BHQWP3o_OYnl2qpMN0bf9cvNZm05_U0e&quot; 
 &quot;https://drive.google.com/uc?id=1BLEKL2foEZKwgZ6-DILSBftJFI8_o2jc&quot;&gt;&gt;</tw-passagedata></tw-storydata>

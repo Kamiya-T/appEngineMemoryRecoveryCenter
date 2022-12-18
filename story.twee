@@ -23,6 +23,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		setup.correctAnswer = 0;
 		setup.wrongAnswer = 0;
 		setup.escapeName = "";
+		setup.answer = "";
 		// Reload current passage since imported scripts can function now.
 		Engine.play(passage(), true);
 		LoadScreen.unlock(lockID);  // Unlock loading screen
@@ -46,13 +47,11 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 			li.textContent = member;
 			document.getElementById('memberlist').appendChild(li);
 		}
-		$("#passageMemberNumber").text(setup.memberNumber);
-		$("#passageGoNumber").text(setup.passageGoNumber[0]);
+		$("#passageGoCheck").text(setup.passageGoNumber[0]+" / "+setup.memberNumber);
 	});
 	TwineGang.bind("userClickButton", (id)=>{
 		setup.passageGoNumber[id]++;
-		$("#passageGoNumber").text(setup.passageGoNumber[id]);
-		$("#passageMemberNumber").text(setup.memberNumber);
+		$("#passageGoCheck").text(setup.passageGoNumber[id]+" / "+setup.memberNumber);
 	});
 	TwineGang.bind("otherAnswer", (id)=>{
 		if(id == 0){
@@ -61,12 +60,23 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		else{
 			setup.wrongAnswer++;
 		}
-		$("#passageGoNumber").text(setup.correctAnswer+setup.wrongAnswer);
-		$("#passageMemberNumber").text(setup.memberNumber);
+		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
 	});
 	TwineGang.bind("escapeAnswer", (name)=>{
 		setup.escapeName = name;
 		setup.correctAnswer++;
+	});
+
+	TwineGang.bind("returnHelp", (help)=>{
+		if(help){
+			State.variables.helpnum++;
+			State.variables.nohelpnum--;
+		}else{
+			State.variables.nohelpnum++;
+			if(State.variables.helpnum >= 0){
+				State.variables.helpnum--;
+			}
+		}
 	});
 //*******************************BIND  END**************************
 	}).catch(function(error) {
@@ -82,20 +92,22 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 :: Start [mv]
 <div class = "text" id = "center">
 <font size="5">被験者はログインするアカウントを選択してください</font>
-<span><a data-passage="Login" data-setter="$name to 'ヒダマリ'"><img class="hidamarib"></a>\     
+<span>	<a data-passage="Login" data-setter="$name to 'ヒダマリ'"><img class="hidamarib"></a>\     
 		<a data-passage="Login" data-setter="$name to 'フシグモ'"><img class="fusigumob"></a>\
-		<a data-passage="Login" data-setter="$name to 'ミン'"><img class="minnb"></a></span>\
+		<a data-passage="Login" data-setter="$name to 'ミン'"><img class="minnb"></a>\
+		<a data-passage="Login" data-setter="$name to '検査官'"><img class="kanrib"></a>
+		</span>\
 </div>
-
+[[ENDDorE]]
 :: Login
 <div class = "text" id = "center">
 <<set $RoomID to 0>>
 進行マニュアル
-1.進行役が新規ルームを作成する。
+1.進行役が『新規ルーム作成』をすること。
 2.画面に表示される部屋番号を他被験者と共有する。
-3.他被験者は共有された部屋番号を用いて既存ルームに接続する。
+3.他被験者は共有された部屋番号を用いて『既存ルームに接続』する。
 <span id="RoomIdDisplay"></span>
-		<<button '新規ルームを作成する'>>
+		<<button '新規ルーム作成'>>
     		<<script>>
     			  TwineGang.createNewRoom(State.variables.name);
     		<</script>>
@@ -136,13 +148,14 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
             li.textContent = member;
             document.getElementById('memberlist').appendChild(li);
         }
-		$("#passageMemberNumber").text(setup.memberNumber);
-		$("#passageGoNumber").text(setup.passageGoNumber[0]);
+		$("#passageGoCheck").text(setup.passageGoNumber[0]+" / "+setup.memberNumber);
+		
+		$("#hidbtn button").prop("disabled", true);
     });
     <</script>>
 	<span id="message">1. 被験者全員のログインを確認する。
 	2. 被験者全員の準備が出来次第、検査官との面談を実施する。</span>
-	<span id="passageGoNumber">0</span> / <span id="passageMemberNumber">0</span>
+	<span id="passageGoCheck">0/0</span>
 
 	<span id="hidbtn" style="display: initial">\
 		  <<button "次へ">>
@@ -150,14 +163,16 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 				$('#hidbtn').css('display', 'none');
 				TwineGang.clickButton(0);
 				setup.passageGoNumber[0]++;
-				$("#passageMemberNumber").text(setup.memberNumber);
-				$("#passageGoNumber").text(setup.passageGoNumber[0]);
+				$("#passageGoCheck").text(setup.passageGoNumber[0]+" / "+setup.memberNumber);
 			<</script>>
 		  <</button>>
 	</span>\
 	<<silently>><<repeat 1s>><<script>>
 		if(setup.passageGoNumber[0] == setup.memberNumber){
 			Engine.play("検査官の質問");
+		}
+		if(setup.memberNumber >= 1){
+			$("#hidbtn button").prop("disabled", false);
 		}
 	<</script>><</repeat>><</silently>>
 </div>
@@ -174,8 +189,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 「さて、心の準備は出来ましたか」
 「では、お聞きしますね」
 
-『あなたにとってその『死んだフリをしている』男……
-　死体と呼んでいるその人は何者ですか？』
+「あなたにとってその『死んだフリをしている』男……
+　死体と呼んでいるその人は何者ですか？」」
 どくん。
 <font size="5">どくん。</font>
 <font size="6">どくん。
@@ -185,28 +200,32 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 <</type>>
 
 <div class = "bottomdiv">
-<span id="passageGoNumber">0</span> / <span id="passageMemberNumber">0</span>
+<span id="passageGoCheck">0/0</span>
 <span id="hidbtn" style="display: initial">\
 	<<button "次へ">>
 		<<script>>
 			$('#hidbtn').css('display', 'none');
 			TwineGang.clickButton(1);
 			setup.passageGoNumber[1]++;
-			$("#passageMemberNumber").text(setup.memberNumber);
-			$("#passageGoNumber").text(setup.passageGoNumber[1]);
+			$("#passageGoCheck").text(setup.passageGoNumber[1]+" / "+setup.memberNumber);
 		<</script>>
 		<</button>>
 	</span>\
 	<<silently>><<repeat 1s>><<script>>
 		if(setup.passageGoNumber[1] == setup.memberNumber){
-			Engine.play("質問フェーズ");
+			if(State.variables.name == '検査官'){
+				Engine.play("監視フェーズ");
+			}
+			else{
+				Engine.play("質問フェーズ");
+			}
+
 		}
 	<</script>><</repeat>><</silently>>
 </div>
 <<script>>
     $(document).one(':passagedisplay', function (ev) {
-		$("#passageMemberNumber").text(setup.memberNumber);
-		$("#passageGoNumber").text(setup.passageGoNumber[1]);
+		$("#passageGoCheck").text(setup.passageGoNumber[1]+" / "+setup.memberNumber);
     });
 <</script>>
 </div>
@@ -230,13 +249,17 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 
 
-<span id="passageGoNumber">0</span> / <span id="passageMemberNumber">0</span>
-<span id="hidans" style="display: initial"><<textarea "$answer" "">></span>
-<span id="hidansbtn" style="display: initial">\
+<span id="answerTest"></span>
+<span id="ans" style="display: initial"><<textarea "$answer" "">></span>
+<div class="box"><span id="passageGoCheck">0/0</span></div>
+<span id="ansbtn" style="display: inline-block">\
 <<button "回答する">>
 	<<script>>
-		$('#hidans').css('display', 'none');
-		$('#hidansbtn').css('display', 'none');
+		$('#ans').css('display', 'none');
+		$('#escape').css('display', 'none');
+		$('#quiet').css('display', 'none');
+		$('#ansbtn').css('display', 'none');
+		$('#escapeChoice').css('display', 'none');
 		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
 		if(State.variables.answer == ""){
 			setup.correctAnswer++;
@@ -244,64 +267,101 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		else{
 			setup.wrongAnswer++;
 		}
-		$("#passageGoNumber").text(setup.correctAnswer+setup.wrongAnswer);
-		$("#passageMemberNumber").text(setup.memberNumber);
+		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
 	<</script>>
 <</button>>
 </span>\
-<span id="hidesc" style="display: none">\
-<<button "* 換気口から脱出する *">>
+<span id="quiet" style="display: none">\
+<<button "何も答えない">>
 	<<script>>	
-	$('#hidans').css('display', 'none');
-	$('#hidesc').css('display', 'none');
+		$('#ans').css('display', 'none');
+		$('#escape').css('display', 'none');
+		$('#quiet').css('display', 'none');
+		$('#ansbtn').css('display', 'none');
+		$('#escapeChoice').css('display', 'none');
 		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
 		if(State.variables.answer == ""){
-			setup.correctAnswer++;
-		}
-		else if(State.variables.answer == "SEVENSUN"){
-			setup.escapeName = State.variables.name;
 			setup.correctAnswer++;
 		}
 		else{
 			setup.wrongAnswer++;
 		}
-		$("#passageGoNumber").text(setup.correctAnswer+setup.wrongAnswer);
-		$("#passageMemberNumber").text(setup.memberNumber);
+		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
+	<</script>>
+<</button>>
+</span>
+
+<span id="escape" style="display: initial">\
+<<button "脱出を試みる">>
+	<<script>>
+	$('#escape').css('display', 'none');
+	$('#escapeChoice').css('display', 'inline');
 	<</script>>
 <</button>>
 </span>\
-<span id="hidquiet" style="display: none">\
-<<button "* 何も答えない *">>
-	<<script>>	
-	$('#hidans').css('display', 'none');
-	$('#hidquiet').css('display', 'none');
-		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
-		if(State.variables.answer == ""){
-			setup.correctAnswer++;
-		}
-		else if(State.variables.answer == "SEVENSUN"){
-			setup.escapeName = State.variables.name;
-			setup.correctAnswer++;
-		}
-		else{
-			setup.wrongAnswer++;
-		}
-		$("#passageGoNumber").text(setup.correctAnswer+setup.wrongAnswer);
-		$("#passageMemberNumber").text(setup.memberNumber);
-	<</script>>
-<</button>>
+
+<span id = "escapeChoice" style="display:none">
+<table>\
+<tr>\
+<<button '天井から脱出する'>><<script>>
+	$('#escapeChoice').css('display', 'none');
+	$('#escapeResultTrue').css('display', 'inline');
+<</script>><</button>>
+<<button '通路から脱出する'>><<script>>
+	$('#escapeChoice').css('display', 'none');
+	$('#escapeResultText').text("通路の鉄格子は硬く、非常な力をもってしても開きそうにない。脱出の手掛かりはなさそうだ。");
+	$('#escapeResultText').css('display', 'inline');
+<</script>><</button>>
+<<button '床から脱出する'>><<script>>
+	$('#escapeChoice').css('display', 'none');
+	$('#escapeResultText').text("床にはほこりもなくある程度清潔だ。しかし、脱出の手掛かりはなさそうだ。");
+	$('#escapeResultText').css('display', 'inline');
+<</script>><</button>>
+<<button 'モニターから脱出する'>><<script>>
+	$('#escapeChoice').css('display', 'none');
+	$('#escapeResultText').text("脱出の窓にならないだろうか？ウィンドウズだけに。脱出の手掛かりはなさそうだ。");
+	$('#escapeResultText').css('display', 'inline');
+<</script>><</button>>
+</tr>\
+</table>\
 </span>\
+<span id="escapeResultTrue" style="display:none">
+貴方は天井の通気口を見つけ、潜り込んだ…
+だが、鉄格子に阻まれ進むことができない。
+パスワードを入力しなければ開かなそうだ。
+	<<textbox "$password" "">>　<<button "入力">><<script>>
+	TwineGang.sendEscape(State.variables.password, State.variables.name);
+	if(State.variables.password == "SEVENSUN"){
+		setup.escapeName = State.variables.name;
+		setup.correctAnswer++;
+		$('#ans').css('display', 'none');
+		$('#escape').css('display', 'none');
+		$('#quiet').css('display', 'none');
+		$('#ansbtn').css('display', 'none');
+		$('#escapeChoice').css('display', 'none');
+		$('#escapeResultTrue').css('display', 'none');
+		$('#escapeResultText').css('display', 'inline');
+		$('#escapeResultText').text("鉄格子が開いた！貴方は必死に通気口を進む…")
+	}
+	else{
+		$('#escapeChoice').css('display', 'none');
+		$('#escapeResultTrue').css('display', 'none');
+		$('#escapeResultText').css('display', 'inline');
+		$('#escapeResultText').text("パスワードが違ったようだ…もうなにも反応しない。")
+	}
+	$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
+	<</script>><</button>>
+</span>\
+<span id="escapeResultText" style="display:none"></span>\
 <<timed 182s>>
 	<<script>>
-		$('#hidans').css('display', 'none');
+		$('#ans').css('display', 'none');
 	<</script>>
 <</timed>>
-<<timed 30s>>
+<<timed 60s>>
 	<<script>>
-		if(State.variables.answer == ""){
-			$('#hidansbtn').css('display', 'none');
-			$('#hidesc').css('display', 'none');
-			$('#hidquiet').css('display', 'inline');
+		if(setup.answer == ""){
+			$('#quiet').css('display', 'inline-block');
 		}
 	<</script>>
 <</timed>>
@@ -315,12 +375,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	$(document).one(':passagedisplay', function (ev) {
 		const textareaElem = document.getElementById("textarea-answer");
 		textareaElem.addEventListener('input', (event) => {
-			if(event.target.value == "SEVENSUN"){
-				$('#hidansbtn').css('display', 'none');
-				$('#hidesc').css('display', 'inline');
-				$('#hidquiet').css('display', 'none');
-			}
-			else if (event.target.value == ""){
+			setup.answer = event.target.value;
+			if (event.target.value == ""){
 				$('#hidansbtn').css('display', 'none');
 				$('#hidesc').css('display', 'none');
 				$('#hidquiet').css('display', 'inline');
@@ -330,9 +386,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 				$('#hidesc').css('display', 'none');
 				$('#hidquiet').css('display', 'none');
 			}
+			$("#answerTest").text(setup.answer);
 		});
-		$("#passageGoNumber").text(setup.correctAnswer+setup.wrongAnswer);
-		$("#passageMemberNumber").text(setup.memberNumber);
 	});
 <</script>>
 </div>\
@@ -341,6 +396,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 :: エンディング判定
 <div class = "text" id = "center">\
+<font size="6">通話チャンネルの休憩室にお戻りください。</font>
 <<if setup.wrongAnswer gt 0>>
 	[[エンディングへ|END A]]
 <<elseif setup.escapeName != "">>
@@ -688,21 +744,82 @@ Bエンド
 <p class="side_text">「どうする～？
 　あの感じだと自分で脱出とかはする気無さそうだけどにぃ」</p>
 
-※
-ここから3分間
-検査官を「助ける」か「助けない」かを話し合う。
-結果はチャットで一斉に送信し
-一人でも「助けない」を選択した場合、「助けない」へ分岐する。
 
-[[助ける|END D]]
-[[助けない|END E]]
-
+[[次へ|ENDDorE]]
 
 <a href="https://drive.google.com/uc?id=13wGZ-uaF-S4cox03t7h597wZuCj3tifL" target="_blank">エラー時はこちらを参照ください。</a>
 
 
 
 </div>\
+:: ENDDorE
+<div class="text">\
+<div class="clock" id="escapeClock"><p class="clock-time" id="time">00:00</p></div>\
+
+
+3分間
+検査官を「助ける」か「助けない」かを話し合う。
+一人でも「助けない」を選択した場合、「助けない」へ分岐する。
+<<script>>
+	$(document).one(':passagedisplay', function (ev) {
+		var span = document.getElementById('time');
+		setup.countdown = new Countdown(span, 200);
+		setup.countdown.init();
+		setup.countdown.easystart();
+		State.variables.helpnum = 0;
+		State.variables.nohelpnum = setup.memberNumber;
+		$('#helpnum').text(State.variables.helpnum);
+		$('#nohelpnum').text(State.variables.nohelpnum);
+		if(State.variables.name!='検査官'){
+			$('input[type=radio][name=radiobutton-help]').on('change', function(event) {
+				TwineGang.sendHelp(State.variables.help);
+				switch (State.variables.help) {
+					case 'help':
+						State.variables.helpnum++;
+						State.variables.nohelpnum--;
+						break;
+					case 'nohelp':
+						State.variables.nohelpnum++;
+						if(State.variables.helpnum >= 0){
+							State.variables.helpnum--;
+						}
+						break;
+				}
+				$('#helpnum').text(State.variables.helpnum);
+				$('#nohelpnum').text(State.variables.nohelpnum);
+			});
+		}
+	});
+
+<</script>>
+<div id = "helpDecision">
+検査官を「助ける」？
+<label><<radiobutton "$help" 'help' >> 助ける　</label>　<span id="helpnum"></span>
+<label><<radiobutton "$help" 'nohelp' checked>> 助けない</label>　<span id="nohelpnum"></span>
+
+<span id="passageGoCheck">0 / 0</span>
+<span id="hidbtn" style="display: initial">\
+		<<button "決断する">>
+		<<script>>
+			$('#hidbtn').css('display', 'none');
+			$('#helpDecision').css('display', 'none');
+			TwineGang.clickButton(2);
+			setup.passageGoNumber[2]++;
+			$("#passageGoCheck").text(setup.passageGoNumber[2]+" / "+setup.memberNumber);
+		<</script>>
+		<</button>>
+</span>\
+<<silently>><<repeat 1s>><<script>>
+	if(setup.passageGoNumber[2] == setup.memberNumber){
+		if(State.variables.nohelp != 0){
+			Engine.play("END E");
+		}else{
+			Engine.play("END D");
+		}
+	}
+<</script>><</repeat>><</silently>>
+</div>
+</div>
 :: END D
 <div class = "text" id = "center">\
 <a href="https://drive.google.com/uc?id=15Juh74UF3ij4zj4SkwLE529V_E8usvLg" target="_blank">ENDING D</a>

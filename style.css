@@ -1,43 +1,11 @@
 @charset "utf8";
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-ul.sample1{
-font: 14px/1.6 'arial narrow', sans-serif;
-list-style: none;
-padding: 0.5em 0.7em;
-border: solid 2px #5c9ee7;
-border-radius: 5px;
-}
-ul.sample1 li{
-position: relative;
-color: #5c9ee7;
-margin-bottom:5px;
-padding-left: 30px;
-line-height: 30px;
-font-size: 15px;
-font-weight: bold;
-border-bottom: 1px dashed #5c9ee7;
-}
-ul.sample1 li:last-child{
-border:none;
-margin: 0;
-}
-ul.sample1 li:before{
-font-family: FontAwesome;
-content: "\f054";
-position: absolute;
-left: 5px;
-font-size: 1.2em;
--webkit-transition: all 0.8s ease-in-out;
-transition: all 0.8s ease-in-out;
-background-position: bottom;
-}
-ul.sample1 li:hover:before{
--webkit-transform:rotateY(-360deg);
-transform:rotateY(-360deg);
-color: red;
-}
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Share+Tech+Mono&display=swap');
+
 /* 時計の共通スタイル */
+#escapeClock.clock{
+  text-shadow: 0 0 0 #000000; /* 文字を発光させる */
+  font-family: 'Open Sans'
+}
 .clock {
   font-family: 'Share Tech Mono', monospace;
   color: #000; /* 文字の色 */
@@ -53,6 +21,11 @@ color: red;
 /* 時間のスタイル */
 .clock-time {
   font-size: 100px;
+}
+.base-timer {
+  position: relative;
+  width: 300px;
+  height: 300px;
 }
 
 /* 文字サイズ調整 */
@@ -109,34 +82,7 @@ input[type="number"]:focus{
   background-color: white;
   color:#000
 }
-/*
-textarea {
-  background-color: white;
-  border: 1px solid #000;
-  color: #080303;
-  padding: 8px;
-  font-family: 'Share Tech Mono', monospace;
-  margin: auto;
-}
-*/
-/*
-textarea:hover{
-  background-color:#fff8dc;
-}
-textarea:not(:disabled):hover {
-  background-color:#fff8dc;
-  border-color: #eee;
-}
-textarea:focus{
-  background-color:#fff8dc;
-}
-input{
-  color: #080303
-}
 
-
-
-*/
 /* 背景、全体 */
 body {
   background-image: url("https://drive.google.com/uc?id=1AmA4XyXI0pB-wi4c0rvnkxCTw7Fybebr");
@@ -145,7 +91,6 @@ body {
   height:auto;
   min-height: 90vh;
   font-size: 110%;
-  will-change: transform;
 }
 
 #ui-overlay{
@@ -166,7 +111,6 @@ body {
   padding-left: 5em;
   min-height:80vh;
   height:auto;
-  will-change: transform;
 }
 
 #center{
@@ -181,11 +125,12 @@ body {
 #bottombar {
 	position: fixed;
 	left: 0;
+  bottom: 0;
 	width: 100%;
 	background-color: transparent;
+  z-index: 40;
 }
 .bottomdiv{
-  position:fixed;
   bottom:0;
   left:auto;
 }
@@ -299,13 +244,29 @@ img.minnb{
   content:url(https://drive.google.com/uc?id=1BLEKL2foEZKwgZ6-DILSBftJFI8_o2jc);
   width:200px;height:200px;
 }
-img.kensa{
+
+img.kanri{
   display:inline-block;
   vertical-align: middle;
   content:url(https://drive.google.com/uc?id=1BPfQaJAInwwQgKQ4pYecfIVAWcHW8tF0);
   width:100px;height:100px;
 }
+
+img.kanrib{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1BPfQaJAInwwQgKQ4pYecfIVAWcHW8tF0);
+  width:200px;height:200px;
+}
 p.side_text{
   display: inline-block;
   vertical-align: middle;
+}
+
+.passage table {
+  margin :auto;
+}
+
+div.box{
+  text-align: center;
 }

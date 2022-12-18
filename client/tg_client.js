@@ -49,7 +49,9 @@
     socket.on('escapeAnswer', function(id) {
       self.trigger("escapeAnswer", id);
     });
-
+    socket.on('returnHelp', function(id) {
+      self.trigger("returnHelp", id);
+    });
     this._socket = socket;
     console.log("End of TGClient function");
   };
@@ -86,6 +88,25 @@
     this._socket.emit('sendAnswer', answer, name);
     // console.log('emitted click');
   };
+
+  TGClient.prototype.sendEscape = function(password, name) {
+    console.log("TGClient.sendEscape");
+    this._socket.emit('sendAnswer', password, name);
+    // console.log('emitted click');
+  };
+
+  TGClient.prototype.sendHelp = function(help) {
+
+    console.log("TGClient.sendHelp");
+    switch (help) {
+      case 'help':
+        this._socket.emit('sendHelp', true);
+        break;
+      case 'nohelp':
+        this._socket.emit('sendHelp', false);
+        break;
+    }
+  };
   TGClient.prototype.arrive = function(id) {
     console.log("TGClient.arrive");
     this._socket.emit('arrive', id);
@@ -121,6 +142,19 @@ function Countdown(elem, seconds) {
       that.elem.innerHTML = that.fillZero(mi) + ":" + that.fillZero(ss) + "." + that.fillZero(ms);
     }
   };
+
+  that.easycount = function() {
+    that.usedTime = Math.floor((+new Date() - that.startTime) / 10);
+    var tt = that.totalTime - that.usedTime;
+    if (tt <= 0) {
+      that.elem.innerHTML = '00:00';
+      clearInterval(that.timer);
+    } else {
+      var mi = Math.floor(tt / (60 * 100));
+      var ss = Math.floor((tt - mi * 60 * 100) / 100);
+      that.elem.innerHTML = that.fillZero(mi) + ":" + that.fillZero(ss);
+    }
+  };
   that.init = function() {
     if(that.timer){
       clearInterval(that.timer);
@@ -138,6 +172,12 @@ function Countdown(elem, seconds) {
     }
   };
 
+  that.easystart = function() {
+    if(!that.timer){
+       that.timer = setInterval(that.easycount, 10);
+    }
+  };
+
   that.stop = function(){
     if(!that.timer){
       clearInterval(that.timer);
@@ -149,4 +189,94 @@ function Countdown(elem, seconds) {
   };
 
   return that;
+}
+
+// Credit: Mateusz Rybczonec
+
+const FULL_DASH_ARRAY = 283;
+const WARNING_THRESHOLD = 10;
+const ALERT_THRESHOLD = 5;
+
+const COLOR_CODES = {
+  info: {
+    color: "green"
+  },
+  warning: {
+    color: "orange",
+    threshold: WARNING_THRESHOLD
+  },
+  alert: {
+    color: "red",
+    threshold: ALERT_THRESHOLD
+  }
+};
+
+const TIME_LIMIT = 20;
+let timePassed = 0;
+let timeLeft = TIME_LIMIT;
+let timerInterval = null;
+let remainingPathColor = COLOR_CODES.info.color;
+
+function onTimesUp() {
+  clearInterval(timerInterval);
+}
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    timePassed = timePassed += 1;
+    timeLeft = TIME_LIMIT - timePassed;
+    document.getElementById("base-timer-label").innerHTML = formatTime(
+      timeLeft
+    );
+    setCircleDasharray();
+    setRemainingPathColor(timeLeft);
+
+    if (timeLeft === 0) {
+      onTimesUp();
+    }
+  }, 1000);
+}
+
+function formatTime(time) {
+  const minutes = Math.floor(time / 60);
+  let seconds = time % 60;
+
+  if (seconds < 10) {
+    seconds = `0${seconds}`;
+  }
+
+  return `${minutes}:${seconds}`;
+}
+
+function setRemainingPathColor(timeLeft) {
+  const { alert, warning, info } = COLOR_CODES;
+  if (timeLeft <= alert.threshold) {
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.remove(warning.color);
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.add(alert.color);
+  } else if (timeLeft <= warning.threshold) {
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.remove(info.color);
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.add(warning.color);
+  }
+}
+
+function calculateTimeFraction() {
+  const rawTimeFraction = timeLeft / TIME_LIMIT;
+  return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
+}
+
+function setCircleDasharray() {
+  const circleDasharray = `${(
+    calculateTimeFraction() * FULL_DASH_ARRAY
+  ).toFixed(0)} 283`;
+  document
+    .getElementById("base-timer-path-remaining")
+    .setAttribute("stroke-dasharray", circleDasharray);
 }

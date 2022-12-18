@@ -60,16 +60,26 @@ io.on('connection', (socket) => {
     if(answer == ""){
       socket.broadcast.to(roomName).emit('otherAnswer', 0);
     }
-    else if(answer == "SEVENSUN"){
-      socket.broadcast.to(roomName).emit('escapeAnswer', name);
-    }
     else{
       socket.broadcast.to(roomName).emit('otherAnswer', 1);
     }
-    console.log("回答を受けました:" + answer);
+    console.log("回答を受けました:" + name + ":"+ answer);
   });
 
+  socket.on('sendEscape', (password, name) =>{
+    if(password == "SEVENSUN"){
+      socket.broadcast.to(roomName).emit('escapeAnswer', name);
+    }
+    else{
+      console.log("間違ったパスワードが入力されました。残念！")
+    }
+    console.log("脱出を受けました:" + name + ":"+ answer);
+  });
 
+  socket.on('sendHelp', (help) =>{
+    console.log('HELPの回答が届きました。'+help);
+    socket.broadcast.to(roomName).emit('returnHelp', help);
+  });
 
   socket.on('disconnect', function() {
     console.log('disconnect');
@@ -92,7 +102,10 @@ io.on('connection', (socket) => {
 // Build a room number like '867-5309'
 function createRoomName() {
   console.log('createRoomNameを実行しました.');
-  return Math.floor(Math.random() * 9999);
+  let room;
+  do {room =  Math.floor(Math.random() * 9999);}
+  while (room in rooms);
+  return room;
 }
 
 function switchRooms(socket, oldRoom, newRoom, userName) {
@@ -115,6 +128,7 @@ function leaveRoom(socket, roomName, userName) {
     io.in(roomName).emit('newList', rooms[roomName]);
   } else {
     delete rooms[roomName];
+    console.log('部屋を破壊します.');
   }
 }
 
