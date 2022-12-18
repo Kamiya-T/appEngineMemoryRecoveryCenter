@@ -94,6 +94,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 :: Start [mv]
 <div class = "text" id = "center">
+[[ミンがセブンサン。|END A-3]]
 <font size="5">被験者はログインするアカウントを選択してください</font>
 <span>	<a data-passage="Login" data-setter="$name to 'ヒダマリ'"><img class="hidamarib"></a>\     
 		<a data-passage="Login" data-setter="$name to 'フシグモ'"><img class="fusigumob"></a>\
