@@ -94,7 +94,6 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 :: Start [mv]
 <div class = "text" id = "center">
-[[ミンがセブンサン。|END A-3]]
 <font size="5">被験者はログインするアカウントを選択してください</font>
 <span>	<a data-passage="Login" data-setter="$name to 'ヒダマリ'"><img class="hidamarib"></a>\     
 		<a data-passage="Login" data-setter="$name to 'フシグモ'"><img class="fusigumob"></a>\
@@ -538,7 +537,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 
 5分間
-『偽物のセブンサン』を殺した『本物のセブンサン様』を誰か議論する。
+『セブンサン』として誰を残して行くかを議論する。
 個人それぞれで投票を行う。
 <<script>>
 	$(document).one(':passagedisplay', function (ev) {
@@ -548,11 +547,12 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		setup.countdown = new Countdown(span, 300);
 		setup.countdown.init();
 		setup.countdown.easystart();
+		setup.passageGoNumber[3] = 0;
 		$("#passageGoCheck").text(setup.passageGoNumber[3]+" / "+setup.memberNumber);
 	});
 <</script>>
 <div id = "sacDecision">
-『本物のセブンサン様』は誰ですか？
+『セブンサン』は誰ですか？
 <label><<radiobutton "$sacrifice" 'ヒダマリ' autocheck>><img class="hidamari">ヒダマリ　</label>
 <label><<radiobutton "$sacrifice" 'フシグモ' autocheck>><img class="fusigumo">フシグモ　</label>
 <label><<radiobutton "$sacrifice" 'ミン' autocheck>><img class="minn">ミン　　　</label>
@@ -577,15 +577,15 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 					break;
 			}
 			TwineGang.sendSacrifice(sacrinum);
-			setup.sacrifice[sacrinum]++
+			setup.sacrifice[sacrinum]++;
 			$("#passageGoCheck").text(setup.passageGoNumber[3]+" / "+setup.memberNumber);
 		<</script>><</button>>
 </span>\
 <<silently>><<repeat 1s>><<script>>
-	if(setup.passageGoNumber[3] == setup.memberNumber){
+	if(setup.passageGoNumber[3] >= setup.memberNumber){
 		let maxIndex = setup.sacrifice.indexOf(Math.max(setup.sacrifice[0],setup.sacrifice[1],setup.sacrifice[2]));
-		if (setup.sacrifice[0] == setup.sacrifice[1]){
-			maxIndex = -1;
+		if (setup.sacrifice[0] == setup.sacrifice[1] && setup.sacrifice[1] == setup.sacrifice[2]){
+			Engine.play("ENDAExtra");
 		}
 		switch (maxIndex) {
 			case -1:
@@ -608,9 +608,9 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 :: END A-0
 <div class = "text">\
 エラーです。申し訳ないですが、投票先をDiscord上で共有し、ENDを選択してください。
-[[END A-1|ヒダマリがセブンサン。]]
-[[END A-2|フシグモがセブンサン。]]
-[[END A-3|ミンがセブンサン。]]
+[[ヒダマリがセブンサン|END A-1|]]
+[[フシグモがセブンサン|END A-2|]]
+[[ミンがセブンサン|END A-3|]]
 
 </div>
 :: END A-1
