@@ -76,6 +76,10 @@ io.on('connection', (socket) => {
     console.log("脱出を受けました:" + name + ":"+ answer);
   });
 
+  socket.on('sendSacrifice', (num) =>{
+    socket.broadcast.to(roomName).emit('returnSacrifice', num);
+  });
+
   socket.on('sendHelp', (help) =>{
     console.log('HELPの回答が届きました。'+help);
     socket.broadcast.to(roomName).emit('returnHelp', help);

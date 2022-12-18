@@ -52,6 +52,10 @@
     socket.on('returnHelp', function(id) {
       self.trigger("returnHelp", id);
     });
+    socket.on('returnSacrifice', function(id) {
+      self.trigger("returnSacrifice", id);
+    });
+    
     this._socket = socket;
     console.log("End of TGClient function");
   };
@@ -92,6 +96,11 @@
   TGClient.prototype.sendEscape = function(password, name) {
     console.log("TGClient.sendEscape");
     this._socket.emit('sendAnswer', password, name);
+    // console.log('emitted click');
+  };
+  TGClient.prototype.sendSacrifice = function(num) {
+    console.log("TGClient.sendEscape");
+    this._socket.emit('sendSacrifice', num);
     // console.log('emitted click');
   };
 

@@ -338,14 +338,14 @@ img.minnb{
   width:200px;height:200px;
 }
 
-img.kanri{
+img.kensa{
   display:inline-block;
   vertical-align: middle;
   content:url(https://drive.google.com/uc?id=1BPfQaJAInwwQgKQ4pYecfIVAWcHW8tF0);
   width:100px;height:100px;
 }
 
-img.kanrib{
+img.kensab{
   display:inline-block;
   vertical-align: middle;
   content:url(https://drive.google.com/uc?id=1BPfQaJAInwwQgKQ4pYecfIVAWcHW8tF0);
@@ -452,6 +452,9 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 			}
 		}
 	});
+	TwineGang.bind("returnSacrifice", (id)=>{
+		setup.sacrifice[id]++;
+	});
 //*******************************BIND  END**************************
 	}).catch(function(error) {
 		alert(error);
@@ -462,7 +465,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 &lt;span&gt;	&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;ヒダマリ&#39;&quot;&gt;&lt;img class=&quot;hidamarib&quot;&gt;&lt;/a&gt;\     
 		&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;フシグモ&#39;&quot;&gt;&lt;img class=&quot;fusigumob&quot;&gt;&lt;/a&gt;\
 		&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;ミン&#39;&quot;&gt;&lt;img class=&quot;minnb&quot;&gt;&lt;/a&gt;\
-		&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;検査官&#39;&quot;&gt;&lt;img class=&quot;kanrib&quot;&gt;&lt;/a&gt;
+		&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;検査官&#39;&quot;&gt;&lt;img class=&quot;kensab&quot;&gt;&lt;/a&gt;
 		&lt;/span&gt;\
 &lt;/div&gt;
 [[ENDDorE]]</tw-passagedata><tw-passagedata pid="2" name="Login" tags="" position="225,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;
@@ -596,6 +599,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		setup.countdown = new Countdown(span, 181);
 		setup.countdown.init();
 		setup.countdown.start();
+		$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+&quot; / &quot;+setup.memberNumber);
 	});
 &lt;&lt;/script&gt;&gt;
 
@@ -606,7 +610,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 
 
-&lt;span id=&quot;answerTest&quot;&gt;&lt;/span&gt;
+
 &lt;span id=&quot;ans&quot; style=&quot;display: initial&quot;&gt;&lt;&lt;textarea &quot;$answer&quot; &quot;&quot;&gt;&gt;&lt;/span&gt;
 &lt;div class=&quot;box&quot;&gt;&lt;span id=&quot;passageGoCheck&quot;&gt;0/0&lt;/span&gt;&lt;/div&gt;
 &lt;span id=&quot;ansbtn&quot; style=&quot;display: inline-block&quot;&gt;\
@@ -683,7 +687,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 &lt;/table&gt;\
 &lt;/span&gt;\
 &lt;span id=&quot;escapeResultTrue&quot; style=&quot;display:none&quot;&gt;
-貴方は天井の通気口を見つけ、潜り込んだ…
+貴方は天井の通気口を見つけた。
 だが、鉄格子に阻まれ進むことができない。
 パスワードを入力しなければ開かなそうだ。
 	&lt;&lt;textbox &quot;$password&quot; &quot;&quot;&gt;&gt;　&lt;&lt;button &quot;入力&quot;&gt;&gt;&lt;&lt;script&gt;&gt;
@@ -698,7 +702,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		$(&#39;#escapeChoice&#39;).css(&#39;display&#39;, &#39;none&#39;);
 		$(&#39;#escapeResultTrue&#39;).css(&#39;display&#39;, &#39;none&#39;);
 		$(&#39;#escapeResultText&#39;).css(&#39;display&#39;, &#39;inline&#39;);
-		$(&#39;#escapeResultText&#39;).text(&quot;鉄格子が開いた！貴方は必死に通気口を進む…&quot;)
+		$(&#39;#escapeResultText&#39;).text(&quot;鉄格子が開いた！時間があれば脱出できるかもしれない。&quot;)
 	}
 	else{
 		$(&#39;#escapeChoice&#39;).css(&#39;display&#39;, &#39;none&#39;);
@@ -743,7 +747,6 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 				$(&#39;#hidesc&#39;).css(&#39;display&#39;, &#39;none&#39;);
 				$(&#39;#hidquiet&#39;).css(&#39;display&#39;, &#39;none&#39;);
 			}
-			$(&quot;#answerTest&quot;).text(setup.answer);
 		});
 	});
 &lt;&lt;/script&gt;&gt;
@@ -757,6 +760,343 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	[[エンディングへ|END C]]
 &lt;&lt;/if&gt;&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="END A" tags="" position="850,100" size="100,100">&lt;div class = &quot;text&quot;&gt;\
+
+検査官を見つめる。
+検査官はこちらをじっと見つめ返した。
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「……違いますよ。あなた達にとって、彼は、セブンサン様は。」&lt;/p&gt;
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「もっともっと尊くて素晴らしいものですよ？」&lt;/p&gt;
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「マニュアル23P、7項の項目『被験者が服従を示さない場合』のプロセスに則り、
+　記憶消去を実行します」&lt;/p&gt;
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「セブンサン様？承認をいただきたいのですが。
+　記憶消去してもよろしいでしょうか」&lt;/p&gt;
+
+……沈黙。
+長い沈黙だ。
+
+誰も彼女に返事をしない。
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「……おや？おかしいですね」&lt;/p&gt;
+
+
+&lt;img class=&quot;fusigumo&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「……本当にあいつに向かって喋りかけているのか？
+　あいつはどう見ても死んでいるだろう」&lt;/p&gt;
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「えぇ…っと」&lt;/p&gt;
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「……………」&lt;/p&gt;
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「え？」&lt;/p&gt;
+
+&lt;img class=&quot;minn&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「どうしたんだい？
+　まさか死体が死んでることにすら気づけない愚か者が
+　ボクたちを検査していたわけないだろう！？」&lt;/p&gt;
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「……」&lt;/p&gt;
+
+&lt;img class=&quot;hidamari&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「ん〜　これはどうなるのかな〜」&lt;/p&gt;
+
+モニターからの3人の視線に晒され、検査官はうろたえる。
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「だって彼が死ぬはずが……」&lt;/p&gt;
+&lt;img class=&quot;minn&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「死んでるじゃないか！」&lt;/p&gt;
+&lt;img class=&quot;fusigumo&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「確かに脈が止まっているぞ」&lt;/p&gt;
+&lt;img class=&quot;hidamari&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「死んでるね〜」&lt;/p&gt;
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「だって……だって……」&lt;/p&gt;
+&lt;img class=&quot;fusigumo&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「耳に機械が付いているんだろう？心拍数すらも計っていないのか？」&lt;/p&gt;
+&lt;img class=&quot;minn&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「首にあんなあざが付いているのに生きているっていうのは
+　とんだお笑いだよねっ！」&lt;/p&gt;
+&lt;img class=&quot;hidamari&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「そもそも今までの話し合いも全部理解してなかったり？」&lt;/p&gt;
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「ちがう……ちがう……」&lt;/p&gt;
+&lt;img class=&quot;fusigumo&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「違くない。あの男は死んでいる」&lt;/p&gt;
+&lt;img class=&quot;minn&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「つまりキミの『セブンサンさま』とやらはどこにもいないわけだけど？」&lt;/p&gt;
+&lt;img class=&quot;hidamari&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「大人しくここからだしてくれないかな～☆」&lt;/p&gt;
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「ちがう……ちがう……そうか！」&lt;/p&gt;
+
+ぐりん。
+首を急に上げる検査官。
+声の大きさに思わずあなたは身を引いた。
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「これも天啓なんですね！あの男は偽物！
+　あの偽物のクソ野郎を殺してくれた方が、
+　本物の『セブンサン』様なんですね！？」&lt;/p&gt;
+
+&lt;img class=&quot;fusigumo&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「……イカれてるな」&lt;/p&gt;
+
+
+ボソリとつぶやかれたその一言に、検査官は機敏に反応した。
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「なんですか？」&lt;/p&gt;
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「あなた方が彼の素晴らしさを理解していないならこの計画は失敗です
+　私は早くセブンサン様と次の計画の話し合いをしなくてはなりません」&lt;/p&gt;
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「今から5分間、時間をあげますから」
+　誰が彼を殺したのかを再度議論し合い、私に教えてください」&lt;/p&gt;
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「残りの2人だけはここから解放してあげます」
+　私とセブンサン様の間に邪魔者は要りませんから……」&lt;/p&gt;
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「あー、そう。
+　通気口からも、逃げれると思わないことですよ」&lt;/p&gt;
+
+
+…………。
+終わったはずなのに。
+再度、話し合いが始まる。 
+
+[[次へ|ENDAExtra]]
+
+
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="ENDAExtra" tags="" position="975,100" size="100,100">&lt;div class=&quot;text&quot;&gt;\
+&lt;div class=&quot;clock&quot; id=&quot;escapeClock&quot;&gt;&lt;p class=&quot;clock-time&quot; id=&quot;time&quot;&gt;00:00&lt;/p&gt;&lt;/div&gt;\
+
+
+5分間
+『偽物のセブンサン』を殺した『本物のセブンサン様』を誰か議論する。
+個人それぞれで投票を行う。
+&lt;&lt;script&gt;&gt;
+	$(document).one(&#39;:passagedisplay&#39;, function (ev) {
+		State.variables.sacrifice = State.variables.name;
+		setup.sacrifice = new Array(0, 0, 0, 0);
+		var span = document.getElementById(&#39;time&#39;);
+		setup.countdown = new Countdown(span, 300);
+		setup.countdown.init();
+		setup.countdown.easystart();
+		$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[3]+&quot; / &quot;+setup.memberNumber);
+	});
+&lt;&lt;/script&gt;&gt;
+&lt;div id = &quot;sacDecision&quot;&gt;
+『本物のセブンサン様』は誰ですか？
+&lt;label&gt;&lt;&lt;radiobutton &quot;$sacrifice&quot; &#39;ヒダマリ&#39; autocheck&gt;&gt;&lt;img class=&quot;hidamari&quot;&gt;ヒダマリ　&lt;/label&gt;
+&lt;label&gt;&lt;&lt;radiobutton &quot;$sacrifice&quot; &#39;フシグモ&#39; autocheck&gt;&gt;&lt;img class=&quot;fusigumo&quot;&gt;フシグモ　&lt;/label&gt;
+&lt;label&gt;&lt;&lt;radiobutton &quot;$sacrifice&quot; &#39;ミン&#39; autocheck&gt;&gt;&lt;img class=&quot;minn&quot;&gt;ミン　　　&lt;/label&gt;
+&lt;/div&gt;
+&lt;span id=&quot;passageGoCheck&quot;&gt;0 / 0&lt;/span&gt;
+&lt;span id=&quot;hidbtn&quot; style=&quot;display: initial&quot;&gt;\
+		&lt;&lt;button &quot;投票する&quot;&gt;&gt;&lt;&lt;script&gt;&gt;
+			$(&#39;#hidbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
+			$(&#39;#sacDecision&#39;).css(&#39;display&#39;, &#39;none&#39;);
+			TwineGang.clickButton(3);
+			setup.passageGoNumber[3]++;
+			let sacrinum = 3;
+			switch (State.variables.sacrifice) {
+				case &#39;ヒダマリ&#39;:
+					sacrinum = 0;
+					break;
+				case &#39;フシグモ&#39;:
+					sacrinum = 1;
+					break;
+				case &#39;ミン&#39;:
+					sacrinum = 2;
+					break;
+			}
+			TwineGang.sendSacrifice(sacrinum);
+			setup.sacrifice[sacrinum]++
+			$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[3]+&quot; / &quot;+setup.memberNumber);
+		&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;/span&gt;\
+&lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
+	if(setup.passageGoNumber[3] == setup.memberNumber){
+		let maxIndex = setup.sacrifice.indexOf(Math.max(setup.sacrifice[0],setup.sacrifice[1],setup.sacrifice[2]));
+		if (setup.sacrifice[0] == setup.sacrifice[1]){
+			maxIndex = -1;
+		}
+		switch (maxIndex) {
+			case -1:
+				Engine.play(&quot;END A-0&quot;);
+				break;
+			case 0:
+				Engine.play(&quot;END A-1&quot;);
+				break;
+			case 1:
+				Engine.play(&quot;END A-2&quot;);
+				break;
+			case 2:
+				Engine.play(&quot;END A-3&quot;);
+				break;
+		}
+	}
+&lt;&lt;/script&gt;&gt;&lt;&lt;/repeat&gt;&gt;&lt;&lt;/silently&gt;&gt;
+&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="9" name="END A-0" tags="" position="1100,100" size="100,100">&lt;div class = &quot;text&quot;&gt;\
+エラーです。申し訳ないですが、投票先をDiscord上で共有し、ENDを選択してください。
+[[END A-1|ヒダマリがセブンサン。]]
+[[END A-2|フシグモがセブンサン。]]
+[[END A-3|ミンがセブンサン。]]
+
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="10" name="END A-1" tags="" position="1225,100" size="100,100">&lt;div class = &quot;text&quot;&gt;\
+あなたたちは話し合いの末、ヒダマリを置いていくことにした。
+最後にヒダマリは何かを2人に言い残すことが出来る。
+
+
+ｰｰ｡
+
+鉄格子が開く。
+閉じられていた扉が開く。暗闇が口を開ける。
+そこから光のように、ミンとフシグモは飛び出した。
+
+
+外の日差しは眩しく、視界を白く染められながらも、二人は走り続けた。
+ｰｰ逃げるように。
+
+それは施設から、
+検査官から、
+
+そして、彼女を置き去りにした罪悪感から。
+
+
+
+彷徨っていた2人はガラの悪い男に声をかけられる。
+どうやら昔の知り合いのようで、2人の世話をその男は甲斐甲斐しく焼いてくれた。
+
+「おい。それは私のものだぞ」
+「ボクが先に触っていたんだぞ！？」
+「子供か？」
+「争いは同レベルの者同士でしか発生しないっ！」
+
+2人は沈黙を嫌うようになった。
+些細なことでぶつかり、喧嘩をした。
+
+沈黙が怖い。
+彼女が、ヒダマリが
+最後に言い残した言葉が
+ずっとずっと　離れない。
+これしかなかったんだ。
+これしかなかったんだ。
+自分に言い聞かせる。
+
+誰か。
+誰か自分の脳を埋め尽くしてくれ。
+
+
+
+ヒダマリ拘束エンド
+Melted sugar
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="11" name="END A-2" tags="" position="100,225" size="100,100">&lt;div class = &quot;text&quot;&gt;\
+あなたたちは話し合いの末、フシグモを置いていくことにした。
+最後にフシグモは何かを2人に言い残すことが出来る。
+
+
+ｰｰ。
+
+
+2人は施設から逃げ出した。
+彼女が怖かった。
+彼女の冷酷な瞳に、全てを見透かされている気がした。
+
+「……痛っ！」
+ミンがつまづき、転倒した。
+前を走っていたヒダマリは振り返ると、彼に手を伸ばす。
+「……ありがとう」
+「どうしちゃったのさ〜　ミンくんらしくもないよ？」
+「仕方ないさ」
+「だって……本当は、さ……」
+何かを言いかけたミンを、ヒダマリが手で静止する。
+
+「ううん。あの男を殺したのはフシグモちゃんだよ」
+ヒダマリの影がミンの顔を隠す。
+「だって、私たちがそう決めたんだから」
+「今更謝ってもフシグモちゃんは帰ってこないんだよ？
+「自分を守るためにそんなくだらないことを言おうとして、ミンくんは満足なのかな？」
+「自分だけが大事？」
+
+ミンはヒダマリを見つめる。
+ヒダマリもミンを何も言わずに見つめていた。
+しばしの静寂の後、ミンはヒダマリのその手を払いのけて立ち上がった。
+
+服についた汚れをはらうと、そのまま土を蹴る。
+
+
+もう戻れない。
+戻ることは出来ないんだ。
+
+
+
+ｰｰ例え、戻りたくなっても。
+
+フシグモ拘束エンド
+裏切り
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="12" name="END A-3" tags="" position="225,225" size="100,100">&lt;div class = &quot;text&quot;&gt;\
+あなたたちは話し合いの末、ミンを置いていくことにした。
+最後にミンは何かを2人に言い残すことが出来る。
+
+ｰｰ｡
+
+2人は扉から脱出した。
+
+「ひぃ〜☆ 世界が広く感じる」
+「そりゃ閉じ込められていたからな……」
+
+何もなく、
+ただ途方もなく広いだけの道を2人で歩いた。
+
+「……ミンくんはどうなるのかなぁ」
+「分からないな」
+「ただ、あいつのことだ。検査官をうまいこと扱って脱出！とかもあり得るだろうな」
+「そしたらトリオ復活だねっ☆」
+「ミンが拘束されたことにブチ切れてなければな」
+「怒ってたら謝るよっ！」
+「相手がブチ切れてからの謝罪じゃあ遅いだろう……」
+「謝るよっ！」
+「……そうか」
+
+2人はミンを施設に置き去りにした。
+
+検査官はまともではない。
+彼の身にどんな危険が起こるか、
+想像することは難しく無かったがｰｰ｡
+
+「なんとな〜くミンくんが死んでる感じはしないよね〜☆」
+彼女たちは能天気だった。
+「確かに。確実にまた会う気はするな」
+「うんうん！」
+
+ミンの最後の言葉は真実だったのだろうか。
+彼は拘束されたことに怒っているだろうか。
+拘束されても微笑んで許してくれただろうか。
+彼の考えは2人には分からない。
+
+ただ、2人は信じていた。
+彼が何事もなくあそこで死ぬわけないと。
+
+きっと、また会えると。
+
+ミン拘束エンド
+Second time
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="13" name="END Z" tags="" position="350,225" size="100,100">&lt;div class = &quot;text&quot;&gt;\
 
 あなたがたはモニター越しの検査官を睨みつける。
 
@@ -824,7 +1164,7 @@ Aエンド
 「記憶回復は続く」
 
 &lt;a href=&quot;https://drive.google.com/uc?id=1Q-CS3-w2OQLiiWKEO4dv1PF5tJUrDV41&quot; target=&quot;_blank&quot;&gt;エラー時はこちらを参照ください。&lt;/a&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="END B" tags="" position="975,100" size="100,100">&lt;div class = &quot;text&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="14" name="END B" tags="" position="475,225" size="100,100">&lt;div class = &quot;text&quot;&gt;
 
 あなたがたはモニター越しの検査官を睨みつけていた。
 
@@ -988,7 +1328,7 @@ Bエンド
 &lt;a href=&quot;https://drive.google.com/uc?id=1AsmuXjSkRdQPiApjijBGxQS987Lxp8jk&quot; target=&quot;_blank&quot;&gt;ヒダマリ逃走END&lt;/a&gt;
 &lt;a href=&quot;https://drive.google.com/uc?id=1AxLuklXiVuTrNgBshDkg6IRCQUHjZ99V&quot; target=&quot;_blank&quot;&gt;フシグモ逃走END&lt;/a&gt;
 &lt;a href=&quot;https://drive.google.com/uc?id=1BAwoCfDI_0Ry7RW4pVYuLA7848jKg_KF&quot; target=&quot;_blank&quot;&gt;ミン脱走END&lt;/a&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="9" name="END C" tags="" position="1100,100" size="100,100">&lt;div class = &quot;text&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="15" name="END C" tags="" position="600,225" size="100,100">&lt;div class = &quot;text&quot;&gt;
 
 何も言わなかった。
 
@@ -1094,7 +1434,7 @@ Bエンド
 
 
 
-&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="10" name="ENDDorE" tags="" position="1225,100" size="100,100">&lt;div class=&quot;text&quot;&gt;\
+&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="16" name="ENDDorE" tags="" position="725,225" size="100,100">&lt;div class=&quot;text&quot;&gt;\
 &lt;div class=&quot;clock&quot; id=&quot;escapeClock&quot;&gt;&lt;p class=&quot;clock-time&quot; id=&quot;time&quot;&gt;00:00&lt;/p&gt;&lt;/div&gt;\
 
 
@@ -1111,6 +1451,7 @@ Bエンド
 		State.variables.nohelpnum = setup.memberNumber;
 		$(&#39;#helpnum&#39;).text(State.variables.helpnum);
 		$(&#39;#nohelpnum&#39;).text(State.variables.nohelpnum);
+		$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[2]+&quot; / &quot;+setup.memberNumber);
 		if(State.variables.name!=&#39;検査官&#39;){
 			$(&#39;input[type=radio][name=radiobutton-help]&#39;).on(&#39;change&#39;, function(event) {
 				TwineGang.sendHelp(State.variables.help);
@@ -1152,19 +1493,19 @@ Bエンド
 &lt;/span&gt;\
 &lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
 	if(setup.passageGoNumber[2] == setup.memberNumber){
-		if(State.variables.nohelp != 0){
-			Engine.play(&quot;END E&quot;);
-		}else{
+		if(State.variables.nohelpnum == 0){
 			Engine.play(&quot;END D&quot;);
+		}else{
+			Engine.play(&quot;END E&quot;);
 		}
 	}
 &lt;&lt;/script&gt;&gt;&lt;&lt;/repeat&gt;&gt;&lt;&lt;/silently&gt;&gt;
 &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="11" name="END D" tags="" position="100,225" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="END D" tags="" position="850,225" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
 &lt;a href=&quot;https://drive.google.com/uc?id=15Juh74UF3ij4zj4SkwLE529V_E8usvLg&quot; target=&quot;_blank&quot;&gt;ENDING D&lt;/a&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="12" name="END E" tags="" position="225,225" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="18" name="END E" tags="" position="975,225" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
 &lt;a href=&quot;https://drive.google.com/uc?id=1wNwBNRcgnyICkkzo8-TTKVv7GpHMaS0m&quot; target=&quot;_blank&quot;&gt;ENDING E&lt;/a&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="13" name="PassageFooter" tags="nobr" position="350,225" size="100,100">&lt;&lt;if !tags().includes(&quot;bbar&quot;)&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="PassageFooter" tags="nobr" position="1100,225" size="100,100">&lt;&lt;if !tags().includes(&quot;bbar&quot;)&gt;&gt;
 &lt;div id=&quot;bottombar&quot;&gt;
 &lt;div id=&quot;bbblock&quot;&gt;
 &lt;div id=&quot;bbtext&quot; align=&quot;left&quot;&gt;
@@ -1193,7 +1534,7 @@ $(document).one(&quot;:passagedisplay&quot;, function (event) {
 
 &lt;&lt;/script&gt;&gt;
 &lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="14" name="StoryInit" tags="" position="475,225" size="100,100">&lt;&lt;preload &quot;https://drive.google.com/uc?id=1BJ-L0M9PVctUgoTRvhVQdnZ53Eo3dxWO&quot; 
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="20" name="StoryInit" tags="" position="1225,225" size="100,100">&lt;&lt;preload &quot;https://drive.google.com/uc?id=1BJ-L0M9PVctUgoTRvhVQdnZ53Eo3dxWO&quot; 
 &quot;https://drive.google.com/uc?id=1BPfQaJAInwwQgKQ4pYecfIVAWcHW8tF0&quot; 
 &quot;https://drive.google.com/uc?id=1BHQWP3o_OYnl2qpMN0bf9cvNZm05_U0e&quot; 
 &quot;https://drive.google.com/uc?id=1BLEKL2foEZKwgZ6-DILSBftJFI8_o2jc&quot;&gt;&gt;</tw-passagedata></tw-storydata>
