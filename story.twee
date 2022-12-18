@@ -101,7 +101,6 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		<a data-passage="Login" data-setter="$name to '検査官'"><img class="kensab"></a>
 		</span>\
 </div>
-[[ENDDorE]]
 :: Login
 <div class = "text" id = "center">
 <<set $RoomID to 0>>
