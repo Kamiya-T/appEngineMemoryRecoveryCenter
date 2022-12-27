@@ -400,9 +400,10 @@ div.box{
 }
 
 .item{
+  border-top: solid 5px #5d627b;
   display:flex;
   flex-direction:column;
-  width:25%;
+  width:40%;
   padding:20px;
   height:auto;
 }
@@ -565,6 +566,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 &lt;/div&gt;
 &lt;div class=&quot;flex between&quot;&gt;
 &lt;div class=&quot;item&quot;&gt;
+
 &lt;span id=&quot;RoomIdDisplay&quot;&gt;&lt;/span&gt;
 		@@.buttonLarge;&lt;&lt;button &#39;新規ルーム作成&#39;&gt;&gt;
     		&lt;&lt;script&gt;&gt;TwineGang.createNewRoom(State.variables.name);&lt;&lt;/script&gt;&gt;
@@ -577,7 +579,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 &lt;div class=&quot;item&quot;&gt;\
 	部屋番号
 	&lt;&lt;numberbox &quot;$seconds&quot; 0&gt;&gt;
-	
+
 	@@.buttonLarge;&lt;&lt;button &#39;既存ルームに接続する&#39;&gt;&gt;
 		&lt;&lt;script&gt;&gt;
 			async function test(){

@@ -116,6 +116,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 </div>
 <div class="flex between">
 <div class="item">
+
 <span id="RoomIdDisplay"></span>
 		@@.buttonLarge;<<button '新規ルーム作成'>>
     		<<script>>TwineGang.createNewRoom(State.variables.name);<</script>>
@@ -128,7 +129,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 <div class="item">\
 	部屋番号
 	<<numberbox "$seconds" 0>>
-	
+
 	@@.buttonLarge;<<button '既存ルームに接続する'>>
 		<<script>>
 			async function test(){
