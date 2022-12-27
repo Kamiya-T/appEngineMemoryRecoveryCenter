@@ -111,6 +111,8 @@ body {
   padding-left: 5em;
   min-height:80vh;
   height:auto;
+  position: relative;
+	padding-bottom: 3rem;
 }
 
 #center{
@@ -131,6 +133,7 @@ body {
   z-index: 40;
 }
 .bottomdiv{
+  position:absolute;
   bottom:0;
   left:auto;
 }
@@ -290,12 +293,11 @@ div.box{
 
 #loginList{
   height:auto;
-  width:auto;
+  width:100%;
   position: absolute;          /* 位置指定 */
   top: 50%;                    /* 親要素の半分下にずらす */
   left: 50%;                   /* 親要素の半分右にずらす */
   transform: translateY(-50%) translateX(-50%);    /* 要素自体の半分、上と左にずらす */
-  padding: 20px;               /* 余白指定 */
 }
 
 
@@ -356,6 +358,43 @@ div.box{
   box-shadow: 0 2px 0 #aaaaaa;
 }
 
+.roomNumber {
+  padding: 0.5em 1em;
+  margin: 2em 0;
+  color: #232323;
+  background: #e8ecff;
+  border-left: solid 10px #333333;
+}
+.roomNumber p {
+  margin: 0; 
+  padding: 0;
+}
+
+ul, ol {
+  color: #1e366a;
+  border-top: solid #1e366a 2px;/*上のボーダー*/
+  border-bottom: solid #1e366a 2px;/*下のボーダー*/
+  padding: 0.5em 0 0.5em 1.5em;
+}
+
+ul li, ol li {
+  line-height: 1.5;
+  padding: 0.5em 0;
+}
 
 
-
+h1 {
+     text-align: center;
+     position: relative;
+     padding: 0 0 12px;
+}
+h1::after{
+     position: absolute;
+     content: "";
+     left: 0;
+     right: 0;
+     bottom: 0;
+     width: 300px;
+     margin: auto;
+     border-bottom: 2px solid #1e366a;
+} 

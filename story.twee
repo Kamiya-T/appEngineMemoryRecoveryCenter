@@ -99,7 +99,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 :: Start [mv]
 <div class = "text" id = "center">
-<font size="5">プレイしているキャラクターを選択してください</font>
+<h1>キャラクター選択</h1>
 <div  id = "loginList">	<a data-passage="Login" data-setter="$name to 'ヒダマリ'"><img class="hidamarib"></a>\     
 		<a data-passage="Login" data-setter="$name to 'フシグモ'"><img class="fusigumob"></a>\
 		<a data-passage="Login" data-setter="$name to 'ミン'"><img class="minnb"></a>\
@@ -151,7 +151,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 </div>
 :: ルームロビー
 <div class = "text">
-<font size="7">	部屋番号：<<print $RoomID>></font>
+<div class="roomNumber">\
+<font size="7">	部屋番号：<<print $RoomID>></font></div>
   	<ul id="memberlist"></ul>
     <<script>>
     $(document).one(':passagedisplay', function (ev) {
@@ -161,34 +162,39 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
             let li = document.createElement('li');
             li.textContent = member;
             document.getElementById('memberlist').appendChild(li);
+			setup.tempflag = true;
         }
 		$("#passageGoCheck").text(setup.passageGoNumber[0]+" / "+setup.memberNumber);
 		
 		$("#hidbtn button").prop("disabled", true);
     });
     <</script>>
-	<span id="message">1. 被験者全員のログインを確認する。
+<div class="manual">
+    <span id="message">1. 被験者全員のログインを確認する。
 	2. 被験者全員の準備が出来次第、検査官との面談を実施する。</span>
-	<span id="passageGoCheck">0/0</span>
-
+	
 	<span id="hidbtn" style="display: initial">\
-		  <<button "次へ">>
+		@@.buttonLarge;<<button '次へ<span id="passageGoCheck">0/0</span>'>>
 		  	<<script>>
-				$('#hidbtn').css('display', 'none');
+				$("#hidbtn button").prop("disabled", true);
 				TwineGang.clickButton(0);
 				setup.passageGoNumber[0]++;
 				$("#passageGoCheck").text(setup.passageGoNumber[0]+" / "+setup.memberNumber);
 			<</script>>
-		  <</button>>
+		<</button>>@@
 	</span>\
+</div>
 	<<silently>><<repeat 1s>><<script>>
 		if(setup.passageGoNumber[0] == setup.memberNumber){
 			Engine.play("検査官の質問");
 		}
-		if(setup.memberNumber >= 1){
+		if(setup.memberNumber >= 1 && setup.tempflag){
 			$("#hidbtn button").prop("disabled", false);
+			setup.tempflag = false;
 		}
 	<</script>><</repeat>><</silently>>
+
+
 </div>
 
 :: 検査官の質問
@@ -204,7 +210,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 「では、お聞きしますね」
 
 「あなたにとってその『死んだフリをしている』男……
-　死体と呼んでいるその人は何者ですか？」」
+　死体と呼んでいるその人は何者ですか？」
 どくん。
 <font size="5">どくん。</font>
 <font size="6">どくん。
@@ -212,19 +218,17 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 検査官の質問に対し、3分以内に回答すること。</font>
 <</type>>
-
 <div class = "bottomdiv">
-<span id="passageGoCheck">0/0</span>
+
 <span id="hidbtn" style="display: initial">\
-	<<button "次へ">>
+	@@.buttonLarge;<<button '次へ<span id="passageGoCheck">0/0</span>'>>
 		<<script>>
-			$('#hidbtn').css('display', 'none');
+			$("#hidbtn button").prop("disabled", true);
 			TwineGang.clickButton(1);
 			setup.passageGoNumber[1]++;
 			$("#passageGoCheck").text(setup.passageGoNumber[1]+" / "+setup.memberNumber);
-		<</script>>
-		<</button>>
-	</span>\
+		<</script>><</button>>@@
+</span>\
 	<<silently>><<repeat 1s>><<script>>
 		if(setup.passageGoNumber[1] == setup.memberNumber){
 			if(State.variables.name == '検査官'){
@@ -233,7 +237,6 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 			else{
 				Engine.play("質問フェーズ");
 			}
-
 		}
 	<</script>><</repeat>><</silently>>
 </div>
@@ -247,29 +250,14 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 :: 質問フェーズ
 <div class = "text" id = "center">\
 <div class="clock"><p class="clock-time" id="time">00:00.00</p></div>\
-<<script>>
-	$(document).one(':passagedisplay', function (ev) {
-		var span = document.getElementById('time');
-		setup.countdown = new Countdown(span, 181);
-		setup.countdown.init();
-		setup.countdown.start();
-		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
-	});
-<</script>>
-
 <font size="5">\
-『あなたにとってその『死んだフリをしている』男……
-　死体と呼んでいるその人は何者ですか？』</font>
-
-
-
+「あなたにとってその『死んだフリをしている』男……
+　死体と呼んでいるその人は何者ですか？」</font>\
 
 
 <span id="ans" style="display: initial"><<textarea "$answer" "">></span>
-<div class="box"><span id="passageGoCheck">0/0</span></div>
 <span id="ansbtn" style="display: inline-block">\
-<<button "回答する">>
-	<<script>>
+@@.buttonLarge;<<button '回答する<span id="passageGoCheck">0/0</span>'>><<script>>
 		$('#ans').css('display', 'none');
 		$('#escape').css('display', 'none');
 		$('#quiet').css('display', 'none');
@@ -279,16 +267,11 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		if(State.variables.answer == ""){
 			setup.correctAnswer++;
 		}
-		else{
-			setup.wrongAnswer++;
-		}
+		else{setup.wrongAnswer++;}
 		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
-	<</script>>
-<</button>>
-</span>\
-<span id="quiet" style="display: none">\
-<<button "何も答えない">>
-	<<script>>	
+<</script>><</button>>@@</span>
+<span id="quiet" style="display: none">
+<<button "何も答えない">><<script>>	
 		$('#ans').css('display', 'none');
 		$('#escape').css('display', 'none');
 		$('#quiet').css('display', 'none');
@@ -298,26 +281,18 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		if(State.variables.answer == ""){
 			setup.correctAnswer++;
 		}
-		else{
-			setup.wrongAnswer++;
-		}
+		else{setup.wrongAnswer++;}
 		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / " + setup.memberNumber);
-	<</script>>
-<</button>>
+	<</script>><</button>>
 </span>
-
-<span id="escape" style="display: initial">\
-<<button "脱出を試みる">>
-	<<script>>
+<span id="escape" style="display: initial">
+<<button "脱出を試みる">><<script>>
 	$('#escape').css('display', 'none');
 	$('#escapeChoice').css('display', 'inline');
-	<</script>>
-<</button>>
+	<</script>><</button>>
 </span>\
 
-<span id = "escapeChoice" style="display:none">
-<table>\
-<tr>\
+<span id = "escapeChoice" style="display:none"><table><tr>
 <<button '天井から脱出する'>><<script>>
 	$('#escapeChoice').css('display', 'none');
 	$('#escapeResultTrue').css('display', 'inline');
@@ -337,9 +312,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	$('#escapeResultText').text("脱出の窓にならないだろうか？ウィンドウズだけに。脱出の手掛かりはなさそうだ。");
 	$('#escapeResultText').css('display', 'inline');
 <</script>><</button>>
-</tr>\
-</table>\
-</span>\
+</tr></table></span>\
 <span id="escapeResultTrue" style="display:none">
 貴方は天井の通気口を見つけた。
 だが、鉄格子に阻まれ進むことができない。
@@ -373,7 +346,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		$('#ans').css('display', 'none');
 	<</script>>
 <</timed>>
-<<timed 60s>>
+<<timed 30s>>
 	<<script>>
 		if(setup.answer == ""){
 			$('#quiet').css('display', 'inline-block');
@@ -405,8 +378,15 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	});
 <</script>>
 </div>\
-
-
+<<script>>
+	$(document).one(':passagedisplay', function (ev) {
+		var span = document.getElementById('time');
+		setup.countdown = new Countdown(span, 181);
+		setup.countdown.init();
+		setup.countdown.start();
+		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
+	});
+<</script>>
 :: 監視フェーズ
 <div class="text">\
 
@@ -878,6 +858,167 @@ Melted sugar
 
 ミン拘束エンド
 Second time
+
+[[エンディング一覧へ|END LIST]]
+
+
+</div>
+:: END B
+<div class = "text">
+
+あなたがたはモニター越しの検査官を睨みつけていた。
+
+<img class="kensa">\
+<p class="side_text">「………………」</p>
+
+突然。
+まるで金属を激しくぶつけ合わせたかのような音が鳴り響く。
+警報だ。検査官の表情が険しくなる。
+
+<img class="kensa">\
+<p class="side_text">「脱走！？どうしてそんなことを！？」</p>
+
+<img class="kensa">\
+<p class="side_text">「しばらく待っていてください。脱走者を鎮圧します！」</p>
+
+白衣を翻し、検査官はモニターから姿を消した。
+
+<<if setup.escapeName == "ヒダマリ">>
+ヒダマリは狭い空気口を潜り抜けた。
+
+<img class="hidamari">\
+<p class="side_text">「わっせ　わっせ」</p>
+
+<img class="kensa">\
+<p class="side_text">「どうして逃げてしまうんですか？」</p>
+
+通気口を抜けた先は出口の前。
+そこには検査官が仁王立ちで彼女を待っていた。
+
+<img class="hidamari">\
+<p class="side_text">「んにに　　
+　あんまりカロリーがない状態で戦いたくないんだけどにゃあ」</p>
+
+<img class="hidamari">\
+<p class="side_text">「でも、邪魔するなら押しとおるよ」</p>
+
+<img class="kensa">\
+<p class="side_text">「……出来るものなら」</p>
+
+<img class="hidamari">\
+<p class="side_text">「出来るんだよ」</p>
+
+交差。
+ヒダマリは一瞬のうちに検査官を吹き飛ばす。
+検査官は壁に全身を打ちながら崩れた。
+
+<img class="hidamari">\
+<p class="side_text">「……とりあえず逃げないと」</p>
+
+ヒダマリは逃げ続けた。ヒダマリは何も信用出来なかった。
+ミンも、フシグモも、自分自身の記憶でさえも。
+問題の解決から逃げることを選択したが、
+いつか追いつかれ『君』はばらばらになるだろう。
+それでも、今は何も考えたくなかった。
+
+ヒダマリ追加エンド
+「運命からは逃れられない」
+
+<</if>>
+<<if setup.escapeName == "フシグモ">>
+フシグモは脱走した。
+
+<img class="kensa">\
+<p class="side_text">「待ってください！」</p>
+
+検査官は必死に追いかけるが、体力はフシグモほどは無いようだ。
+
+<img class="fusigumo">\
+<p class="side_text">「……ふぅん」</p>
+
+それからしばらく……。
+
+<img class="kensa">\
+<p class="side_text">「いたい　くるしい」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「この毒はまだ有害性を上げられるな」</p>
+
+検査官は実験台にされていた。
+
+<img class="kensa">\
+<p class="side_text">「むり　いたい　だって　うぅ」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「まだ痛みを訴える余裕があるな。もうあと2段階上げてみよう。」</p>
+
+<img class="kensa">\
+<p class="side_text">「たすけて　セブンサンさま」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「……いずれ会わせてやるさ」</p>
+
+検査官の目に希望の光が灯る。
+希望をチラつかせただけで……なんて哀れな生き物なんだ。
+フシグモは、そんな希望の光を乱暴にかき消すところを想像し
+口角が上がってしまうのを必死でこらえた。
+
+フシグモ追加エンド
+「『地獄で会えるぞ』」
+
+<</if>>
+
+<<if setup.escapeName == "ミン">>
+ミンが通気口を通る。
+
+<img class="minn">\
+<p class="side_text">「とりあえずは撤退だ…」</p>
+
+通気口から出ると、そこには絶望が広がっていた。
+
+<img class="kensa">\
+<p class="side_text">「どこに行こうというんですか？」</p>
+
+二本の刀を持った検査官。
+『ラスト・リゾート』がミンを殺す為に待っていた。
+
+<img class="minn">\
+<p class="side_text">「まぁ、そうか」</p>
+
+一閃。瞬きの間におびただしいほどの風が切り裂かれた。
+
+<img class="minn">\
+<p class="side_text">「ボクだけが助かるってのは　ズルすぎるか」</p>
+
+<img class="kensa">\
+<p class="side_text">「……やっぱり、殺しは良い……」</p>
+
+検査官は刀に付いた血をぬぐうと、そのまま扉から外に出た。
+
+……もうそこに検査官としての面影はない。
+いるのはただの人殺しだ。
+
+ミン追加エンド
+「一人勝ちは無し」
+
+<</if>>
+静寂………。
+………………。
+
+どれくらいの時間が経っただろうか。
+3時間、1日、あるいはそれ以上か。
+脱走者も、検査官も。
+どちらも帰ってくる気配はない。
+止まない警報が、正気をどんどん奪っていく。
+
+だれか　たすけてくれ
+
+必死に絞り出した声は
+警報にかき消され
+誰にも届くことはなかった。
+
+Bエンド
+「死体を誰が見つける？」
 
 [[エンディング一覧へ|END LIST]]
 

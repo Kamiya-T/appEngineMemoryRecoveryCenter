@@ -204,6 +204,8 @@ body {
   padding-left: 5em;
   min-height:80vh;
   height:auto;
+  position: relative;
+	padding-bottom: 3rem;
 }
 
 #center{
@@ -224,6 +226,7 @@ body {
   z-index: 40;
 }
 .bottomdiv{
+  position:absolute;
   bottom:0;
   left:auto;
 }
@@ -383,12 +386,11 @@ div.box{
 
 #loginList{
   height:auto;
-  width:auto;
+  width:100%;
   position: absolute;          /* 位置指定 */
   top: 50%;                    /* 親要素の半分下にずらす */
   left: 50%;                   /* 親要素の半分右にずらす */
   transform: translateY(-50%) translateX(-50%);    /* 要素自体の半分、上と左にずらす */
-  padding: 20px;               /* 余白指定 */
 }
 
 
@@ -447,6 +449,47 @@ div.box{
   transform: translateY(3px);
   text-decoration: none;
   box-shadow: 0 2px 0 #aaaaaa;
+}
+
+.roomNumber {
+  padding: 0.5em 1em;
+  margin: 2em 0;
+  color: #232323;
+  background: #e8ecff;
+  border-left: solid 10px #333333;
+}
+.roomNumber p {
+  margin: 0; 
+  padding: 0;
+}
+
+ul, ol {
+  color: #1e366a;
+  border-top: solid #1e366a 2px;/*上のボーダー*/
+  border-bottom: solid #1e366a 2px;/*下のボーダー*/
+  padding: 0.5em 0 0.5em 1.5em;
+}
+
+ul li, ol li {
+  line-height: 1.5;
+  padding: 0.5em 0;
+}
+
+
+h1 {
+     text-align: center;
+     position: relative;
+     padding: 0 0 12px;
+}
+h1::after{
+     position: absolute;
+     content: "";
+     left: 0;
+     right: 0;
+     bottom: 0;
+     width: 300px;
+     margin: auto;
+     border-bottom: 2px solid #1e366a;
 }</style>
 <script id="script-module-modernizr_custom" type="text/javascript">/*! modernizr 3.6.0 (Custom Build) | MIT *
  * https://modernizr.com/download/?-setclasses !*/
@@ -551,7 +594,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	});
   }
 );</script><tw-passagedata pid="1" name="Start" tags="mv" position="100,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;
-&lt;font size=&quot;5&quot;&gt;プレイしているキャラクターを選択してください&lt;/font&gt;
+&lt;h1&gt;キャラクター選択&lt;/h1&gt;
 &lt;div  id = &quot;loginList&quot;&gt;	&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;ヒダマリ&#39;&quot;&gt;&lt;img class=&quot;hidamarib&quot;&gt;&lt;/a&gt;\     
 		&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;フシグモ&#39;&quot;&gt;&lt;img class=&quot;fusigumob&quot;&gt;&lt;/a&gt;\
 		&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;ミン&#39;&quot;&gt;&lt;img class=&quot;minnb&quot;&gt;&lt;/a&gt;\
@@ -599,7 +642,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="ルームロビー" tags="" position="350,100" size="100,100">&lt;div class = &quot;text&quot;&gt;
-&lt;font size=&quot;7&quot;&gt;	部屋番号：&lt;&lt;print $RoomID&gt;&gt;&lt;/font&gt;
+&lt;div class=&quot;roomNumber&quot;&gt;\
+&lt;font size=&quot;7&quot;&gt;	部屋番号：&lt;&lt;print $RoomID&gt;&gt;&lt;/font&gt;&lt;/div&gt;
   	&lt;ul id=&quot;memberlist&quot;&gt;&lt;/ul&gt;
     &lt;&lt;script&gt;&gt;
     $(document).one(&#39;:passagedisplay&#39;, function (ev) {
@@ -609,34 +653,39 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
             let li = document.createElement(&#39;li&#39;);
             li.textContent = member;
             document.getElementById(&#39;memberlist&#39;).appendChild(li);
+			setup.tempflag = true;
         }
 		$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[0]+&quot; / &quot;+setup.memberNumber);
 		
 		$(&quot;#hidbtn button&quot;).prop(&quot;disabled&quot;, true);
     });
     &lt;&lt;/script&gt;&gt;
-	&lt;span id=&quot;message&quot;&gt;1. 被験者全員のログインを確認する。
+&lt;div class=&quot;manual&quot;&gt;
+    &lt;span id=&quot;message&quot;&gt;1. 被験者全員のログインを確認する。
 	2. 被験者全員の準備が出来次第、検査官との面談を実施する。&lt;/span&gt;
-	&lt;span id=&quot;passageGoCheck&quot;&gt;0/0&lt;/span&gt;
-
+	
 	&lt;span id=&quot;hidbtn&quot; style=&quot;display: initial&quot;&gt;\
-		  &lt;&lt;button &quot;次へ&quot;&gt;&gt;
+		@@.buttonLarge;&lt;&lt;button &#39;次へ&lt;span id=&quot;passageGoCheck&quot;&gt;0/0&lt;/span&gt;&#39;&gt;&gt;
 		  	&lt;&lt;script&gt;&gt;
-				$(&#39;#hidbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
+				$(&quot;#hidbtn button&quot;).prop(&quot;disabled&quot;, true);
 				TwineGang.clickButton(0);
 				setup.passageGoNumber[0]++;
 				$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[0]+&quot; / &quot;+setup.memberNumber);
 			&lt;&lt;/script&gt;&gt;
-		  &lt;&lt;/button&gt;&gt;
+		&lt;&lt;/button&gt;&gt;@@
 	&lt;/span&gt;\
+&lt;/div&gt;
 	&lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
 		if(setup.passageGoNumber[0] == setup.memberNumber){
 			Engine.play(&quot;検査官の質問&quot;);
 		}
-		if(setup.memberNumber &gt;= 1){
+		if(setup.memberNumber &gt;= 1 &amp;&amp; setup.tempflag){
 			$(&quot;#hidbtn button&quot;).prop(&quot;disabled&quot;, false);
+			setup.tempflag = false;
 		}
 	&lt;&lt;/script&gt;&gt;&lt;&lt;/repeat&gt;&gt;&lt;&lt;/silently&gt;&gt;
+
+
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="検査官の質問" tags="" position="475,100" size="100,100">&lt;div class = &quot;text&quot;&gt;
 &lt;&lt;type 100ms none&gt;&gt;\
 個室に戻り、ドアを閉める。
@@ -649,7 +698,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 「では、お聞きしますね」
 
 「あなたにとってその『死んだフリをしている』男……
-　死体と呼んでいるその人は何者ですか？」」
+　死体と呼んでいるその人は何者ですか？」
 どくん。
 &lt;font size=&quot;5&quot;&gt;どくん。&lt;/font&gt;
 &lt;font size=&quot;6&quot;&gt;どくん。
@@ -657,19 +706,17 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 検査官の質問に対し、3分以内に回答すること。&lt;/font&gt;
 &lt;&lt;/type&gt;&gt;
-
 &lt;div class = &quot;bottomdiv&quot;&gt;
-&lt;span id=&quot;passageGoCheck&quot;&gt;0/0&lt;/span&gt;
+
 &lt;span id=&quot;hidbtn&quot; style=&quot;display: initial&quot;&gt;\
-	&lt;&lt;button &quot;次へ&quot;&gt;&gt;
+	@@.buttonLarge;&lt;&lt;button &#39;次へ&lt;span id=&quot;passageGoCheck&quot;&gt;0/0&lt;/span&gt;&#39;&gt;&gt;
 		&lt;&lt;script&gt;&gt;
-			$(&#39;#hidbtn&#39;).css(&#39;display&#39;, &#39;none&#39;);
+			$(&quot;#hidbtn button&quot;).prop(&quot;disabled&quot;, true);
 			TwineGang.clickButton(1);
 			setup.passageGoNumber[1]++;
 			$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[1]+&quot; / &quot;+setup.memberNumber);
-		&lt;&lt;/script&gt;&gt;
-		&lt;&lt;/button&gt;&gt;
-	&lt;/span&gt;\
+		&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;@@
+&lt;/span&gt;\
 	&lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
 		if(setup.passageGoNumber[1] == setup.memberNumber){
 			if(State.variables.name == &#39;検査官&#39;){
@@ -678,7 +725,6 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 			else{
 				Engine.play(&quot;質問フェーズ&quot;);
 			}
-
 		}
 	&lt;&lt;/script&gt;&gt;&lt;&lt;/repeat&gt;&gt;&lt;&lt;/silently&gt;&gt;
 &lt;/div&gt;
@@ -689,29 +735,14 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 &lt;&lt;/script&gt;&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="質問フェーズ" tags="" position="600,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
 &lt;div class=&quot;clock&quot;&gt;&lt;p class=&quot;clock-time&quot; id=&quot;time&quot;&gt;00:00.00&lt;/p&gt;&lt;/div&gt;\
-&lt;&lt;script&gt;&gt;
-	$(document).one(&#39;:passagedisplay&#39;, function (ev) {
-		var span = document.getElementById(&#39;time&#39;);
-		setup.countdown = new Countdown(span, 181);
-		setup.countdown.init();
-		setup.countdown.start();
-		$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+&quot; / &quot;+setup.memberNumber);
-	});
-&lt;&lt;/script&gt;&gt;
-
 &lt;font size=&quot;5&quot;&gt;\
-『あなたにとってその『死んだフリをしている』男……
-　死体と呼んでいるその人は何者ですか？』&lt;/font&gt;
-
-
-
+「あなたにとってその『死んだフリをしている』男……
+　死体と呼んでいるその人は何者ですか？」&lt;/font&gt;\
 
 
 &lt;span id=&quot;ans&quot; style=&quot;display: initial&quot;&gt;&lt;&lt;textarea &quot;$answer&quot; &quot;&quot;&gt;&gt;&lt;/span&gt;
-&lt;div class=&quot;box&quot;&gt;&lt;span id=&quot;passageGoCheck&quot;&gt;0/0&lt;/span&gt;&lt;/div&gt;
 &lt;span id=&quot;ansbtn&quot; style=&quot;display: inline-block&quot;&gt;\
-&lt;&lt;button &quot;回答する&quot;&gt;&gt;
-	&lt;&lt;script&gt;&gt;
+@@.buttonLarge;&lt;&lt;button &#39;回答する&lt;span id=&quot;passageGoCheck&quot;&gt;0/0&lt;/span&gt;&#39;&gt;&gt;&lt;&lt;script&gt;&gt;
 		$(&#39;#ans&#39;).css(&#39;display&#39;, &#39;none&#39;);
 		$(&#39;#escape&#39;).css(&#39;display&#39;, &#39;none&#39;);
 		$(&#39;#quiet&#39;).css(&#39;display&#39;, &#39;none&#39;);
@@ -721,16 +752,11 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		if(State.variables.answer == &quot;&quot;){
 			setup.correctAnswer++;
 		}
-		else{
-			setup.wrongAnswer++;
-		}
+		else{setup.wrongAnswer++;}
 		$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+&quot; / &quot;+setup.memberNumber);
-	&lt;&lt;/script&gt;&gt;
-&lt;&lt;/button&gt;&gt;
-&lt;/span&gt;\
-&lt;span id=&quot;quiet&quot; style=&quot;display: none&quot;&gt;\
-&lt;&lt;button &quot;何も答えない&quot;&gt;&gt;
-	&lt;&lt;script&gt;&gt;	
+&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;@@&lt;/span&gt;
+&lt;span id=&quot;quiet&quot; style=&quot;display: none&quot;&gt;
+&lt;&lt;button &quot;何も答えない&quot;&gt;&gt;&lt;&lt;script&gt;&gt;	
 		$(&#39;#ans&#39;).css(&#39;display&#39;, &#39;none&#39;);
 		$(&#39;#escape&#39;).css(&#39;display&#39;, &#39;none&#39;);
 		$(&#39;#quiet&#39;).css(&#39;display&#39;, &#39;none&#39;);
@@ -740,26 +766,18 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		if(State.variables.answer == &quot;&quot;){
 			setup.correctAnswer++;
 		}
-		else{
-			setup.wrongAnswer++;
-		}
+		else{setup.wrongAnswer++;}
 		$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+&quot; / &quot; + setup.memberNumber);
-	&lt;&lt;/script&gt;&gt;
-&lt;&lt;/button&gt;&gt;
+	&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
 &lt;/span&gt;
-
-&lt;span id=&quot;escape&quot; style=&quot;display: initial&quot;&gt;\
-&lt;&lt;button &quot;脱出を試みる&quot;&gt;&gt;
-	&lt;&lt;script&gt;&gt;
+&lt;span id=&quot;escape&quot; style=&quot;display: initial&quot;&gt;
+&lt;&lt;button &quot;脱出を試みる&quot;&gt;&gt;&lt;&lt;script&gt;&gt;
 	$(&#39;#escape&#39;).css(&#39;display&#39;, &#39;none&#39;);
 	$(&#39;#escapeChoice&#39;).css(&#39;display&#39;, &#39;inline&#39;);
-	&lt;&lt;/script&gt;&gt;
-&lt;&lt;/button&gt;&gt;
+	&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
 &lt;/span&gt;\
 
-&lt;span id = &quot;escapeChoice&quot; style=&quot;display:none&quot;&gt;
-&lt;table&gt;\
-&lt;tr&gt;\
+&lt;span id = &quot;escapeChoice&quot; style=&quot;display:none&quot;&gt;&lt;table&gt;&lt;tr&gt;
 &lt;&lt;button &#39;天井から脱出する&#39;&gt;&gt;&lt;&lt;script&gt;&gt;
 	$(&#39;#escapeChoice&#39;).css(&#39;display&#39;, &#39;none&#39;);
 	$(&#39;#escapeResultTrue&#39;).css(&#39;display&#39;, &#39;inline&#39;);
@@ -779,9 +797,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	$(&#39;#escapeResultText&#39;).text(&quot;脱出の窓にならないだろうか？ウィンドウズだけに。脱出の手掛かりはなさそうだ。&quot;);
 	$(&#39;#escapeResultText&#39;).css(&#39;display&#39;, &#39;inline&#39;);
 &lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;
-&lt;/tr&gt;\
-&lt;/table&gt;\
-&lt;/span&gt;\
+&lt;/tr&gt;&lt;/table&gt;&lt;/span&gt;\
 &lt;span id=&quot;escapeResultTrue&quot; style=&quot;display:none&quot;&gt;
 貴方は天井の通気口を見つけた。
 だが、鉄格子に阻まれ進むことができない。
@@ -815,7 +831,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		$(&#39;#ans&#39;).css(&#39;display&#39;, &#39;none&#39;);
 	&lt;&lt;/script&gt;&gt;
 &lt;&lt;/timed&gt;&gt;
-&lt;&lt;timed 60s&gt;&gt;
+&lt;&lt;timed 30s&gt;&gt;
 	&lt;&lt;script&gt;&gt;
 		if(setup.answer == &quot;&quot;){
 			$(&#39;#quiet&#39;).css(&#39;display&#39;, &#39;inline-block&#39;);
@@ -846,7 +862,16 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		});
 	});
 &lt;&lt;/script&gt;&gt;
-&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="6" name="監視フェーズ" tags="" position="725,100" size="100,100">&lt;div class=&quot;text&quot;&gt;\
+&lt;/div&gt;\
+&lt;&lt;script&gt;&gt;
+	$(document).one(&#39;:passagedisplay&#39;, function (ev) {
+		var span = document.getElementById(&#39;time&#39;);
+		setup.countdown = new Countdown(span, 181);
+		setup.countdown.init();
+		setup.countdown.start();
+		$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+&quot; / &quot;+setup.memberNumber);
+	});
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="6" name="監視フェーズ" tags="" position="725,100" size="100,100">&lt;div class=&quot;text&quot;&gt;\
 
 &lt;font size=&quot;7&quot;&gt;	回答を以下に表示します。&lt;/font&gt;
   	&lt;ul id=&quot;answerlist&quot;&gt;&lt;/ul&gt;
@@ -1306,7 +1331,166 @@ Second time
 [[エンディング一覧へ|END LIST]]
 
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="14" name="END C" tags="" position="475,225" size="100,100">&lt;div class = &quot;text&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="14" name="END B" tags="" position="475,225" size="100,100">&lt;div class = &quot;text&quot;&gt;
+
+あなたがたはモニター越しの検査官を睨みつけていた。
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「………………」&lt;/p&gt;
+
+突然。
+まるで金属を激しくぶつけ合わせたかのような音が鳴り響く。
+警報だ。検査官の表情が険しくなる。
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「脱走！？どうしてそんなことを！？」&lt;/p&gt;
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「しばらく待っていてください。脱走者を鎮圧します！」&lt;/p&gt;
+
+白衣を翻し、検査官はモニターから姿を消した。
+
+&lt;&lt;if setup.escapeName == &quot;ヒダマリ&quot;&gt;&gt;
+ヒダマリは狭い空気口を潜り抜けた。
+
+&lt;img class=&quot;hidamari&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「わっせ　わっせ」&lt;/p&gt;
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「どうして逃げてしまうんですか？」&lt;/p&gt;
+
+通気口を抜けた先は出口の前。
+そこには検査官が仁王立ちで彼女を待っていた。
+
+&lt;img class=&quot;hidamari&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「んにに　　
+　あんまりカロリーがない状態で戦いたくないんだけどにゃあ」&lt;/p&gt;
+
+&lt;img class=&quot;hidamari&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「でも、邪魔するなら押しとおるよ」&lt;/p&gt;
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「……出来るものなら」&lt;/p&gt;
+
+&lt;img class=&quot;hidamari&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「出来るんだよ」&lt;/p&gt;
+
+交差。
+ヒダマリは一瞬のうちに検査官を吹き飛ばす。
+検査官は壁に全身を打ちながら崩れた。
+
+&lt;img class=&quot;hidamari&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「……とりあえず逃げないと」&lt;/p&gt;
+
+ヒダマリは逃げ続けた。ヒダマリは何も信用出来なかった。
+ミンも、フシグモも、自分自身の記憶でさえも。
+問題の解決から逃げることを選択したが、
+いつか追いつかれ『君』はばらばらになるだろう。
+それでも、今は何も考えたくなかった。
+
+ヒダマリ追加エンド
+「運命からは逃れられない」
+
+&lt;&lt;/if&gt;&gt;
+&lt;&lt;if setup.escapeName == &quot;フシグモ&quot;&gt;&gt;
+フシグモは脱走した。
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「待ってください！」&lt;/p&gt;
+
+検査官は必死に追いかけるが、体力はフシグモほどは無いようだ。
+
+&lt;img class=&quot;fusigumo&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「……ふぅん」&lt;/p&gt;
+
+それからしばらく……。
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「いたい　くるしい」&lt;/p&gt;
+
+&lt;img class=&quot;fusigumo&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「この毒はまだ有害性を上げられるな」&lt;/p&gt;
+
+検査官は実験台にされていた。
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「むり　いたい　だって　うぅ」&lt;/p&gt;
+
+&lt;img class=&quot;fusigumo&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「まだ痛みを訴える余裕があるな。もうあと2段階上げてみよう。」&lt;/p&gt;
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「たすけて　セブンサンさま」&lt;/p&gt;
+
+&lt;img class=&quot;fusigumo&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「……いずれ会わせてやるさ」&lt;/p&gt;
+
+検査官の目に希望の光が灯る。
+希望をチラつかせただけで……なんて哀れな生き物なんだ。
+フシグモは、そんな希望の光を乱暴にかき消すところを想像し
+口角が上がってしまうのを必死でこらえた。
+
+フシグモ追加エンド
+「『地獄で会えるぞ』」
+
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;if setup.escapeName == &quot;ミン&quot;&gt;&gt;
+ミンが通気口を通る。
+
+&lt;img class=&quot;minn&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「とりあえずは撤退だ…」&lt;/p&gt;
+
+通気口から出ると、そこには絶望が広がっていた。
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「どこに行こうというんですか？」&lt;/p&gt;
+
+二本の刀を持った検査官。
+『ラスト・リゾート』がミンを殺す為に待っていた。
+
+&lt;img class=&quot;minn&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「まぁ、そうか」&lt;/p&gt;
+
+一閃。瞬きの間におびただしいほどの風が切り裂かれた。
+
+&lt;img class=&quot;minn&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「ボクだけが助かるってのは　ズルすぎるか」&lt;/p&gt;
+
+&lt;img class=&quot;kensa&quot;&gt;\
+&lt;p class=&quot;side_text&quot;&gt;「……やっぱり、殺しは良い……」&lt;/p&gt;
+
+検査官は刀に付いた血をぬぐうと、そのまま扉から外に出た。
+
+……もうそこに検査官としての面影はない。
+いるのはただの人殺しだ。
+
+ミン追加エンド
+「一人勝ちは無し」
+
+&lt;&lt;/if&gt;&gt;
+静寂………。
+………………。
+
+どれくらいの時間が経っただろうか。
+3時間、1日、あるいはそれ以上か。
+脱走者も、検査官も。
+どちらも帰ってくる気配はない。
+止まない警報が、正気をどんどん奪っていく。
+
+だれか　たすけてくれ
+
+必死に絞り出した声は
+警報にかき消され
+誰にも届くことはなかった。
+
+Bエンド
+「死体を誰が見つける？」
+
+[[エンディング一覧へ|END LIST]]
+
+
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="15" name="END C" tags="" position="600,225" size="100,100">&lt;div class = &quot;text&quot;&gt;
 
 何も言わなかった。
 
@@ -1409,7 +1593,7 @@ Second time
 [[次へ|ENDDorE]]
 
 
-&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="15" name="ENDDorE" tags="" position="600,225" size="100,100">&lt;div class=&quot;text&quot;&gt;\
+&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="16" name="ENDDorE" tags="" position="725,225" size="100,100">&lt;div class=&quot;text&quot;&gt;\
 &lt;div class=&quot;clock&quot; id=&quot;escapeClock&quot;&gt;&lt;p class=&quot;clock-time&quot; id=&quot;time&quot;&gt;00:00&lt;/p&gt;&lt;/div&gt;\
 
 
@@ -1477,7 +1661,7 @@ Second time
 &lt;/div&gt;
 
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="16" name="END D" tags="" position="725,225" size="100,100">&lt;div class = &quot;text&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="END D" tags="" position="850,225" size="100,100">&lt;div class = &quot;text&quot;&gt;\
 
 
 ……そうして、しばらくの時が経った。
@@ -1572,7 +1756,7 @@ Dエンド
 [[エンディング一覧へ|END LIST]]
 
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="END E" tags="" position="850,225" size="100,100">&lt;div class = &quot;text&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="18" name="END E" tags="" position="975,225" size="100,100">&lt;div class = &quot;text&quot;&gt;\
 
 
 それからしばらく経った後。
@@ -1634,7 +1818,7 @@ Eエンド
 [[エンディング一覧へ|END LIST]]
 
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="18" name="PassageFooter" tags="nobr" position="975,225" size="100,100">&lt;&lt;if !tags().includes(&quot;bbar&quot;)&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="PassageFooter" tags="nobr" position="1100,225" size="100,100">&lt;&lt;if !tags().includes(&quot;bbar&quot;)&gt;&gt;
 &lt;div id=&quot;bottombar&quot;&gt;
 &lt;div id=&quot;bbblock&quot;&gt;
 &lt;div id=&quot;bbtext&quot; align=&quot;left&quot;&gt;
@@ -1663,10 +1847,10 @@ $(document).one(&quot;:passagedisplay&quot;, function (event) {
 
 &lt;&lt;/script&gt;&gt;
 &lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="19" name="StoryInit" tags="" position="1100,225" size="100,100">&lt;&lt;preload &quot;https://drive.google.com/uc?id=1BJ-L0M9PVctUgoTRvhVQdnZ53Eo3dxWO&quot; 
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="20" name="StoryInit" tags="" position="1225,225" size="100,100">&lt;&lt;preload &quot;https://drive.google.com/uc?id=1BJ-L0M9PVctUgoTRvhVQdnZ53Eo3dxWO&quot; 
 &quot;https://drive.google.com/uc?id=1BPfQaJAInwwQgKQ4pYecfIVAWcHW8tF0&quot; 
 &quot;https://drive.google.com/uc?id=1BHQWP3o_OYnl2qpMN0bf9cvNZm05_U0e&quot; 
-&quot;https://drive.google.com/uc?id=1BLEKL2foEZKwgZ6-DILSBftJFI8_o2jc&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="20" name="END LIST" tags="" position="1225,225" size="100,100">&lt;div class = &quot;text&quot;&gt;\
+&quot;https://drive.google.com/uc?id=1BLEKL2foEZKwgZ6-DILSBftJFI8_o2jc&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="END LIST" tags="" position="100,350" size="100,100">&lt;div class = &quot;text&quot;&gt;\
 
 お疲れさまでした。
 以下がエンディングのリストになります。
@@ -1678,7 +1862,7 @@ $(document).one(&quot;:passagedisplay&quot;, function (event) {
 [[全員検査官の質問に回答しなかった場合|ENDCSHOW]]
 
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="21" name="ENDASHOW" tags="" position="100,350" size="100,100">&lt;div class = &quot;text&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="22" name="ENDASHOW" tags="" position="225,350" size="100,100">&lt;div class = &quot;text&quot;&gt;\
 
 検査官を見つめる。
 検査官はこちらをじっと見つめ返した。
@@ -1810,7 +1994,7 @@ $(document).one(&quot;:passagedisplay&quot;, function (event) {
 [[ミンを置き去りにする場合|END A-3]]
 
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="22" name="ENDBSHOW" tags="" position="225,350" size="100,100">&lt;div class = &quot;text&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="23" name="ENDBSHOW" tags="" position="350,350" size="100,100">&lt;div class = &quot;text&quot;&gt;
 
 あなたがたはモニター越しの検査官を睨みつけていた。
 
@@ -1973,7 +2157,7 @@ Bエンド
 [[エンディング一覧へ|END LIST]]
 
 
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="23" name="ENDCSHOW" tags="" position="350,350" size="100,100">&lt;div class = &quot;text&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="24" name="ENDCSHOW" tags="" position="475,350" size="100,100">&lt;div class = &quot;text&quot;&gt;
 
 何も言わなかった。
 
