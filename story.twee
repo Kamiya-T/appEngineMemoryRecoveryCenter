@@ -130,7 +130,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	部屋番号
 	<<numberbox "$seconds" 0>>
 
-	@@.buttonLarge;<<button '既存ルームに接続する'>>
+	@@.buttonLarge;<<button '既存ルームに接続'>>
 		<<script>>
 			async function test(){
 				let result = await TwineGang.joinExistRoom(State.variables.seconds, State.variables.name);
