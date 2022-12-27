@@ -732,6 +732,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 ヒダマリ拘束エンド
 Melted sugar
+
+[[エンディング一覧へ|END LIST]]
 </div>
 :: END A-2
 <div class = "text">\
@@ -791,6 +793,8 @@ Melted sugar
 
 フシグモ拘束エンド
 裏切り
+
+[[エンディング一覧へ|END LIST]]
 </div>
 :: END A-3
 <div class = "text">\
@@ -861,6 +865,8 @@ Melted sugar
 
 ミン拘束エンド
 Second time
+
+[[エンディング一覧へ|END LIST]]
 </div>
 :: END C
 <div class = "text">
@@ -1191,7 +1197,7 @@ Dエンド
 <p class="side_text">「かわいそう」</p>
 
 
-<a href="https://drive.google.com/uc?id=1wNwBNRcgnyICkkzo8-TTKVv7GpHMaS0m" target="_blank">ENDING E</a>
+[[エンディング一覧へ|END LIST]]
 </div>
 
 :: StoryData
@@ -1244,3 +1250,411 @@ $(document).one(":passagedisplay", function (event) {
 
 お疲れさまでした。
 以下がENDINGのリストになります。
+
+[[誰かが検査官の質問に回答している場合|ENDASHOW]]
+
+[[全員検査官の質問に回答しなかったが、脱出した人がいる場合|ENDBSHOW]]
+
+[[全員検査官の質問に回答しなかった場合|ENDCSHOW]]
+
+
+</div>
+
+:: ENDASHOW
+<div class = "text">\
+
+検査官を見つめる。
+検査官はこちらをじっと見つめ返した。
+
+<img class="kensa">\
+<p class="side_text">「……違いますよ。あなた達にとって、彼は、セブンサン様は。」</p>
+<img class="kensa">\
+<p class="side_text">「もっともっと尊くて素晴らしいものですよ？」</p>」
+<<if hoge>>
+<img class="kensa">\
+<p class="side_text">「そうですよね？<<name>>さん？」</p>
+突然モニターが切り替わり通気口から脱出しようとしていた<<name>>の姿が映し出される。
+検査官が手元を弄ると通気口が開き<<name>>は自室に落とされる。
+<</if>>
+<img class="kensa">\
+<p class="side_text">「マニュアル23P、7項の項目『被験者が服従を示さない場合』のプロセスに則り、
+　記憶消去を実行します」</p>
+<img class="kensa">\
+<p class="side_text">「セブンサン様？承認をいただきたいのですが。
+　記憶消去してもよろしいでしょうか」</p>
+
+……沈黙。
+長い沈黙だ。
+
+誰も彼女に返事をしない。
+
+<img class="kensa">\
+<p class="side_text">「……おや？おかしいですね」</p>
+
+
+<img class="fusigumo">\
+<p class="side_text">「……本当にあいつに向かって喋りかけているのか？
+　あいつはどう見ても死んでいるだろう」</p>
+
+<img class="kensa">\
+<p class="side_text">「えぇ…っと」</p>
+
+<img class="kensa">\
+<p class="side_text">「……………」</p>
+
+<img class="kensa">\
+<p class="side_text">「え？」</p>
+
+<img class="minn">\
+<p class="side_text">「どうしたんだい？
+　まさか死体が死んでることにすら気づけない愚か者が
+　ボクたちを検査していたわけないだろう！？」</p>
+
+<img class="kensa">\
+<p class="side_text">「……」</p>
+
+<img class="hidamari">\
+<p class="side_text">「ん〜　これはどうなるのかな〜」</p>
+
+モニターからの3人の視線に晒され、検査官はうろたえる。
+
+<img class="kensa">\
+<p class="side_text">「だって彼が死ぬはずが……」</p>
+<img class="minn">\
+<p class="side_text">「死んでるじゃないか！」</p>
+<img class="fusigumo">\
+<p class="side_text">「確かに脈が止まっているぞ」</p>
+<img class="hidamari">\
+<p class="side_text">「死んでるね〜」</p>
+<img class="kensa">\
+<p class="side_text">「だって……だって……」</p>
+<img class="fusigumo">\
+<p class="side_text">「耳に機械が付いているんだろう？心拍数すらも計っていないのか？」</p>
+<img class="minn">\
+<p class="side_text">「首にあんなあざが付いているのに生きているっていうのは
+　とんだお笑いだよねっ！」</p>
+<img class="hidamari">\
+<p class="side_text">「そもそも今までの話し合いも全部理解してなかったり？」</p>
+<img class="kensa">\
+<p class="side_text">「ちがう……ちがう……」</p>
+<img class="fusigumo">\
+<p class="side_text">「違くない。あの男は死んでいる」</p>
+<img class="minn">\
+<p class="side_text">「つまりキミの『セブンサンさま』とやらはどこにもいないわけだけど？」</p>
+<img class="hidamari">\
+<p class="side_text">「大人しくここからだしてくれないかな～☆」</p>
+
+<img class="kensa">\
+<p class="side_text">「ちがう……ちがう……そうか！」</p>
+
+ぐりん。
+首を急に上げる検査官。
+声の大きさに思わずあなたは身を引いた。
+
+<img class="kensa">\
+<p class="side_text">「これも天啓なんですね！あの男は偽物！
+　あの偽物のクソ野郎を殺してくれた方が、
+　本物の『セブンサン』様なんですね！？」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「……イカれてるな」</p>
+
+
+ボソリとつぶやかれたその一言に、検査官は機敏に反応した。
+<img class="kensa">\
+<p class="side_text">「なんですか？」</p>
+
+<img class="kensa">\
+<p class="side_text">「あなた方が彼の素晴らしさを理解していないならこの計画は失敗です
+　私は早くセブンサン様と次の計画の話し合いをしなくてはなりません」</p>
+
+<img class="kensa">\
+<p class="side_text">「今から5分間、時間をあげますから」
+　誰が彼を殺したのかを再度議論し合い、私に教えてください」</p>
+
+<img class="kensa">\
+<p class="side_text">「残りの2人だけはここから解放してあげます」
+　私とセブンサン様の間に邪魔者は要りませんから……」</p>
+
+<img class="kensa">\
+<p class="side_text">「あー、そう。
+　通気口からも、逃げれると思わないことですよ」</p>
+
+
+…………。
+終わったはずなのに。
+再度、話し合いが始まる。 
+
+
+
+
+[[ヒダマリを置き去りにする場合|END A-1]]
+[[フシグモを置き去りにする場合|END A-2]]
+[[ミンを置き去りにする場合|END A-3]]
+
+</div>
+:: ENDBSHOW
+<div class = "text">
+
+あなたがたはモニター越しの検査官を睨みつけていた。
+
+<img class="kensa">\
+<p class="side_text">「………………」</p>
+
+突然。
+まるで金属を激しくぶつけ合わせたかのような音が鳴り響く。
+警報だ。検査官の表情が険しくなる。
+
+<img class="kensa">\
+<p class="side_text">「脱走！？どうしてそんなことを！？」</p>
+
+<img class="kensa">\
+<p class="side_text">「しばらく待っていてください。脱走者を鎮圧します！」</p>
+
+白衣を翻し、検査官はモニターから姿を消した。
+
+<<if setup.escapeName == "ヒダマリ">>
+ヒダマリは狭い空気口を潜り抜けた。
+
+<img class="hidamari">\
+<p class="side_text">「わっせ　わっせ」</p>
+
+<img class="kensa">\
+<p class="side_text">「どうして逃げてしまうんですか？」</p>
+
+通気口を抜けた先は出口の前。
+そこには検査官が仁王立ちで彼女を待っていた。
+
+<img class="hidamari">\
+<p class="side_text">「んにに　　
+　あんまりカロリーがない状態で戦いたくないんだけどにゃあ」</p>
+
+<img class="hidamari">\
+<p class="side_text">「でも、邪魔するなら押しとおるよ」</p>
+
+<img class="kensa">\
+<p class="side_text">「……出来るものなら」</p>
+
+<img class="hidamari">\
+<p class="side_text">「出来るんだよ」</p>
+
+交差。
+ヒダマリは一瞬のうちに検査官を吹き飛ばす。
+検査官は壁に全身を打ちながら崩れた。
+
+<img class="hidamari">\
+<p class="side_text">「……とりあえず逃げないと」</p>
+
+ヒダマリは逃げ続けた。ヒダマリは何も信用出来なかった。
+ミンも、フシグモも、自分自身の記憶でさえも。
+問題の解決から逃げることを選択したが、
+いつか追いつかれ『君』はばらばらになるだろう。
+それでも、今は何も考えたくなかった。
+
+ヒダマリ追加エンド
+「運命からは逃れられない」
+
+<</if>>
+<<if setup.escapeName == "フシグモ">>
+フシグモは脱走した。
+
+<img class="kensa">\
+<p class="side_text">「待ってください！」</p>
+
+検査官は必死に追いかけるが、体力はフシグモほどは無いようだ。
+
+<img class="fusigumo">\
+<p class="side_text">「……ふぅん」</p>
+
+それからしばらく……。
+
+<img class="kensa">\
+<p class="side_text">「いたい　くるしい」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「この毒はまだ有害性を上げられるな」</p>
+
+検査官は実験台にされていた。
+
+<img class="kensa">\
+<p class="side_text">「むり　いたい　だって　うぅ」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「まだ痛みを訴える余裕があるな。もうあと2段階上げてみよう。」</p>
+
+<img class="kensa">\
+<p class="side_text">「たすけて　セブンサンさま」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「……いずれ会わせてやるさ」</p>
+
+検査官の目に希望の光が灯る。
+希望をチラつかせただけで……なんて哀れな生き物なんだ。
+フシグモは、そんな希望の光を乱暴にかき消すところを想像し
+口角が上がってしまうのを必死でこらえた。
+
+フシグモ追加エンド
+「『地獄で会えるぞ』」
+
+<</if>>
+
+<<if setup.escapeName == "ミン">>
+ミンが通気口を通る。
+
+<img class="minn">\
+<p class="side_text">「とりあえずは撤退だ…」</p>
+
+通気口から出ると、そこには絶望が広がっていた。
+
+<img class="kensa">\
+<p class="side_text">「どこに行こうというんですか？」</p>
+
+二本の刀を持った検査官。
+『ラスト・リゾート』がミンを殺す為に待っていた。
+
+<img class="minn">\
+<p class="side_text">「まぁ、そうか」</p>
+
+一閃。瞬きの間におびただしいほどの風が切り裂かれた。
+
+<img class="minn">\
+<p class="side_text">「ボクだけが助かるってのは　ズルすぎるか」</p>
+
+<img class="kensa">\
+<p class="side_text">「……やっぱり、殺しは良い……」</p>
+
+検査官は刀に付いた血をぬぐうと、そのまま扉から外に出た。
+
+……もうそこに検査官としての面影はない。
+いるのはただの人殺しだ。
+
+ミン追加エンド
+「一人勝ちは無し」
+
+<</if>>
+静寂………。
+………………。
+
+どれくらいの時間が経っただろうか。
+3時間、1日、あるいはそれ以上か。
+脱走者も、検査官も。
+どちらも帰ってくる気配はない。
+止まない警報が、正気をどんどん奪っていく。
+
+だれか　たすけてくれ
+
+必死に絞り出した声は
+警報にかき消され
+誰にも届くことはなかった。
+
+Bエンド
+「死体を誰が見つける？」
+
+[[エンディング一覧へ|END LIST]]
+</div>
+
+:: ENDCSHOW
+<div class = "text">
+
+何も言わなかった。
+
+<img class="kensa">\
+<p class="side_text">「……………………」</p>
+
+<img class="kensa">\
+<p class="side_text">「あれ、聞こえてますよね？」</p>
+
+ぱたぱたと手を振る検査官。
+何も言わなかった。
+
+<img class="kensa">\
+<p class="side_text">「あれぇ………故障かなぁ……えぇ…っと……」</p>
+
+何も言わなかった。
+何も言わなかった。
+何も言わなかった。
+……無言のまま数十分が過ぎた。
+
+<img class="kensa">\
+<p class="side_text">「セブンサン様、こういうときはどうすればよろしいのでしょうか
+　死体のフリをしているのは承知です。どうか、お導きください。」</p>
+
+何も言わなかった。
+
+<img class="kensa">\
+<p class="side_text">「セブンサン様？」</p>
+
+死体は喋らない。
+
+<img class="kensa">\
+<p class="side_text">「え？うそ、ウソですよね？
+　あれ、おかしいですよね？そんな、え？」</p>
+
+<img class="kensa">\
+<p class="side_text">「導いてくれるって言ったじゃないですか
+　救いになるって言ってくれたじゃないですか
+　どうして？どうして死んでいるんですか？
+　本当に死んでいるんですか？」</p>
+
+死体は喋らない。
+
+<img class="kensa">\
+<p class="side_text">「え、うそ、うそうそうそ！
+　なんで勝手に死んでいるんですか？
+　あたしは、一人にされたんですか？え、あ」</p>
+
+検査官は髪をかきむしりながら、必死にモニターを覗き込む。
+……それでも、死体は死んでいる。
+
+<img class="kensa">\
+<p class="side_text">「あ/あぁ！見捨てられ/た
+　神は違っ/た/私を/救っ/たわけじゃ/なかったんだ」</p>
+
+検査官はそのまま机を両手で持ち上げた。
+モニターの映像がぐらぐらと揺れ、何も映らなくなる。
+
+<img class="kensa">\
+<p class="side_text">「神/のいないこの世界/私もすぐ行きま/すからね」</p>
+
+警報が部屋に鳴り響く。
+モニターからは検査官が椅子を投げ、壁を蹴りつけ、泣きわめき、
+気の、狂いのままに暴れる音が鳴り響いていた。
+……そして、偶然か。
+それとも必然か。
+
+鉄格子が音を立ててゆっくりと上がっていく。
+脱出だ。
+
+三人は、警報の鳴り響く廊下を駆け抜ける。
+
+<img class="hidamari">\
+<p class="side_text">「ひゃー☆　こんなにうまくいくなんてねっ！」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「全く非合理的だ。もっといい策はいくらでもあっただろう」</p>
+
+<img class="minn">\
+<p class="side_text">「とりあえず地上にさえ出れば何とかなるはず！
+　進め！ボクが怪我しないように前を！」</p>
+
+必死に廊下を走っていた3人は
+『EXIT』
+出口と書かれたドアの前でふと、足を止めた。
+そのドアの横にもう一つ。
+『監視室』と書かれたドアがあったからだ。
+
+<img class="minn">\
+<p class="side_text">「あら～」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「中には検査官、か」</p>
+
+<img class="hidamari">\
+<p class="side_text">「どうする～？
+　あの感じだと自分で脱出とかはする気無さそうだけどにぃ」</p>
+
+
+[[検査官を助ける場合|END D]]
+[[検査官を助けない場合|END E]]
+
+</div>\
