@@ -114,7 +114,6 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	2. 部屋番号を他被験者と共有する。
 	3. 他被験者は共有された部屋番号を用いて『既存ルームに接続』する。</p>
 </div>
-
 <span id="RoomIdDisplay"></span>
 		<<button '新規ルーム作成'>>
     		<<script>>
