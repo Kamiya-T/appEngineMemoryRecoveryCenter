@@ -29,7 +29,6 @@ io.on('connection', (socket) => {
 
   socket.on('joinExistRoom', function(room, name, callback) {
     console.log('接続要求を確認、クライアントの部屋入室を試みます.');
-    callback = callback || function(){};
     // New room has to exist.
     if (!(room in rooms)) {
       console.log('接続要求中、部屋番号が存在しません.エラーです.');
@@ -58,10 +57,10 @@ io.on('connection', (socket) => {
 
   socket.on('sendAnswer', (answer, name) =>{
     if(answer == ""){
-      socket.broadcast.to(roomName).emit('otherAnswer', 0);
+      socket.broadcast.to(roomName).emit('otherAnswer', answer, name, 0);
     }
     else{
-      socket.broadcast.to(roomName).emit('otherAnswer', 1);
+      socket.broadcast.to(roomName).emit('otherAnswer', answer, name, 1);
     }
     console.log("回答を受けました:" + name + ":"+ answer);
   });
@@ -160,5 +159,6 @@ function joinRoom(socket, roomName, userName) {
 var port = process.env.PORT || 8080;
 console.log('Start Listening');
 server.listen(port);
+server.setTimeout();
 
 console.log('Listening on port ' + port);
