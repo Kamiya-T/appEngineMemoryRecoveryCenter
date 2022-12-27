@@ -99,12 +99,12 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 :: Start [mv]
 <div class = "text" id = "center">
-<font size="5">被験者はログインするアカウントを選択してください</font>
-<span>	<a data-passage="Login" data-setter="$name to 'ヒダマリ'"><img class="hidamarib"></a>\     
+<font size="5">プレイしているキャラクターを選択してください</font>
+<div  id = "loginList">	<a data-passage="Login" data-setter="$name to 'ヒダマリ'"><img class="hidamarib"></a>\     
 		<a data-passage="Login" data-setter="$name to 'フシグモ'"><img class="fusigumob"></a>\
 		<a data-passage="Login" data-setter="$name to 'ミン'"><img class="minnb"></a>\
 		<a data-passage="Login" data-setter="$name to '検査官'"><img class="kensab"></a>
-		</span>\
+</div>\
 </div>
 :: Login
 <div class = "text" id = "center">
@@ -449,6 +449,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 <<else>>
 	[[エンディングへ|END C]]
 <</if>>
+
+
 </div>
 :: END A
 <div class = "text">\
@@ -460,15 +462,15 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 <p class="side_text">「……違いますよ。あなた達にとって、彼は、セブンサン様は。」</p>
 <img class="kensa">\
 <p class="side_text">「もっともっと尊くて素晴らしいものですよ？」</p>」
-<<if hoge>>
+<<if setup.escapeName != ''>>
 <img class="kensa">\
 <p class="side_text">「そうですよね？<<name>>さん？」</p>
 突然モニターが切り替わり通気口から脱出しようとしていた<<name>>の姿が映し出される。
 検査官が手元を弄ると通気口が開き<<name>>は自室に落とされる。
 <</if>>
 <img class="kensa">\
-<p class="side_text">「マニュアル23P、7項の項目『被験者が服従を示さない場合』のプロセスに則り、
-　記憶消去を実行します」</p>
+<p class="side_text">「マニュアル23P、7項の項目『被験者が服従を示さない場合』の
+　プロセスに則り、記憶消去を実行します」</p>
 <img class="kensa">\
 <p class="side_text">「セブンサン様？承認をいただきたいのですが。
 　記憶消去してもよろしいでしょうか」</p>
@@ -669,6 +671,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	}
 <</script>><</repeat>><</silently>>
 </div>
+
+
 </div>
 :: END A-0
 <div class = "text">\
@@ -677,9 +681,12 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 [[フシグモがセブンサン|END A-2|]]
 [[ミンがセブンサン|END A-3|]]
 
+
 </div>
 :: END A-1
 <div class = "text">\
+
+
 あなたたちは話し合いの末、ヒダマリを置いていくことにした。
 最後にヒダマリは何かを2人に言い残すことが出来る。
 
@@ -700,9 +707,9 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 そして、彼女を置き去りにした罪悪感から。
 
 
-
 彷徨っていた2人はガラの悪い男に声をかけられる。
 どうやら昔の知り合いのようで、2人の世話をその男は甲斐甲斐しく焼いてくれた。
+
 <img class="fusigumo">\
 <p class="side_text">「おい。それは私のものだぞ」</p>
 <img class="minn">\
@@ -711,7 +718,6 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 <p class="side_text">「子供か？」</p>
 <img class="minn">\
 <p class="side_text">「争いは同レベルの者同士でしか発生しないっ！」</p>
-
 
 
 2人は沈黙を嫌うようになった。
@@ -734,9 +740,12 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 Melted sugar
 
 [[エンディング一覧へ|END LIST]]
+
+
 </div>
 :: END A-2
 <div class = "text">\
+
 あなたたちは話し合いの末、フシグモを置いていくことにした。
 最後にフシグモは何かを2人に言い残すことが出来る。
 
@@ -795,6 +804,8 @@ Melted sugar
 裏切り
 
 [[エンディング一覧へ|END LIST]]
+
+
 </div>
 :: END A-3
 <div class = "text">\
@@ -867,6 +878,8 @@ Melted sugar
 Second time
 
 [[エンディング一覧へ|END LIST]]
+
+
 </div>
 :: END C
 <div class = "text">
@@ -971,9 +984,6 @@ Second time
 
 [[次へ|ENDDorE]]
 
-<a href="https://drive.google.com/uc?id=13wGZ-uaF-S4cox03t7h597wZuCj3tifL" target="_blank">エラー時はこちらを参照ください。</a>
-
-
 
 </div>\
 :: ENDDorE
@@ -1015,7 +1025,6 @@ Second time
 			});
 		}
 	});
-
 <</script>>
 <div id = "helpDecision">
 検査官を「助ける」？
@@ -1044,16 +1053,18 @@ Second time
 	}
 <</script>><</repeat>><</silently>>
 </div>
+
+
 </div>
 :: END D
 <div class = "text">\
 
 
 ……そうして、しばらくの時が経った。
-<img class="minn">\
+<img class="minn2">\
 <p class="side_text">「……どうだい、記憶回復は」</p>
 
-<img class="hidamari">\
+<img class="hidamari2">\
 <p class="side_text">「さっぱりだねぇ～
 私達と違って、洗脳の度合いが重かったから難しいのかも」</p>
 <img class="kensa">\
@@ -1063,81 +1074,84 @@ Second time
 依存先を失ったショックから幼児へと退行してしまった彼女には、
 これから多くの試練が待っているだろう。
 
-<img class="minn">\
+<img class="minn2">\
 <p class="side_text">「きっと将来は大物になるだろうけどね」</p>
-<img class="fusigumo">\
+<img class="fusigumo2">\
 <p class="side_text">「ふん。私が勉強を教えているんだぞ。
 　1年でこれまで以上の頭脳にしてやるさ」</p>
 <img class="kensa">\
 <p class="side_text">「えびえび」</p>
-<img class="hidamari">\
+<img class="hidamari2">\
 <p class="side_text">「海鮮ばっか教えてない？」</p>
 
-<img class="minn">\
+<img class="minn2">\
 <p class="side_text">「しかしまぁ……。
 　よく生きて帰ってこれたよ」</p>
 
 やれやれと嘆息するミン。
 ゆっくりと、彼の顔が意地悪になっていく。
 
-<img class="minn">\
+<img class="minn2">\
 <p class="side_text">「ボクたちの記憶が本物だという確証はないけど……
 　これで終わりで、キミたちはいい？」</p>
-<img class="fusigumo">\
+<img class="fusigumo2">\
 <p class="side_text">「<ruby>愚問<rp>(</rp><rt>ぐもん</rt><rp>)</rp></ruby>だな。
 　偽物だったとしてそれが何になる」</p>
-<img class="fusigumo">\
+<img class="fusigumo2">\
 <p class="side_text">「どうせ頭蓋骨の暗闇の中で起こった変化だ。
 　私達にはどうしようも出来ないよ」</p>
 <img class="kensa">\
 <p class="side_text">「かにかに」</p>
-<img class="hidamari">\
+<img class="hidamari2">\
 <p class="side_text">「高い海鮮の<ruby>語彙<rp>(</rp><rt>ごい</rt><rp>)</rp></ruby>ばっか教えてない？」</p>
-<img class="minn">\
+<img class="minn2">\
 <p class="side_text">「ま、そうか。
-　後はあの死体を殺した犯人を裁いて終わりだね！」
-</p>
+　後はあの死体を殺した犯人を裁いて終わりだね！」</p>
+
 ヒダマリはミンを背負い投げした！
-<img class="minn">\
+
+<img class="minn2">\
 <p class="side_text">「グハーーーーーーーーーーーッ！」</p>
-<img class="hidamari">\
+<img class="hidamari2">\
 <p class="side_text">「乙女の秘密は暴いちゃいけないんだぞ☆」</p>
-<img class="fusigumo">\
+<img class="fusigumo2">\
 <p class="side_text">「ふん。付き合ってられないな。
 　行くぞ、検査官」</p>
 
 フシグモは検査官を連れて帰ろうとする。
 
-<img class="hidamari">\
+<img class="hidamari2">\
 <p class="side_text">「フシグモちゃんに世話任せちゃってごめんね～」</p>
-<img class="fusigumo">\
+<img class="fusigumo2">\
 <p class="side_text">「ヒダマリの食生活に合わせたらありえなく太らされるからな」</p>
-<img class="minn">\
+<img class="minn2">\
 <p class="side_text">「ボクが世話してもいいけどね！ね！検査官ちゃん！」</p>
 <img class="kensa">\
 <p class="side_text">「うぁああああああああああああん」</p>
-<img class="hidamari">\
+<img class="hidamari2">\
 <p class="side_text">「大号泣じゃん」</p>
 <img class="kensa">\
 <p class="side_text">「まま たすけて」</p>
 
 フシグモの足にぴったりつく検査官。
 
-<img class="minn">\
+<img class="minn2">\
 <p class="side_text">「マミー！？フシグモが！？そう呼ばせてる！？ママ！？
 　ママ！？！？！！？？！？？！」</p>
 
-<img class="fusigumo">\
+<img class="fusigumo2">\
 <p class="side_text">「お、おい！うるさい！余計なことを言うな！」</p>
 
 フシグモはミンを<ruby>巴<rp>(</rp><rt>ともえ</rt><rp>)</rp></ruby>投げした！
-<img class="minn">\挿し込んだ
+<img class="minn2">
 <p class="side_text">「グハーーーーーーーーーーーーーッ！」</p>
 
 Dエンド
 「記憶回復終了!」
 
 [[エンディング一覧へ|END LIST]]
+
+
 </div>
 :: END E
 <div class = "text">\
@@ -1145,59 +1159,63 @@ Dエンド
 
 それからしばらく経った後。
 
-<img class="hidamari">\
+<img class="hidamari2">\
 <p class="side_text">「助かった！助かった！助かった！」</p>
-<img class="fusigumo">\
+<img class="fusigumo2">\
 <p class="side_text">「早食いは寿命を縮めるぞ」</p>
 
 元の暮らしに戻った3人はパーティを開いていた。
 
-<img class="minn">\
+<img class="minn2">\
 <p class="side_text">「ボクたちがいない間の<ruby>諸々<rp>(</rp><rt>もろもろ</rt><rp>)</rp></ruby>があるからね
 　食べたら仕事に戻らないとね」</p>
-<img class="hidamari">\
+<img class="hidamari2">\
 <p class="side_text">「なんか性格変わってる？」</p>
-<img class="minn">\
+<img class="minn2">\
 <p class="side_text">「ふざける余裕がないだけだよ」</p>
-<img class="fusigumo">\
+<img class="fusigumo2">\
 <p class="side_text">「同意だ。
 　私達のいない間にくだらない連中がのさばっているからな」</p>
-<img class="fusigumo">\
+<img class="fusigumo2">\
 <p class="side_text">「ヒダマリの才能には期待しているよ」</p>
-<img class="hidamari">\
+<img class="hidamari2">\
 <p class="side_text">「あいさい合点承知！
 　大気圏まで吹き飛ばしちゃうぞ☆」</p>
-<img class="fusigumo">\
+<img class="fusigumo2">\
 <p class="side_text">「大気圏は無理だな」</p>
-<img class="hidamari">\
+<img class="hidamari2">\
 <p class="side_text">「冷静すぎない？」</p>
-<img class="hidamari">\
+<img class="hidamari2">\
 <p class="side_text">「あんまり焦りすぎると疲れちゃうぞ☆」</p>
 
 ヒダマリは食べていたパンをフシグモの口に<ruby>挿<rp>(</rp><rt>さ</rt><rp>)</rp>し込<rp>(</rp><rt>こ</rt><rp>)</rp>んだ。</ruby>
 
-<img class="fusigumo">\
+<img class="fusigumo2">\
 <p class="side_text">「もがもが」</p>
-<img class="minn">\
+<img class="minn2">\
 <p class="side_text">「間接キッスだ！！！！！！！！！！！！」</p>
-<img class="fusigumo">\
+<img class="fusigumo2">\
 <p class="side_text">「……。そんなにこのパンが気になるならお前にもくれてやる」</p>
 
 フシグモはパンをかみ切ると、その残りをミンに放り込む。
 
-<img class="minn">\
+<img class="minn2">\
 <p class="side_text">「え！？ヤッター！！
 　ほどよい小麦の香りと口中を刺激する酸味が口内を地獄にしてて
 　これフシグモちゃん才能で絶対毒入れてるねマジで」</p>
-<img class="fusigumo">\
+<img class="fusigumo2">\
 <p class="side_text">「正解だ」</p>
-<img class="minn">\
+<img class="minn2">\
 <p class="side_text">「賞品としてお水をください……」</p>
-<img class="hidamari">\
+<img class="hidamari2">\
 <p class="side_text">「かわいそう」</p>
 
+Eエンド
+「記憶回復終了!」
 
 [[エンディング一覧へ|END LIST]]
+
+
 </div>
 
 :: StoryData
@@ -1249,7 +1267,7 @@ $(document).one(":passagedisplay", function (event) {
 <div class = "text">\
 
 お疲れさまでした。
-以下がENDINGのリストになります。
+以下がエンディングのリストになります。
 
 [[誰かが検査官の質問に回答している場合|ENDASHOW]]
 
@@ -1270,7 +1288,7 @@ $(document).one(":passagedisplay", function (event) {
 <p class="side_text">「……違いますよ。あなた達にとって、彼は、セブンサン様は。」</p>
 <img class="kensa">\
 <p class="side_text">「もっともっと尊くて素晴らしいものですよ？」</p>」
-<<if hoge>>
+<<if setup.escapeName != ''>>
 <img class="kensa">\
 <p class="side_text">「そうですよね？<<name>>さん？」</p>
 突然モニターが切り替わり通気口から脱出しようとしていた<<name>>の姿が映し出される。
@@ -1391,6 +1409,7 @@ $(document).one(":passagedisplay", function (event) {
 [[ヒダマリを置き去りにする場合|END A-1]]
 [[フシグモを置き去りにする場合|END A-2]]
 [[ミンを置き去りにする場合|END A-3]]
+
 
 </div>
 :: ENDBSHOW
@@ -1550,7 +1569,13 @@ $(document).one(":passagedisplay", function (event) {
 Bエンド
 「死体を誰が見つける？」
 
+[[ヒダマリが脱出しようとした場合|ENDBSHOW][setup.escapeName to "ヒダマリ"]]
+[[フシグモが脱出しようとした場合|ENDBSHOW][setup.escapeName to "フシグモ"]]
+[[ミンが脱出しようとした場合|ENDBSHOW][setup.escapeName to "ミン"]]
+
 [[エンディング一覧へ|END LIST]]
+
+
 </div>
 
 :: ENDCSHOW
@@ -1656,5 +1681,6 @@ Bエンド
 
 [[検査官を助ける場合|END D]]
 [[検査官を助けない場合|END E]]
+
 
 </div>\

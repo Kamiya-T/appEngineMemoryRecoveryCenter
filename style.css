@@ -225,7 +225,24 @@ img.minn{
   content:url(https://drive.google.com/uc?id=1BLEKL2foEZKwgZ6-DILSBftJFI8_o2jc);
   width:100px;height:100px;
 }
-
+img.fusigumo2{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1BoImjSBoCtBPVBJvB5ELG0tYQMq3QaD3);
+  width:100px;height:100px;
+}
+img.hidamari2{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1Bk5NTi6CM8WyLWoWyESuSuYk7eMLms1c);
+  width:100px;height:100px;
+}
+img.minn2{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1BcWCA2TCX0aUaVQutMwJRisnWlUZRonT);
+  width:100px;height:100px;
+}
 img.fusigumob{
   display:inline-block;
   vertical-align: middle;
@@ -269,4 +286,14 @@ p.side_text{
 
 div.box{
   text-align: center;
+}
+
+#loginList{
+  height:auto;
+  width:auto;
+  position: absolute;          /* 位置指定 */
+  top: 50%;                    /* 親要素の半分下にずらす */
+  left: 50%;                   /* 親要素の半分右にずらす */
+  transform: translateY(-50%) translateX(-50%);    /* 要素自体の半分、上と左にずらす */
+  padding: 20px;               /* 余白指定 */
 }
