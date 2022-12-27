@@ -114,42 +114,39 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	2. 部屋番号を他被験者と共有する。
 	3. 他被験者は共有された部屋番号を用いて『既存ルームに接続』する。</p>
 </div>
+<div class="flex between">
+<div class="item">
 <span id="RoomIdDisplay"></span>
-		<<button '新規ルーム作成'>>
-    		<<script>>
-    			  TwineGang.createNewRoom(State.variables.name);
-    		<</script>>
+		@@.buttonLarge;<<button '新規ルーム作成'>>
+    		<<script>>TwineGang.createNewRoom(State.variables.name);<</script>>
 			<<timed 100ms>>
 				<<set $RoomID to setup.RoomNum>>
 			    <<script>>
 					Engine.play("ルームロビー")
-    			<</script>>
-			<</timed>>
-		<</button>>
-
-
-
-  部屋番号
-  <<numberbox "$seconds" 0>>
-
-	<<button '既存ルームに接続する'>>
-			<<script>>
-				async function test(){
-					let result = await TwineGang.joinExistRoom(State.variables.seconds, State.variables.name);
-					if(result){
-						State.variables.RoomID = setup.RoomNum;
-						Engine.play("ルームロビー");
-					}else{
-						alert("部屋番号に誤りがあります。");
-					};
-				}
-			try {
-				test();
-			} catch (error) {}
-			<</script>>
-		<</button>>
-
-
+    			<</script>><</timed>><</button>>@@
+</div>
+<div class="item">\
+	部屋番号
+	<<numberbox "$seconds" 0>>
+	
+	@@.buttonLarge;<<button '既存ルームに接続する'>>
+		<<script>>
+			async function test(){
+				let result = await TwineGang.joinExistRoom(State.variables.seconds, State.variables.name);
+				if(result){
+					State.variables.RoomID = setup.RoomNum;
+					Engine.play("ルームロビー");
+				}else{
+					alert("部屋番号に誤りがあります。");
+				};
+			}
+		try {
+			test();
+		} catch (error) {}
+		<</script>>
+	<</button>>@@
+</div>
+</div>
 </div>
 :: ルームロビー
 <div class = "text">

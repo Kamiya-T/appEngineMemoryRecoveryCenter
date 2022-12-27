@@ -391,6 +391,21 @@ div.box{
   padding: 20px;               /* 余白指定 */
 }
 
+
+.flex{
+  display:flex;
+}
+.between{
+  justify-content: space-between;
+}
+
+.item{
+  display:flex;
+  flex-direction:column;
+  width:25%;
+  padding:20px;
+  height:auto;
+}
 .manual{
   padding: 0.5em 1em;
   margin: auto;
@@ -399,6 +414,38 @@ div.box{
   border-top: solid 5px #5d627b;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
   width: fit-content;
+}
+.buttonLarge{
+  margin-top: auto;
+}
+.buttonLarge button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  padding: 1em 2em;
+  width: 300px;
+  color: #333;
+  font-size: 18px;
+  font-weight: 700;
+  background-color: #cccccc;
+  box-shadow: 0 5px 0 #aaaaaa;
+  transition: 0.3s;
+}
+
+.buttonLarge button::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-top: 3px solid #333333;
+  border-right: 3px solid #333333;
+  transform: rotate(45deg);
+}
+
+.buttonLarge button:hover {
+  transform: translateY(3px);
+  text-decoration: none;
+  box-shadow: 0 2px 0 #aaaaaa;
 }</style>
 <script id="script-module-modernizr_custom" type="text/javascript">/*! modernizr 3.6.0 (Custom Build) | MIT *
  * https://modernizr.com/download/?-setclasses !*/
@@ -516,42 +563,39 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	2. 部屋番号を他被験者と共有する。
 	3. 他被験者は共有された部屋番号を用いて『既存ルームに接続』する。&lt;/p&gt;
 &lt;/div&gt;
+&lt;div class=&quot;flex between&quot;&gt;
+&lt;div class=&quot;item&quot;&gt;
 &lt;span id=&quot;RoomIdDisplay&quot;&gt;&lt;/span&gt;
-		&lt;&lt;button &#39;新規ルーム作成&#39;&gt;&gt;
-    		&lt;&lt;script&gt;&gt;
-    			  TwineGang.createNewRoom(State.variables.name);
-    		&lt;&lt;/script&gt;&gt;
+		@@.buttonLarge;&lt;&lt;button &#39;新規ルーム作成&#39;&gt;&gt;
+    		&lt;&lt;script&gt;&gt;TwineGang.createNewRoom(State.variables.name);&lt;&lt;/script&gt;&gt;
 			&lt;&lt;timed 100ms&gt;&gt;
 				&lt;&lt;set $RoomID to setup.RoomNum&gt;&gt;
 			    &lt;&lt;script&gt;&gt;
 					Engine.play(&quot;ルームロビー&quot;)
-    			&lt;&lt;/script&gt;&gt;
-			&lt;&lt;/timed&gt;&gt;
-		&lt;&lt;/button&gt;&gt;
-
-
-
-  部屋番号
-  &lt;&lt;numberbox &quot;$seconds&quot; 0&gt;&gt;
-
-	&lt;&lt;button &#39;既存ルームに接続する&#39;&gt;&gt;
-			&lt;&lt;script&gt;&gt;
-				async function test(){
-					let result = await TwineGang.joinExistRoom(State.variables.seconds, State.variables.name);
-					if(result){
-						State.variables.RoomID = setup.RoomNum;
-						Engine.play(&quot;ルームロビー&quot;);
-					}else{
-						alert(&quot;部屋番号に誤りがあります。&quot;);
-					};
-				}
-			try {
-				test();
-			} catch (error) {}
-			&lt;&lt;/script&gt;&gt;
-		&lt;&lt;/button&gt;&gt;
-
-
+    			&lt;&lt;/script&gt;&gt;&lt;&lt;/timed&gt;&gt;&lt;&lt;/button&gt;&gt;@@
+&lt;/div&gt;
+&lt;div class=&quot;item&quot;&gt;\
+	部屋番号
+	&lt;&lt;numberbox &quot;$seconds&quot; 0&gt;&gt;
+	
+	@@.buttonLarge;&lt;&lt;button &#39;既存ルームに接続する&#39;&gt;&gt;
+		&lt;&lt;script&gt;&gt;
+			async function test(){
+				let result = await TwineGang.joinExistRoom(State.variables.seconds, State.variables.name);
+				if(result){
+					State.variables.RoomID = setup.RoomNum;
+					Engine.play(&quot;ルームロビー&quot;);
+				}else{
+					alert(&quot;部屋番号に誤りがあります。&quot;);
+				};
+			}
+		try {
+			test();
+		} catch (error) {}
+		&lt;&lt;/script&gt;&gt;
+	&lt;&lt;/button&gt;&gt;@@
+&lt;/div&gt;
+&lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="ルームロビー" tags="" position="350,100" size="100,100">&lt;div class = &quot;text&quot;&gt;
 &lt;font size=&quot;7&quot;&gt;	部屋番号：&lt;&lt;print $RoomID&gt;&gt;&lt;/font&gt;
   	&lt;ul id=&quot;memberlist&quot;&gt;&lt;/ul&gt;
