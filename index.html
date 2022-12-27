@@ -389,6 +389,15 @@ div.box{
   left: 50%;                   /* 親要素の半分右にずらす */
   transform: translateY(-50%) translateX(-50%);    /* 要素自体の半分、上と左にずらす */
   padding: 20px;               /* 余白指定 */
+}
+
+.manual{
+  padding: 0.5em 1em;
+  margin: 0 7em;
+  color: #5d627b;
+  background: white;
+  border-top: solid 5px #5d627b;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
 }</style>
 <script id="script-module-modernizr_custom" type="text/javascript">/*! modernizr 3.6.0 (Custom Build) | MIT *
  * https://modernizr.com/download/?-setclasses !*/
@@ -499,12 +508,14 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;ミン&#39;&quot;&gt;&lt;img class=&quot;minnb&quot;&gt;&lt;/a&gt;\
 		&lt;a data-passage=&quot;Login&quot; data-setter=&quot;$name to &#39;検査官&#39;&quot;&gt;&lt;img class=&quot;kensab&quot;&gt;&lt;/a&gt;
 &lt;/div&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="2" name="Login" tags="" position="225,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;
-&lt;&lt;set $RoomID to 0&gt;&gt;
-進行マニュアル
-1.進行役が『新規ルーム作成』をすること。
-2.画面に表示される部屋番号を他被験者と共有する。
-3.他被験者は共有された部屋番号を用いて『既存ルームに接続』する。
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="2" name="Login" tags="" position="225,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;&lt;&lt;set $RoomID to 0&gt;&gt;
+&lt;div class=&quot;manual&quot;&gt;
+    &lt;p&gt;&lt;font size=&quot;5&quot;&gt;進行マニュアル&lt;/font&gt;&lt;/p&gt;
+	&lt;p style=&quot;text-align:left&quot;&gt;1.進行役が『新規ルーム作成』をすること。
+	2.部屋番号を他被験者と共有する。
+	3.他被験者は共有された部屋番号を用いて『既存ルームに接続』する。&lt;/p&gt;
+&lt;/div&gt;
+
 &lt;span id=&quot;RoomIdDisplay&quot;&gt;&lt;/span&gt;
 		&lt;&lt;button &#39;新規ルーム作成&#39;&gt;&gt;
     		&lt;&lt;script&gt;&gt;
@@ -520,7 +531,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 
 
-  部屋番号⇒&lt;&lt;numberbox &quot;$seconds&quot; 0&gt;&gt;
+  部屋番号
+  &lt;&lt;numberbox &quot;$seconds&quot; 0&gt;&gt;
 
 	&lt;&lt;button &#39;既存ルームに接続する&#39;&gt;&gt;
 			&lt;&lt;script&gt;&gt;
@@ -538,6 +550,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 			} catch (error) {}
 			&lt;&lt;/script&gt;&gt;
 		&lt;&lt;/button&gt;&gt;
+
+
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="ルームロビー" tags="" position="350,100" size="100,100">&lt;div class = &quot;text&quot;&gt;
 &lt;font size=&quot;7&quot;&gt;	部屋番号：&lt;&lt;print $RoomID&gt;&gt;&lt;/font&gt;
   	&lt;ul id=&quot;memberlist&quot;&gt;&lt;/ul&gt;

@@ -107,12 +107,14 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 </div>\
 </div>
 :: Login
-<div class = "text" id = "center">
-<<set $RoomID to 0>>
-進行マニュアル
-1.進行役が『新規ルーム作成』をすること。
-2.画面に表示される部屋番号を他被験者と共有する。
-3.他被験者は共有された部屋番号を用いて『既存ルームに接続』する。
+<div class = "text" id = "center"><<set $RoomID to 0>>
+<div class="manual">
+    <p><font size="5">進行マニュアル</font></p>
+	<p style="text-align:left">1. 進行役が『新規ルーム作成』をすること。
+	2. 部屋番号を他被験者と共有する。
+	3. 他被験者は共有された部屋番号を用いて『既存ルームに接続』する。</p>
+</div>
+
 <span id="RoomIdDisplay"></span>
 		<<button '新規ルーム作成'>>
     		<<script>>
@@ -128,7 +130,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 
 
-  部屋番号⇒<<numberbox "$seconds" 0>>
+  部屋番号
+  <<numberbox "$seconds" 0>>
 
 	<<button '既存ルームに接続する'>>
 			<<script>>
@@ -146,6 +149,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 			} catch (error) {}
 			<</script>>
 		<</button>>
+
+
 </div>
 :: ルームロビー
 <div class = "text">
