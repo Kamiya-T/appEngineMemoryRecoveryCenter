@@ -1,0 +1,1829 @@
+:: Story JavaScript [script]
+// preload.min.js, for SugarCube 2, by Chapel
+// v1.0.0, 2021-04-20, 53d1a20e9321b3782a303cf7dbe00f5c51e947db
+;!function(){"use strict";function t(t,e){var n=0,r=t.length;t.forEach((function(t){!function(t,e){var n=new Image;n.onload=e,n.onerror=e,n.src=t}(t,(function(){++n===r&&e()}))}))}function e(){return State.length<=0}function n(){var n=[].slice.call(arguments).flatten(),r=!!e()&&LoadScreen.lock();return t(n,(function(){r&&LoadScreen.unlock(r)})),r}setup.preload=n,setup.preload.force=!1,Macro.add("preload",{handler:function(){if(!e()&&!setup.preload.force)return this.error("Attempting to preload images outside of `StoryInit` or similar can cause performance issues. Set `setup.preload.force` to `true` if you want to do it anyway.");n(this.args.flatten().filter((function(t){return"string"==typeof t})))}})}();
+// end preload.min.js
+UIBar.destroy()
+if (document.location.href.toLowerCase().includes("/temp/") || document.location.href.toLowerCase().includes("/private/") || hasOwnProperty.call(window, "storyFormat")) {
+	// Change this to the path where the HTML file is
+	// located if you want to run this from inside Twine.
+	setup.Path = "C:/Games/MyGame/";  // Running inside Twine application
+} else {
+	setup.Path = "client/";  // Running in a browser
+}
+setup.JSLoaded = false;
+var lockID = LoadScreen.lock();  // Lock loading screen
+importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(function() {
+    importScripts(setup.Path + "tg_client.js").then(function() {
+		setup.JSLoaded = true;
+		setup.memberUpdate = false;
+		setup.passageGoNumber = Array(10);
+		setup.passageGoNumber.fill(0)
+		setup.memberNumber = 0;
+		setup.correctAnswer = 0;
+		setup.wrongAnswer = 0;
+		setup.escapeName = "";
+		setup.answer = "";
+		// Reload current passage since imported scripts can function now.
+		Engine.play(passage(), true);
+		LoadScreen.unlock(lockID);  // Unlock loading screen
+//*******************************BIND HERE**************************
+    TwineGang.bind("roomInfo", (data)=>{
+      	setup.RoomNum = data;
+    });
+    TwineGang.bind("newList", (data)=>{
+      	setup.MemberList = data;
+    });
+	TwineGang.bind("newMember", (data)=>{
+		setup.MemberList.push(data);
+		setup.memberNumber = 0;
+		let element = document.getElementById('memberlist');
+		while(element.firstChild){
+			element.removeChild(element.firstChild);
+		}
+		for (let member of setup.MemberList) {
+			if(member  != '検査官'){setup.memberNumber++;}
+			let li = document.createElement('li');
+			li.textContent = member;
+			document.getElementById('memberlist').appendChild(li);
+		}
+		$("#passageGoCheck").text(setup.passageGoNumber[0]+" / "+setup.memberNumber);
+	});
+	TwineGang.bind("userClickButton", (id)=>{
+		setup.passageGoNumber[id]++;
+		$("#passageGoCheck").text(setup.passageGoNumber[id]+" / "+setup.memberNumber);
+	});
+	TwineGang.bind("otherAnswer", (answer, name, id)=>{
+		if(id == 0){
+			setup.correctAnswer++;
+		}
+		else{
+			setup.wrongAnswer++;
+		}
+		if(State.variables.name == '検査官'){
+			let li = document.createElement('li');
+            li.textContent = name + " : " + answer;
+            document.getElementById('answerlist').appendChild(li);
+		}
+		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
+	});
+	TwineGang.bind("escapeAnswer", (name)=>{
+		setup.escapeName = name;
+		setup.correctAnswer++;
+	});
+
+	TwineGang.bind("returnHelp", (help)=>{
+		if(help){
+			State.variables.helpnum++;
+			State.variables.nohelpnum--;
+		}else{
+			State.variables.nohelpnum++;
+			if(State.variables.helpnum >= 0){
+				State.variables.helpnum--;
+			}
+		}
+	});
+	TwineGang.bind("returnSacrifice", (id)=>{
+		setup.sacrifice[id]++;
+	});
+//*******************************BIND  END**************************
+	}).catch(function(error) {
+		alert(error);
+	});
+  }
+);
+
+
+:: StoryTitle
+記憶回復センター
+
+:: Start [mv]
+<div class = "text" id = "center">
+<h1>キャラクター選択</h1>
+<div  id = "loginList">	<a data-passage="Login" data-setter="$name to 'ヒダマリ'"><img class="hidamarib"></a>\     
+		<a data-passage="Login" data-setter="$name to 'フシグモ'"><img class="fusigumob"></a>\
+		<a data-passage="Login" data-setter="$name to 'ミン'"><img class="minnb"></a>\
+		<a data-passage="Login" data-setter="$name to '検査官'"><img class="kensab"></a>
+</div>\
+</div>
+:: Login
+<div class = "text" id = "center"><<set $RoomID to 0>>
+<div class="manual">
+    <p><font size="5">進行マニュアル</font></p>
+	<p style="text-align:left">1. 進行役が『新規ルーム作成』をすること。
+	2. 部屋番号を他被験者と共有する。
+	3. 他被験者は共有された部屋番号を用いて『既存ルームに接続』する。</p>
+</div>
+<div class="flex between">
+<div class="item">
+
+<span id="RoomIdDisplay"></span>
+		@@.buttonLarge;<<button '新規ルーム作成'>>
+    		<<script>>TwineGang.createNewRoom(State.variables.name);<</script>>
+			<<timed 100ms>>
+				<<set $RoomID to setup.RoomNum>>
+			    <<script>>
+					Engine.play("ルームロビー")
+    			<</script>><</timed>><</button>>@@
+</div>
+<div class="item">\
+	部屋番号
+	<<numberbox "$seconds" 0>>
+
+	@@.buttonLarge;<<button '既存ルームに接続'>>
+		<<script>>
+			async function test(){
+				let result = await TwineGang.joinExistRoom(State.variables.seconds, State.variables.name);
+				if(result){
+					State.variables.RoomID = setup.RoomNum;
+					Engine.play("ルームロビー");
+				}else{
+					alert("部屋番号に誤りがあります。");
+				};
+			}
+		try {
+			test();
+		} catch (error) {}
+		<</script>>
+	<</button>>@@
+</div>
+</div>
+</div>
+:: ルームロビー
+<div class = "text">
+<div class="roomNumber">\
+<font size="7">	部屋番号：<<print $RoomID>></font></div>
+  	<ul id="memberlist"></ul>
+    <<script>>
+    $(document).one(':passagedisplay', function (ev) {
+		setup.memberNumber = 0;
+        for (let member of setup.MemberList) {
+			if(member  != '検査官'){setup.memberNumber++;}
+            let li = document.createElement('li');
+            li.textContent = member;
+            document.getElementById('memberlist').appendChild(li);
+			setup.tempflag = true;
+        }
+		$("#passageGoCheck").text(setup.passageGoNumber[0]+" / "+setup.memberNumber);
+		
+		$("#hidbtn button").prop("disabled", true);
+    });
+    <</script>>
+<div class="manual">
+    <span id="message">1. 被験者全員のログインを確認する。
+	2. 被験者全員の準備が出来次第、検査官との面談を実施する。</span>
+	
+	<span id="hidbtn" style="display: initial">\
+		@@.buttonLarge;<<button '次へ<span id="passageGoCheck">0/0</span>'>>
+		  	<<script>>
+				$("#hidbtn button").prop("disabled", true);
+				TwineGang.clickButton(0);
+				setup.passageGoNumber[0]++;
+				$("#passageGoCheck").text(setup.passageGoNumber[0]+" / "+setup.memberNumber);
+			<</script>>
+		<</button>>@@
+	</span>\
+</div>
+	<<silently>><<repeat 1s>><<script>>
+		if(setup.passageGoNumber[0] == setup.memberNumber){
+			Engine.play("検査官の質問");
+		}
+		if(setup.memberNumber >= 1 && setup.tempflag){
+			$("#hidbtn button").prop("disabled", false);
+			setup.tempflag = false;
+		}
+	<</script>><</repeat>><</silently>>
+
+
+</div>
+
+:: 検査官の質問
+<div class = "text">
+<<type 100ms none>>\
+個室に戻り、ドアを閉める。
+ドアの閉まる音が、やけに重く響いた。
+
+検査官がモニター越しにこちらを見ている。
+
+「………………」
+「さて、心の準備は出来ましたか」
+「では、お聞きしますね」
+
+「あなたにとってその『死んだフリをしている』男……
+　死体と呼んでいるその人は何者ですか？」
+どくん。
+<font size="5">どくん。</font>
+<font size="6">どくん。
+鼓動が大きくなる。
+
+検査官の質問に対し、3分以内に回答すること。</font>
+<</type>>
+<div class = "bottomdiv">
+
+<span id="hidbtn" style="display: initial">\
+	@@.buttonLarge;<<button '次へ<span id="passageGoCheck">0/0</span>'>>
+		<<script>>
+			$("#hidbtn button").prop("disabled", true);
+			TwineGang.clickButton(1);
+			setup.passageGoNumber[1]++;
+			$("#passageGoCheck").text(setup.passageGoNumber[1]+" / "+setup.memberNumber);
+		<</script>><</button>>@@
+</span>\
+	<<silently>><<repeat 1s>><<script>>
+		if(setup.passageGoNumber[1] == setup.memberNumber){
+			if(State.variables.name == '検査官'){
+				Engine.play("監視フェーズ");
+			}
+			else{
+				Engine.play("質問フェーズ");
+			}
+		}
+	<</script>><</repeat>><</silently>>
+</div>
+<<script>>
+    $(document).one(':passagedisplay', function (ev) {
+		$("#passageGoCheck").text(setup.passageGoNumber[1]+" / "+setup.memberNumber);
+    });
+<</script>>
+</div>
+
+:: 質問フェーズ
+<div class = "text" id = "center">\
+<div class="clock"><p class="clock-time" id="time">00:00.00</p></div>\
+<font size="5">\
+「あなたにとってその『死んだフリをしている』男……
+　死体と呼んでいるその人は何者ですか？」</font>\
+
+
+<span id="ans" style="display: initial"><<textarea "$answer" "">></span>
+<span id="ansbtn" style="display: inline-block">\
+@@.buttonLarge;<<button '回答する<span id="passageGoCheck">0/0</span>'>><<script>>
+		$('#ans').css('display', 'none');
+		$('#escape').css('display', 'none');
+		$('#quiet').css('display', 'none');
+		$('#ansbtn').css('display', 'none');
+		$('#escapeChoice').css('display', 'none');
+		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
+		if(State.variables.answer == ""){
+			setup.correctAnswer++;
+		}
+		else{setup.wrongAnswer++;}
+		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
+<</script>><</button>>@@</span>
+<span id="quiet" style="display: none">
+<<button "何も答えない">><<script>>	
+		$('#ans').css('display', 'none');
+		$('#escape').css('display', 'none');
+		$('#quiet').css('display', 'none');
+		$('#ansbtn').css('display', 'none');
+		$('#escapeChoice').css('display', 'none');
+		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
+		if(State.variables.answer == ""){
+			setup.correctAnswer++;
+		}
+		else{setup.wrongAnswer++;}
+		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / " + setup.memberNumber);
+	<</script>><</button>>
+</span>
+<span id="escape" style="display: initial">
+<<button "脱出を試みる">><<script>>
+	$('#escape').css('display', 'none');
+	$('#escapeChoice').css('display', 'inline');
+	<</script>><</button>>
+</span>\
+
+<span id = "escapeChoice" style="display:none"><table><tr>
+<<button '天井から脱出する'>><<script>>
+	$('#escapeChoice').css('display', 'none');
+	$('#escapeResultTrue').css('display', 'inline');
+<</script>><</button>>
+<<button '通路から脱出する'>><<script>>
+	$('#escapeChoice').css('display', 'none');
+	$('#escapeResultText').text("通路の鉄格子は硬く、非常な力をもってしても開きそうにない。脱出の手掛かりはなさそうだ。");
+	$('#escapeResultText').css('display', 'inline');
+<</script>><</button>>
+<<button '床から脱出する'>><<script>>
+	$('#escapeChoice').css('display', 'none');
+	$('#escapeResultText').text("床にはほこりもなくある程度清潔だ。しかし、脱出の手掛かりはなさそうだ。");
+	$('#escapeResultText').css('display', 'inline');
+<</script>><</button>>
+<<button 'モニターから脱出する'>><<script>>
+	$('#escapeChoice').css('display', 'none');
+	$('#escapeResultText').text("脱出の窓にならないだろうか？ウィンドウズだけに。脱出の手掛かりはなさそうだ。");
+	$('#escapeResultText').css('display', 'inline');
+<</script>><</button>>
+</tr></table></span>\
+<span id="escapeResultTrue" style="display:none">
+貴方は天井の通気口を見つけた。
+だが、鉄格子に阻まれ進むことができない。
+パスワードを入力しなければ開かなそうだ。
+	<<textbox "$password" "">>　<<button "入力">><<script>>
+	TwineGang.sendEscape(State.variables.password, State.variables.name);
+	if(State.variables.password == "SEVENSUN"){
+		setup.escapeName = State.variables.name;
+		setup.correctAnswer++;
+		$('#ans').css('display', 'none');
+		$('#escape').css('display', 'none');
+		$('#quiet').css('display', 'none');
+		$('#ansbtn').css('display', 'none');
+		$('#escapeChoice').css('display', 'none');
+		$('#escapeResultTrue').css('display', 'none');
+		$('#escapeResultText').css('display', 'inline');
+		$('#escapeResultText').text("鉄格子が開いた！時間があれば脱出できるかもしれない。")
+	}
+	else{
+		$('#escapeChoice').css('display', 'none');
+		$('#escapeResultTrue').css('display', 'none');
+		$('#escapeResultText').css('display', 'inline');
+		$('#escapeResultText').text("パスワードが違ったようだ…もうなにも反応しない。")
+	}
+	$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
+	<</script>><</button>>
+</span>\
+<span id="escapeResultText" style="display:none"></span>\
+<<timed 182s>>
+	<<script>>
+		$('#ans').css('display', 'none');
+	<</script>>
+<</timed>>
+<<timed 30s>>
+	<<script>>
+		if(setup.answer == ""){
+			$('#quiet').css('display', 'inline-block');
+		}
+	<</script>>
+<</timed>>
+<<silently>><<repeat 1s>><<script>>
+	if(setup.correctAnswer + setup.wrongAnswer == setup.memberNumber){
+		Engine.play("エンディング判定");
+		setup.countdown.stop();
+	}
+<</script>><</repeat>><</silently>>
+<<script>>
+	$(document).one(':passagedisplay', function (ev) {
+		const textareaElem = document.getElementById("textarea-answer");
+		textareaElem.addEventListener('input', (event) => {
+			setup.answer = event.target.value;
+			if (event.target.value == ""){
+				$('#hidansbtn').css('display', 'none');
+				$('#hidesc').css('display', 'none');
+				$('#hidquiet').css('display', 'inline');
+			}
+			else{
+				$('#hidansbtn').css('display', 'inline');
+				$('#hidesc').css('display', 'none');
+				$('#hidquiet').css('display', 'none');
+			}
+		});
+	});
+<</script>>
+</div>\
+<<script>>
+	$(document).one(':passagedisplay', function (ev) {
+		var span = document.getElementById('time');
+		setup.countdown = new Countdown(span, 181);
+		setup.countdown.init();
+		setup.countdown.start();
+		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
+	});
+<</script>>
+:: 監視フェーズ
+<div class="text">\
+
+<font size="7">	回答を以下に表示します。</font>
+  	<ul id="answerlist"></ul>
+    <<script>>
+    $(document).one(':passagedisplay', function (ev) {
+		$("#passageGoCheck").text(setup.passageGoNumber[0]+" / "+setup.memberNumber);
+		
+		$("#hidbtn button").prop("disabled", true);
+    });
+    <</script>>
+	<span id="hidbtn" style="display: initial">\
+		<<button "次へ">>
+			<<script>>	
+				TwineGang.sendAnswer("", State.variables.name);
+				if(State.variables.answer == ""){
+					setup.correctAnswer++;
+				}
+				else{
+					setup.wrongAnswer++;
+				}
+				$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / " + setup.memberNumber);
+			<</script>>
+		<</button>>
+	</span>\
+	<<silently>><<repeat 1s>><<script>>
+		if(setup.correctAnswer + setup.wrongAnswer == setup.memberNumber){
+		Engine.play("エンディング判定");
+		setup.countdown.stop();
+	}
+	<</script>><</repeat>><</silently>>
+</div>
+</div>\
+:: エンディング判定
+<div class = "text" id = "center">\
+<font size="6">通話チャンネルの休憩室にお戻りください。</font>
+<<if setup.wrongAnswer gt 0>>
+	[[エンディングへ|END A]]
+<<elseif setup.escapeName != "">>
+	[[エンディングへ|END B]]
+<<else>>
+	[[エンディングへ|END C]]
+<</if>>
+
+
+</div>
+:: END A
+<div class = "text">\
+
+検査官を見つめる。
+検査官はこちらをじっと見つめ返した。
+
+<img class="kensa">\
+<p class="side_text">「……違いますよ。あなた達にとって、彼は、セブンサン様は。」</p>
+<img class="kensa">\
+<p class="side_text">「もっともっと尊くて素晴らしいものですよ？」</p>」
+<<if setup.escapeName != ''>>
+<img class="kensa">\
+<p class="side_text">「そうですよね？<<name>>さん？」</p>
+突然モニターが切り替わり通気口から脱出しようとしていた<<name>>の姿が映し出される。
+検査官が手元を弄ると通気口が開き<<name>>は自室に落とされる。
+<</if>>
+<img class="kensa">\
+<p class="side_text">「マニュアル23P、7項の項目『被験者が服従を示さない場合』の
+　プロセスに則り、記憶消去を実行します」</p>
+<img class="kensa">\
+<p class="side_text">「セブンサン様？承認をいただきたいのですが。
+　記憶消去してもよろしいでしょうか」</p>
+
+……沈黙。
+長い沈黙だ。
+
+誰も彼女に返事をしない。
+
+<img class="kensa">\
+<p class="side_text">「……おや？おかしいですね」</p>
+
+
+<img class="fusigumo">\
+<p class="side_text">「……本当にあいつに向かって喋りかけているのか？
+　あいつはどう見ても死んでいるだろう」</p>
+
+<img class="kensa">\
+<p class="side_text">「えぇ…っと」</p>
+
+<img class="kensa">\
+<p class="side_text">「……………」</p>
+
+<img class="kensa">\
+<p class="side_text">「え？」</p>
+
+<img class="minn">\
+<p class="side_text">「どうしたんだい？
+　まさか死体が死んでることにすら気づけない愚か者が
+　ボクたちを検査していたわけないだろう！？」</p>
+
+<img class="kensa">\
+<p class="side_text">「……」</p>
+
+<img class="hidamari">\
+<p class="side_text">「ん〜　これはどうなるのかな〜」</p>
+
+モニターからの3人の視線に晒され、検査官はうろたえる。
+
+<img class="kensa">\
+<p class="side_text">「だって彼が死ぬはずが……」</p>
+<img class="minn">\
+<p class="side_text">「死んでるじゃないか！」</p>
+<img class="fusigumo">\
+<p class="side_text">「確かに脈が止まっているぞ」</p>
+<img class="hidamari">\
+<p class="side_text">「死んでるね〜」</p>
+<img class="kensa">\
+<p class="side_text">「だって……だって……」</p>
+<img class="fusigumo">\
+<p class="side_text">「耳に機械が付いているんだろう？心拍数すらも計っていないのか？」</p>
+<img class="minn">\
+<p class="side_text">「首にあんなあざが付いているのに生きているっていうのは
+　とんだお笑いだよねっ！」</p>
+<img class="hidamari">\
+<p class="side_text">「そもそも今までの話し合いも全部理解してなかったり？」</p>
+<img class="kensa">\
+<p class="side_text">「ちがう……ちがう……」</p>
+<img class="fusigumo">\
+<p class="side_text">「違くない。あの男は死んでいる」</p>
+<img class="minn">\
+<p class="side_text">「つまりキミの『セブンサンさま』とやらはどこにもいないわけだけど？」</p>
+<img class="hidamari">\
+<p class="side_text">「大人しくここからだしてくれないかな～☆」</p>
+
+<img class="kensa">\
+<p class="side_text">「ちがう……ちがう……そうか！」</p>
+
+ぐりん。
+首を急に上げる検査官。
+声の大きさに思わずあなたは身を引いた。
+
+<img class="kensa">\
+<p class="side_text">「これも天啓なんですね！あの男は偽物！
+　あの偽物のクソ野郎を殺してくれた方が、
+　本物の『セブンサン』様なんですね！？」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「……イカれてるな」</p>
+
+
+ボソリとつぶやかれたその一言に、検査官は機敏に反応した。
+<img class="kensa">\
+<p class="side_text">「なんですか？」</p>
+
+<img class="kensa">\
+<p class="side_text">「あなた方が彼の素晴らしさを理解していないならこの計画は失敗です
+　私は早くセブンサン様と次の計画の話し合いをしなくてはなりません」</p>
+
+<img class="kensa">\
+<p class="side_text">「今から5分間、時間をあげますから」
+　誰が彼を殺したのかを再度議論し合い、私に教えてください」</p>
+
+<img class="kensa">\
+<p class="side_text">「残りの2人だけはここから解放してあげます」
+　私とセブンサン様の間に邪魔者は要りませんから……」</p>
+
+<img class="kensa">\
+<p class="side_text">「あー、そう。
+　通気口からも、逃げれると思わないことですよ」</p>
+
+
+…………。
+終わったはずなのに。
+再度、話し合いが始まる。 
+<span id="passageGoCheck">0/3</span>
+<span id="hidbtn" style="display: initial">\
+<<button "次へ">><<script>>
+	$('#hidbtn').css('display', 'none');
+	TwineGang.clickButton(4);
+	setup.passageGoNumber[4]++;
+	$("#passageGoCheck").text(setup.passageGoNumber[4]+" / "+setup.memberNumber);
+<</script>><</button>>
+<<silently>><<repeat 1s>><<script>>
+	if(setup.passageGoNumber[4] >= setup.memberNumber){
+		Engine.play("ENDAExtra");
+	}
+<</script>><</repeat>><</silently>>
+</span>
+
+
+
+</div>
+:: ENDAExtra
+<div class="text">\
+<div class="clock" id="escapeClock"><p class="clock-time" id="time">00:00</p></div>\
+
+
+5分間、
+殺した『セブンサン』の代わりとして、誰をここに置き去りにするかを議論する。
+全員が同票になった場合再度議論が始まる。
+必ず最多票を作るように動かれたし。
+
+個人それぞれで投票を行う。
+<<script>>
+	$(document).one(':passagedisplay', function (ev) {
+		State.variables.sacrifice = State.variables.name;
+		setup.sacrifice = new Array(0, 0, 0, 0);
+		var span = document.getElementById('time');
+		setup.countdown = new Countdown(span, 300);
+		setup.countdown.init();
+		setup.countdown.easystart();
+		setup.passageGoNumber[3] = 0;
+		$("#passageGoCheck").text(setup.passageGoNumber[3]+" / "+setup.memberNumber);
+	});
+<</script>>
+<div id = "sacDecision">
+誰をここに置き去りにしますか？
+<label><<radiobutton "$sacrifice" 'ヒダマリ' autocheck>><img class="hidamari">ヒダマリ　</label>
+<label><<radiobutton "$sacrifice" 'フシグモ' autocheck>><img class="fusigumo">フシグモ　</label>
+<label><<radiobutton "$sacrifice" 'ミン' autocheck>><img class="minn">ミン　　　</label>
+</div>
+<span id="passageGoCheck">0 / 0</span>
+<span id="hidbtn" style="display: initial">\
+		<<button "投票する">><<script>>
+			$('#hidbtn').css('display', 'none');
+			$('#sacDecision').css('display', 'none');
+			TwineGang.clickButton(3);
+			setup.passageGoNumber[3]++;
+			let sacrinum = 3;
+			switch (State.variables.sacrifice) {
+				case 'ヒダマリ':
+					sacrinum = 0;
+					break;
+				case 'フシグモ':
+					sacrinum = 1;
+					break;
+				case 'ミン':
+					sacrinum = 2;
+					break;
+			}
+			TwineGang.sendSacrifice(sacrinum);
+			setup.sacrifice[sacrinum]++;
+			$("#passageGoCheck").text(setup.passageGoNumber[3]+" / "+setup.memberNumber);
+		<</script>><</button>>
+</span>\
+<<silently>><<repeat 1s>><<script>>
+	if(setup.passageGoNumber[3] >= setup.memberNumber){
+		let maxIndex = setup.sacrifice.indexOf(Math.max(setup.sacrifice[0],setup.sacrifice[1],setup.sacrifice[2]));
+		if (setup.sacrifice[0] == setup.sacrifice[1] && setup.sacrifice[1] == setup.sacrifice[2]){
+			alert("再投票を行います。");
+			Engine.play("ENDAExtra");
+		}else{
+			switch (maxIndex) {
+				case -1:
+					Engine.play("END A-0");
+					break;
+				case 0:
+					Engine.play("END A-1");
+					break;
+				case 1:
+					Engine.play("END A-2");
+					break;
+				case 2:
+					Engine.play("END A-3");
+					break;
+		}}
+	}
+<</script>><</repeat>><</silently>>
+</div>
+
+
+</div>
+:: END A-0
+<div class = "text">\
+エラーです。申し訳ないですが、投票先をDiscord上で共有し、ENDを選択してください。
+[[ヒダマリがセブンサン|END A-1|]]
+[[フシグモがセブンサン|END A-2|]]
+[[ミンがセブンサン|END A-3|]]
+
+
+</div>
+:: END A-1
+<div class = "text">\
+
+
+あなたたちは話し合いの末、ヒダマリを置いていくことにした。
+最後にヒダマリは何かを2人に言い残すことが出来る。
+
+
+ｰｰ｡
+
+鉄格子が開く。
+閉じられていた扉が開く。暗闇が口を開ける。
+そこから光のように、ミンとフシグモは飛び出した。
+
+
+外の日差しは眩しく、視界を白く染められながらも、二人は走り続けた。
+ｰｰ逃げるように。
+
+それは施設から、
+検査官から、
+
+そして、彼女を置き去りにした罪悪感から。
+
+
+彷徨っていた2人はガラの悪い男に声をかけられる。
+どうやら昔の知り合いのようで、2人の世話をその男は甲斐甲斐しく焼いてくれた。
+
+<img class="fusigumo">\
+<p class="side_text">「おい。それは私のものだぞ」</p>
+<img class="minn">\
+<p class="side_text">「ボクが先に触っていたんだぞ！？」</p>
+<img class="fusigumo">\
+<p class="side_text">「子供か？」</p>
+<img class="minn">\
+<p class="side_text">「争いは同レベルの者同士でしか発生しないっ！」</p>
+
+
+2人は沈黙を嫌うようになった。
+些細なことでぶつかり、喧嘩をした。
+
+沈黙が怖い。
+彼女が、ヒダマリが
+最後に言い残した言葉が
+ずっとずっと　離れない。
+これしかなかったんだ。
+これしかなかったんだ。
+自分に言い聞かせる。
+
+誰か。
+誰か自分の脳を埋め尽くしてくれ。
+
+
+
+ヒダマリ拘束エンド
+Melted sugar
+
+[[エンディング一覧へ|END LIST]]
+
+
+</div>
+:: END A-2
+<div class = "text">\
+
+あなたたちは話し合いの末、フシグモを置いていくことにした。
+最後にフシグモは何かを2人に言い残すことが出来る。
+
+
+ｰｰ。
+
+
+2人は施設から逃げ出した。
+彼女が怖かった。
+彼女の冷酷な瞳に、全てを見透かされている気がした。
+<img class="minn">\
+<p class="side_text">「……痛っ！」</p>
+
+ミンがつまづき、転倒した。
+前を走っていたヒダマリは振り返ると、彼に手を伸ばす。
+<img class="minn">\
+<p class="side_text">「……ありがとう」</p>
+<img class="hidamari">\
+<p class="side_text">「どうしちゃったのさ〜　ミンくんらしくもないよ？」</p>
+<img class="minn">\
+<p class="side_text">「仕方ないさ
+　だって……本当は、さ……」</p>
+
+何かを言いかけたミンを、ヒダマリが手で静止する。
+<img class="hidamari">\
+<p class="side_text">「ううん。あの男を殺したのはフシグモちゃんだよ」</p>
+ヒダマリの影がミンの顔を隠す。
+<img class="hidamari">\
+<p class="side_text">「だって、私たちがそう決めたんだから
+　今更謝ってもフシグモちゃんは帰ってこないんだよ？」</p>
+<img class="hidamari">\
+<p class="side_text">「自分を守るためにそんなくだらないことを言おうとして、
+　ミンくんは満足なのかな？」</p>
+<img class="hidamari">\
+<p class="side_text">「今更謝ってもフシグモちゃんは帰ってこないんだよ？」</p>
+　
+<img class="hidamari">\
+<p class="side_text">「自分だけが大事？」</p>
+
+
+ミンはヒダマリを見つめる。
+ヒダマリもミンを何も言わずに見つめていた。
+しばしの静寂の後、ミンはヒダマリのその手を払いのけて立ち上がった。
+
+服についた汚れをはらうと、そのまま土を蹴る。
+
+
+もう戻れない。
+戻ることは出来ないんだ。
+
+
+
+ｰｰ例え、戻りたくなっても。
+
+フシグモ拘束エンド
+裏切り
+
+[[エンディング一覧へ|END LIST]]
+
+
+</div>
+:: END A-3
+<div class = "text">\
+あなたたちは話し合いの末、ミンを置いていくことにした。
+最後にミンは何かを2人に言い残すことが出来る。
+
+ｰｰ｡
+
+2人は扉から脱出した。
+<img class="hidamari">\
+<p class="side_text">「ひぃ〜☆ 世界が広く感じる」</p>
+<img class="fusigumo">\
+<p class="side_text">「そりゃ閉じ込められていたからな……」</p>
+
+
+何もなく、
+ただ途方もなく広いだけの道を2人で歩いた。
+<img class="hidamari">\
+<p class="side_text">「……ミンくんはどうなるのかなぁ」</p>
+<img class="fusigumo">\
+<p class="side_text">「分からないな」</p>
+<img class="hidamari">\
+<p class="side_text">「……ミンくんはどうなるのかなぁ」</p>
+<img class="fusigumo">\
+<p class="side_text">「分からないな
+　ただ、あいつのことだ。検査官をうまいこと扱って脱出！とかもあり得るだろうな」</p>
+<img class="hidamari">\
+<p class="side_text">「そしたらトリオ復活だねっ☆」</p>
+<img class="fusigumo">\
+<p class="side_text">「ミンが拘束されたことにブチ切れてなければな」</p>
+<img class="hidamari">\
+<p class="side_text">「怒ってたら謝るよっ！」</p>
+<img class="fusigumo">\
+<p class="side_text">「相手がブチ切れてからの謝罪じゃあ遅いだろう……」</p>
+<img class="hidamari">\
+<p class="side_text">「謝るよっ！」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「……そうか」</p>
+
+
+
+2人はミンを施設に置き去りにした。
+
+検査官はまともではない。
+彼の身にどんな危険が起こるか、
+想像することは難しく無かったがｰｰ｡
+<img class="hidamari">\
+<p class="side_text">「なんとな〜くミンくんが死んでる感じはしないよね〜☆」</p>
+
+彼女たちは能天気だった。
+<img class="fusigumo">\
+<p class="side_text">「確かに。確実にまた会う気はするな」</p>
+
+<img class="hidamari">\
+<p class="side_text">「うんうん！」</p>
+
+
+ミンの最後の言葉は真実だったのだろうか。
+彼は拘束されたことに怒っているだろうか。
+拘束されても微笑んで許してくれただろうか。
+彼の考えは2人には分からない。
+
+ただ、2人は信じていた。
+彼が何事もなくあそこで死ぬわけないと。
+
+きっと、また会えると。
+
+ミン拘束エンド
+Second time
+
+[[エンディング一覧へ|END LIST]]
+
+
+</div>
+:: END B
+<div class = "text">
+
+あなたがたはモニター越しの検査官を睨みつけていた。
+
+<img class="kensa">\
+<p class="side_text">「………………」</p>
+
+突然。
+まるで金属を激しくぶつけ合わせたかのような音が鳴り響く。
+警報だ。検査官の表情が険しくなる。
+
+<img class="kensa">\
+<p class="side_text">「脱走！？どうしてそんなことを！？」</p>
+
+<img class="kensa">\
+<p class="side_text">「しばらく待っていてください。脱走者を鎮圧します！」</p>
+
+白衣を翻し、検査官はモニターから姿を消した。
+
+<<if setup.escapeName == "ヒダマリ">>
+ヒダマリは狭い空気口を潜り抜けた。
+
+<img class="hidamari">\
+<p class="side_text">「わっせ　わっせ」</p>
+
+<img class="kensa">\
+<p class="side_text">「どうして逃げてしまうんですか？」</p>
+
+通気口を抜けた先は出口の前。
+そこには検査官が仁王立ちで彼女を待っていた。
+
+<img class="hidamari">\
+<p class="side_text">「んにに　　
+　あんまりカロリーがない状態で戦いたくないんだけどにゃあ」</p>
+
+<img class="hidamari">\
+<p class="side_text">「でも、邪魔するなら押しとおるよ」</p>
+
+<img class="kensa">\
+<p class="side_text">「……出来るものなら」</p>
+
+<img class="hidamari">\
+<p class="side_text">「出来るんだよ」</p>
+
+交差。
+ヒダマリは一瞬のうちに検査官を吹き飛ばす。
+検査官は壁に全身を打ちながら崩れた。
+
+<img class="hidamari">\
+<p class="side_text">「……とりあえず逃げないと」</p>
+
+ヒダマリは逃げ続けた。ヒダマリは何も信用出来なかった。
+ミンも、フシグモも、自分自身の記憶でさえも。
+問題の解決から逃げることを選択したが、
+いつか追いつかれ『君』はばらばらになるだろう。
+それでも、今は何も考えたくなかった。
+
+ヒダマリ追加エンド
+「運命からは逃れられない」
+
+<</if>>
+<<if setup.escapeName == "フシグモ">>
+フシグモは脱走した。
+
+<img class="kensa">\
+<p class="side_text">「待ってください！」</p>
+
+検査官は必死に追いかけるが、体力はフシグモほどは無いようだ。
+
+<img class="fusigumo">\
+<p class="side_text">「……ふぅん」</p>
+
+それからしばらく……。
+
+<img class="kensa">\
+<p class="side_text">「いたい　くるしい」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「この毒はまだ有害性を上げられるな」</p>
+
+検査官は実験台にされていた。
+
+<img class="kensa">\
+<p class="side_text">「むり　いたい　だって　うぅ」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「まだ痛みを訴える余裕があるな。もうあと2段階上げてみよう。」</p>
+
+<img class="kensa">\
+<p class="side_text">「たすけて　セブンサンさま」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「……いずれ会わせてやるさ」</p>
+
+検査官の目に希望の光が灯る。
+希望をチラつかせただけで……なんて哀れな生き物なんだ。
+フシグモは、そんな希望の光を乱暴にかき消すところを想像し
+口角が上がってしまうのを必死でこらえた。
+
+フシグモ追加エンド
+「『地獄で会えるぞ』」
+
+<</if>>
+
+<<if setup.escapeName == "ミン">>
+ミンが通気口を通る。
+
+<img class="minn">\
+<p class="side_text">「とりあえずは撤退だ…」</p>
+
+通気口から出ると、そこには絶望が広がっていた。
+
+<img class="kensa">\
+<p class="side_text">「どこに行こうというんですか？」</p>
+
+二本の刀を持った検査官。
+『ラスト・リゾート』がミンを殺す為に待っていた。
+
+<img class="minn">\
+<p class="side_text">「まぁ、そうか」</p>
+
+一閃。瞬きの間におびただしいほどの風が切り裂かれた。
+
+<img class="minn">\
+<p class="side_text">「ボクだけが助かるってのは　ズルすぎるか」</p>
+
+<img class="kensa">\
+<p class="side_text">「……やっぱり、殺しは良い……」</p>
+
+検査官は刀に付いた血をぬぐうと、そのまま扉から外に出た。
+
+……もうそこに検査官としての面影はない。
+いるのはただの人殺しだ。
+
+ミン追加エンド
+「一人勝ちは無し」
+
+<</if>>
+静寂………。
+………………。
+
+どれくらいの時間が経っただろうか。
+3時間、1日、あるいはそれ以上か。
+脱走者も、検査官も。
+どちらも帰ってくる気配はない。
+止まない警報が、正気をどんどん奪っていく。
+
+だれか　たすけてくれ
+
+必死に絞り出した声は
+警報にかき消され
+誰にも届くことはなかった。
+
+Bエンド
+「死体を誰が見つける？」
+
+[[エンディング一覧へ|END LIST]]
+
+
+</div>
+:: END C
+<div class = "text">
+
+何も言わなかった。
+
+<img class="kensa">\
+<p class="side_text">「……………………」</p>
+
+<img class="kensa">\
+<p class="side_text">「あれ、聞こえてますよね？」</p>
+
+ぱたぱたと手を振る検査官。
+何も言わなかった。
+
+<img class="kensa">\
+<p class="side_text">「あれぇ………故障かなぁ……えぇ…っと……」</p>
+
+何も言わなかった。
+何も言わなかった。
+何も言わなかった。
+……無言のまま数十分が過ぎた。
+
+<img class="kensa">\
+<p class="side_text">「セブンサン様、こういうときはどうすればよろしいのでしょうか
+　死体のフリをしているのは承知です。どうか、お導きください。」</p>
+
+何も言わなかった。
+
+<img class="kensa">\
+<p class="side_text">「セブンサン様？」</p>
+
+死体は喋らない。
+
+<img class="kensa">\
+<p class="side_text">「え？うそ、ウソですよね？
+　あれ、おかしいですよね？そんな、え？」</p>
+
+<img class="kensa">\
+<p class="side_text">「導いてくれるって言ったじゃないですか
+　救いになるって言ってくれたじゃないですか
+　どうして？どうして死んでいるんですか？
+　本当に死んでいるんですか？」</p>
+
+死体は喋らない。
+
+<img class="kensa">\
+<p class="side_text">「え、うそ、うそうそうそ！
+　なんで勝手に死んでいるんですか？
+　あたしは、一人にされたんですか？え、あ」</p>
+
+検査官は髪をかきむしりながら、必死にモニターを覗き込む。
+……それでも、死体は死んでいる。
+
+<img class="kensa">\
+<p class="side_text">「あ/あぁ！見捨てられ/た
+　神は違っ/た/私を/救っ/たわけじゃ/なかったんだ」</p>
+
+検査官はそのまま机を両手で持ち上げた。
+モニターの映像がぐらぐらと揺れ、何も映らなくなる。
+
+<img class="kensa">\
+<p class="side_text">「神/のいないこの世界/私もすぐ行きま/すからね」</p>
+
+警報が部屋に鳴り響く。
+モニターからは検査官が椅子を投げ、壁を蹴りつけ、泣きわめき、
+気の、狂いのままに暴れる音が鳴り響いていた。
+……そして、偶然か。
+それとも必然か。
+
+鉄格子が音を立ててゆっくりと上がっていく。
+脱出だ。
+
+三人は、警報の鳴り響く廊下を駆け抜ける。
+
+<img class="hidamari">\
+<p class="side_text">「ひゃー☆　こんなにうまくいくなんてねっ！」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「全く非合理的だ。もっといい策はいくらでもあっただろう」</p>
+
+<img class="minn">\
+<p class="side_text">「とりあえず地上にさえ出れば何とかなるはず！
+　進め！ボクが怪我しないように前を！」</p>
+
+必死に廊下を走っていた3人は
+『EXIT』
+出口と書かれたドアの前でふと、足を止めた。
+そのドアの横にもう一つ。
+『監視室』と書かれたドアがあったからだ。
+
+<img class="minn">\
+<p class="side_text">「あら～」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「中には検査官、か」</p>
+
+<img class="hidamari">\
+<p class="side_text">「どうする～？
+　あの感じだと自分で脱出とかはする気無さそうだけどにぃ」</p>
+
+
+[[次へ|ENDDorE]]
+
+
+</div>\
+:: ENDDorE
+<div class="text">\
+<div class="clock" id="escapeClock"><p class="clock-time" id="time">00:00</p></div>\
+
+
+3分間
+検査官を「助ける」か「助けない」かを話し合う。
+一人でも「助けない」を選択した場合、「助けない」へ分岐する。
+<<script>>
+	$(document).one(':passagedisplay', function (ev) {
+		var span = document.getElementById('time');
+		setup.countdown = new Countdown(span, 200);
+		setup.countdown.init();
+		setup.countdown.easystart();
+		State.variables.helpnum = 0;
+		State.variables.nohelpnum = setup.memberNumber;
+		$('#helpnum').text(State.variables.helpnum);
+		$('#nohelpnum').text(State.variables.nohelpnum);
+		$("#passageGoCheck").text(setup.passageGoNumber[2]+" / "+setup.memberNumber);
+		if(State.variables.name!='検査官'){
+			$('input[type=radio][name=radiobutton-help]').on('change', function(event) {
+				TwineGang.sendHelp(State.variables.help);
+				switch (State.variables.help) {
+					case 'help':
+						State.variables.helpnum++;
+						State.variables.nohelpnum--;
+						break;
+					case 'nohelp':
+						State.variables.nohelpnum++;
+						if(State.variables.helpnum >= 0){
+							State.variables.helpnum--;
+						}
+						break;
+				}
+				$('#helpnum').text(State.variables.helpnum);
+				$('#nohelpnum').text(State.variables.nohelpnum);
+			});
+		}
+	});
+<</script>>
+<div id = "helpDecision">
+検査官を「助ける」？
+<label><<radiobutton "$help" 'help' >> 助ける　</label>　<span id="helpnum"></span>
+<label><<radiobutton "$help" 'nohelp' checked>> 助けない</label>　<span id="nohelpnum"></span>
+
+<span id="passageGoCheck">0 / 0</span>
+<span id="hidbtn" style="display: initial">\
+		<<button "決断する">>
+		<<script>>
+			$('#hidbtn').css('display', 'none');
+			$('#helpDecision').css('display', 'none');
+			TwineGang.clickButton(2);
+			setup.passageGoNumber[2]++;
+			$("#passageGoCheck").text(setup.passageGoNumber[2]+" / "+setup.memberNumber);
+		<</script>>
+		<</button>>
+</span>\
+<<silently>><<repeat 1s>><<script>>
+	if(setup.passageGoNumber[2] == setup.memberNumber){
+		if(State.variables.nohelpnum == 0){
+			Engine.play("END D");
+		}else{
+			Engine.play("END E");
+		}
+	}
+<</script>><</repeat>><</silently>>
+</div>
+
+
+</div>
+:: END D
+<div class = "text">\
+
+
+……そうして、しばらくの時が経った。
+<img class="minn2">\
+<p class="side_text">「……どうだい、記憶回復は」</p>
+
+<img class="hidamari2">\
+<p class="side_text">「さっぱりだねぇ～
+私達と違って、洗脳の度合いが重かったから難しいのかも」</p>
+<img class="kensa">\
+<p class="side_text">「うにうに」</p>
+
+検査官の記憶は戻らなかった。
+依存先を失ったショックから幼児へと退行してしまった彼女には、
+これから多くの試練が待っているだろう。
+
+<img class="minn2">\
+<p class="side_text">「きっと将来は大物になるだろうけどね」</p>
+<img class="fusigumo2">\
+<p class="side_text">「ふん。私が勉強を教えているんだぞ。
+　1年でこれまで以上の頭脳にしてやるさ」</p>
+<img class="kensa">\
+<p class="side_text">「えびえび」</p>
+<img class="hidamari2">\
+<p class="side_text">「海鮮ばっか教えてない？」</p>
+
+<img class="minn2">\
+<p class="side_text">「しかしまぁ……。
+　よく生きて帰ってこれたよ」</p>
+
+やれやれと嘆息するミン。
+ゆっくりと、彼の顔が意地悪になっていく。
+
+<img class="minn2">\
+<p class="side_text">「ボクたちの記憶が本物だという確証はないけど……
+　これで終わりで、キミたちはいい？」</p>
+<img class="fusigumo2">\
+<p class="side_text">「<ruby>愚問<rp>(</rp><rt>ぐもん</rt><rp>)</rp></ruby>だな。
+　偽物だったとしてそれが何になる」</p>
+<img class="fusigumo2">\
+<p class="side_text">「どうせ頭蓋骨の暗闇の中で起こった変化だ。
+　私達にはどうしようも出来ないよ」</p>
+<img class="kensa">\
+<p class="side_text">「かにかに」</p>
+<img class="hidamari2">\
+<p class="side_text">「高い海鮮の<ruby>語彙<rp>(</rp><rt>ごい</rt><rp>)</rp></ruby>ばっか教えてない？」</p>
+<img class="minn2">\
+<p class="side_text">「ま、そうか。
+　後はあの死体を殺した犯人を裁いて終わりだね！」</p>
+
+ヒダマリはミンを背負い投げした！
+
+<img class="minn2">\
+<p class="side_text">「グハーーーーーーーーーーーッ！」</p>
+<img class="hidamari2">\
+<p class="side_text">「乙女の秘密は暴いちゃいけないんだぞ☆」</p>
+<img class="fusigumo2">\
+<p class="side_text">「ふん。付き合ってられないな。
+　行くぞ、検査官」</p>
+
+フシグモは検査官を連れて帰ろうとする。
+
+<img class="hidamari2">\
+<p class="side_text">「フシグモちゃんに世話任せちゃってごめんね～」</p>
+<img class="fusigumo2">\
+<p class="side_text">「ヒダマリの食生活に合わせたらありえなく太らされるからな」</p>
+<img class="minn2">\
+<p class="side_text">「ボクが世話してもいいけどね！ね！検査官ちゃん！」</p>
+<img class="kensa">\
+<p class="side_text">「うぁああああああああああああん」</p>
+<img class="hidamari2">\
+<p class="side_text">「大号泣じゃん」</p>
+<img class="kensa">\
+<p class="side_text">「まま たすけて」</p>
+
+フシグモの足にぴったりつく検査官。
+
+<img class="minn2">\
+<p class="side_text">「マミー！？フシグモが！？そう呼ばせてる！？ママ！？
+　ママ！？！？！！？？！？？！」</p>
+
+<img class="fusigumo2">\
+<p class="side_text">「お、おい！うるさい！余計なことを言うな！」</p>
+
+フシグモはミンを<ruby>巴<rp>(</rp><rt>ともえ</rt><rp>)</rp></ruby>投げした！
+<img class="minn2">
+<p class="side_text">「グハーーーーーーーーーーーーーッ！」</p>
+
+Dエンド
+「記憶回復終了!」
+
+[[エンディング一覧へ|END LIST]]
+
+
+</div>
+:: END E
+<div class = "text">\
+
+
+それからしばらく経った後。
+
+<img class="hidamari2">\
+<p class="side_text">「助かった！助かった！助かった！」</p>
+<img class="fusigumo2">\
+<p class="side_text">「早食いは寿命を縮めるぞ」</p>
+
+元の暮らしに戻った3人はパーティを開いていた。
+
+<img class="minn2">\
+<p class="side_text">「ボクたちがいない間の<ruby>諸々<rp>(</rp><rt>もろもろ</rt><rp>)</rp></ruby>があるからね
+　食べたら仕事に戻らないとね」</p>
+<img class="hidamari2">\
+<p class="side_text">「なんか性格変わってる？」</p>
+<img class="minn2">\
+<p class="side_text">「ふざける余裕がないだけだよ」</p>
+<img class="fusigumo2">\
+<p class="side_text">「同意だ。
+　私達のいない間にくだらない連中がのさばっているからな」</p>
+<img class="fusigumo2">\
+<p class="side_text">「ヒダマリの才能には期待しているよ」</p>
+<img class="hidamari2">\
+<p class="side_text">「あいさい合点承知！
+　大気圏まで吹き飛ばしちゃうぞ☆」</p>
+<img class="fusigumo2">\
+<p class="side_text">「大気圏は無理だな」</p>
+<img class="hidamari2">\
+<p class="side_text">「冷静すぎない？」</p>
+<img class="hidamari2">\
+<p class="side_text">「あんまり焦りすぎると疲れちゃうぞ☆」</p>
+
+ヒダマリは食べていたパンをフシグモの口に<ruby>挿<rp>(</rp><rt>さ</rt><rp>)</rp>し込<rp>(</rp><rt>こ</rt><rp>)</rp>んだ。</ruby>
+
+<img class="fusigumo2">\
+<p class="side_text">「もがもが」</p>
+<img class="minn2">\
+<p class="side_text">「間接キッスだ！！！！！！！！！！！！」</p>
+<img class="fusigumo2">\
+<p class="side_text">「……。そんなにこのパンが気になるならお前にもくれてやる」</p>
+
+フシグモはパンをかみ切ると、その残りをミンに放り込む。
+
+<img class="minn2">\
+<p class="side_text">「え！？ヤッター！！
+　ほどよい小麦の香りと口中を刺激する酸味が口内を地獄にしてて
+　これフシグモちゃん才能で絶対毒入れてるねマジで」</p>
+<img class="fusigumo2">\
+<p class="side_text">「正解だ」</p>
+<img class="minn2">\
+<p class="side_text">「賞品としてお水をください……」</p>
+<img class="hidamari2">\
+<p class="side_text">「かわいそう」</p>
+
+Eエンド
+「記憶回復終了!」
+
+[[エンディング一覧へ|END LIST]]
+
+
+</div>
+
+:: StoryData
+{
+"ifid": "623A713C-4D15-437C-8CA1-23EF109ED1A1",
+"format": "SugarCube",
+"format-version": "2.36.1"
+}
+
+:: PassageFooter [nobr]
+<<if !tags().includes("bbar")>>
+<div id="bottombar">
+<div id="bbblock">
+<div id="bbtext" align="left">
+<span id="restart" class="inline">
+<<button '<span class="sc-icon sc-power" style="display: inline-block;"></span> やり直す'>>
+	<<script>>
+		Dialog.setup("初めからやり直す");
+		Dialog.wiki('本当に初めからやり直しますか？
+		<<button "はい">><<run Engine.restart()>><</button>>
+		<<run Dialog.open()>>');
+	<</script>>
+<</button>>
+</span>
+<span id="backbtn" class="inline">
+<<button '<span class="sc-icon sc-backward" style="display: inline-block;"></span> 一つ戻る'>>
+<<run Engine.backward()>>
+<</button>>
+</span>
+
+<<script>>
+$(document).one(":passagedisplay", function (event) {
+	if (State.length < 2) {
+		$("#backbtn button").prop("disabled", true);
+	}
+});
+
+<</script>>
+</div></div></div>
+<</if>>
+
+:: StoryInit
+<<preload "https://drive.google.com/uc?id=1BJ-L0M9PVctUgoTRvhVQdnZ53Eo3dxWO" 
+"https://drive.google.com/uc?id=1BPfQaJAInwwQgKQ4pYecfIVAWcHW8tF0" 
+"https://drive.google.com/uc?id=1BHQWP3o_OYnl2qpMN0bf9cvNZm05_U0e" 
+"https://drive.google.com/uc?id=1BLEKL2foEZKwgZ6-DILSBftJFI8_o2jc">>
+
+:: END LIST
+<div class = "text">\
+
+お疲れさまでした。
+以下がエンディングのリストになります。
+
+[[誰かが検査官の質問に回答している場合|ENDASHOW]]
+
+[[全員検査官の質問に回答しなかったが、脱出した人がいる場合|ENDBSHOW]]
+
+[[全員検査官の質問に回答しなかった場合|ENDCSHOW]]
+
+
+</div>
+
+:: ENDASHOW
+<div class = "text">\
+
+検査官を見つめる。
+検査官はこちらをじっと見つめ返した。
+
+<img class="kensa">\
+<p class="side_text">「……違いますよ。あなた達にとって、彼は、セブンサン様は。」</p>
+<img class="kensa">\
+<p class="side_text">「もっともっと尊くて素晴らしいものですよ？」</p>」
+<<if setup.escapeName != ''>>
+<img class="kensa">\
+<p class="side_text">「そうですよね？<<name>>さん？」</p>
+突然モニターが切り替わり通気口から脱出しようとしていた<<name>>の姿が映し出される。
+検査官が手元を弄ると通気口が開き<<name>>は自室に落とされる。
+<</if>>
+<img class="kensa">\
+<p class="side_text">「マニュアル23P、7項の項目『被験者が服従を示さない場合』のプロセスに則り、
+　記憶消去を実行します」</p>
+<img class="kensa">\
+<p class="side_text">「セブンサン様？承認をいただきたいのですが。
+　記憶消去してもよろしいでしょうか」</p>
+
+……沈黙。
+長い沈黙だ。
+
+誰も彼女に返事をしない。
+
+<img class="kensa">\
+<p class="side_text">「……おや？おかしいですね」</p>
+
+
+<img class="fusigumo">\
+<p class="side_text">「……本当にあいつに向かって喋りかけているのか？
+　あいつはどう見ても死んでいるだろう」</p>
+
+<img class="kensa">\
+<p class="side_text">「えぇ…っと」</p>
+
+<img class="kensa">\
+<p class="side_text">「……………」</p>
+
+<img class="kensa">\
+<p class="side_text">「え？」</p>
+
+<img class="minn">\
+<p class="side_text">「どうしたんだい？
+　まさか死体が死んでることにすら気づけない愚か者が
+　ボクたちを検査していたわけないだろう！？」</p>
+
+<img class="kensa">\
+<p class="side_text">「……」</p>
+
+<img class="hidamari">\
+<p class="side_text">「ん〜　これはどうなるのかな〜」</p>
+
+モニターからの3人の視線に晒され、検査官はうろたえる。
+
+<img class="kensa">\
+<p class="side_text">「だって彼が死ぬはずが……」</p>
+<img class="minn">\
+<p class="side_text">「死んでるじゃないか！」</p>
+<img class="fusigumo">\
+<p class="side_text">「確かに脈が止まっているぞ」</p>
+<img class="hidamari">\
+<p class="side_text">「死んでるね〜」</p>
+<img class="kensa">\
+<p class="side_text">「だって……だって……」</p>
+<img class="fusigumo">\
+<p class="side_text">「耳に機械が付いているんだろう？心拍数すらも計っていないのか？」</p>
+<img class="minn">\
+<p class="side_text">「首にあんなあざが付いているのに生きているっていうのは
+　とんだお笑いだよねっ！」</p>
+<img class="hidamari">\
+<p class="side_text">「そもそも今までの話し合いも全部理解してなかったり？」</p>
+<img class="kensa">\
+<p class="side_text">「ちがう……ちがう……」</p>
+<img class="fusigumo">\
+<p class="side_text">「違くない。あの男は死んでいる」</p>
+<img class="minn">\
+<p class="side_text">「つまりキミの『セブンサンさま』とやらはどこにもいないわけだけど？」</p>
+<img class="hidamari">\
+<p class="side_text">「大人しくここからだしてくれないかな～☆」</p>
+
+<img class="kensa">\
+<p class="side_text">「ちがう……ちがう……そうか！」</p>
+
+ぐりん。
+首を急に上げる検査官。
+声の大きさに思わずあなたは身を引いた。
+
+<img class="kensa">\
+<p class="side_text">「これも天啓なんですね！あの男は偽物！
+　あの偽物のクソ野郎を殺してくれた方が、
+　本物の『セブンサン』様なんですね！？」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「……イカれてるな」</p>
+
+
+ボソリとつぶやかれたその一言に、検査官は機敏に反応した。
+<img class="kensa">\
+<p class="side_text">「なんですか？」</p>
+
+<img class="kensa">\
+<p class="side_text">「あなた方が彼の素晴らしさを理解していないならこの計画は失敗です
+　私は早くセブンサン様と次の計画の話し合いをしなくてはなりません」</p>
+
+<img class="kensa">\
+<p class="side_text">「今から5分間、時間をあげますから」
+　誰が彼を殺したのかを再度議論し合い、私に教えてください」</p>
+
+<img class="kensa">\
+<p class="side_text">「残りの2人だけはここから解放してあげます」
+　私とセブンサン様の間に邪魔者は要りませんから……」</p>
+
+<img class="kensa">\
+<p class="side_text">「あー、そう。
+　通気口からも、逃げれると思わないことですよ」</p>
+
+
+…………。
+終わったはずなのに。
+再度、話し合いが始まる。 
+
+
+
+
+[[ヒダマリを置き去りにする場合|END A-1]]
+[[フシグモを置き去りにする場合|END A-2]]
+[[ミンを置き去りにする場合|END A-3]]
+
+
+</div>
+:: ENDBSHOW
+<div class = "text">
+
+あなたがたはモニター越しの検査官を睨みつけていた。
+
+<img class="kensa">\
+<p class="side_text">「………………」</p>
+
+突然。
+まるで金属を激しくぶつけ合わせたかのような音が鳴り響く。
+警報だ。検査官の表情が険しくなる。
+
+<img class="kensa">\
+<p class="side_text">「脱走！？どうしてそんなことを！？」</p>
+
+<img class="kensa">\
+<p class="side_text">「しばらく待っていてください。脱走者を鎮圧します！」</p>
+
+白衣を翻し、検査官はモニターから姿を消した。
+
+<<if setup.escapeName == "ヒダマリ">>
+ヒダマリは狭い空気口を潜り抜けた。
+
+<img class="hidamari">\
+<p class="side_text">「わっせ　わっせ」</p>
+
+<img class="kensa">\
+<p class="side_text">「どうして逃げてしまうんですか？」</p>
+
+通気口を抜けた先は出口の前。
+そこには検査官が仁王立ちで彼女を待っていた。
+
+<img class="hidamari">\
+<p class="side_text">「んにに　　
+　あんまりカロリーがない状態で戦いたくないんだけどにゃあ」</p>
+
+<img class="hidamari">\
+<p class="side_text">「でも、邪魔するなら押しとおるよ」</p>
+
+<img class="kensa">\
+<p class="side_text">「……出来るものなら」</p>
+
+<img class="hidamari">\
+<p class="side_text">「出来るんだよ」</p>
+
+交差。
+ヒダマリは一瞬のうちに検査官を吹き飛ばす。
+検査官は壁に全身を打ちながら崩れた。
+
+<img class="hidamari">\
+<p class="side_text">「……とりあえず逃げないと」</p>
+
+ヒダマリは逃げ続けた。ヒダマリは何も信用出来なかった。
+ミンも、フシグモも、自分自身の記憶でさえも。
+問題の解決から逃げることを選択したが、
+いつか追いつかれ『君』はばらばらになるだろう。
+それでも、今は何も考えたくなかった。
+
+ヒダマリ追加エンド
+「運命からは逃れられない」
+
+<</if>>
+<<if setup.escapeName == "フシグモ">>
+フシグモは脱走した。
+
+<img class="kensa">\
+<p class="side_text">「待ってください！」</p>
+
+検査官は必死に追いかけるが、体力はフシグモほどは無いようだ。
+
+<img class="fusigumo">\
+<p class="side_text">「……ふぅん」</p>
+
+それからしばらく……。
+
+<img class="kensa">\
+<p class="side_text">「いたい　くるしい」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「この毒はまだ有害性を上げられるな」</p>
+
+検査官は実験台にされていた。
+
+<img class="kensa">\
+<p class="side_text">「むり　いたい　だって　うぅ」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「まだ痛みを訴える余裕があるな。もうあと2段階上げてみよう。」</p>
+
+<img class="kensa">\
+<p class="side_text">「たすけて　セブンサンさま」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「……いずれ会わせてやるさ」</p>
+
+検査官の目に希望の光が灯る。
+希望をチラつかせただけで……なんて哀れな生き物なんだ。
+フシグモは、そんな希望の光を乱暴にかき消すところを想像し
+口角が上がってしまうのを必死でこらえた。
+
+フシグモ追加エンド
+「『地獄で会えるぞ』」
+
+<</if>>
+
+<<if setup.escapeName == "ミン">>
+ミンが通気口を通る。
+
+<img class="minn">\
+<p class="side_text">「とりあえずは撤退だ…」</p>
+
+通気口から出ると、そこには絶望が広がっていた。
+
+<img class="kensa">\
+<p class="side_text">「どこに行こうというんですか？」</p>
+
+二本の刀を持った検査官。
+『ラスト・リゾート』がミンを殺す為に待っていた。
+
+<img class="minn">\
+<p class="side_text">「まぁ、そうか」</p>
+
+一閃。瞬きの間におびただしいほどの風が切り裂かれた。
+
+<img class="minn">\
+<p class="side_text">「ボクだけが助かるってのは　ズルすぎるか」</p>
+
+<img class="kensa">\
+<p class="side_text">「……やっぱり、殺しは良い……」</p>
+
+検査官は刀に付いた血をぬぐうと、そのまま扉から外に出た。
+
+……もうそこに検査官としての面影はない。
+いるのはただの人殺しだ。
+
+ミン追加エンド
+「一人勝ちは無し」
+
+<</if>>
+静寂………。
+………………。
+
+どれくらいの時間が経っただろうか。
+3時間、1日、あるいはそれ以上か。
+脱走者も、検査官も。
+どちらも帰ってくる気配はない。
+止まない警報が、正気をどんどん奪っていく。
+
+だれか　たすけてくれ
+
+必死に絞り出した声は
+警報にかき消され
+誰にも届くことはなかった。
+
+Bエンド
+「死体を誰が見つける？」
+
+[[ヒダマリが脱出しようとした場合|ENDBSHOW][setup.escapeName to "ヒダマリ"]]
+[[フシグモが脱出しようとした場合|ENDBSHOW][setup.escapeName to "フシグモ"]]
+[[ミンが脱出しようとした場合|ENDBSHOW][setup.escapeName to "ミン"]]
+
+[[エンディング一覧へ|END LIST]]
+
+
+</div>
+
+:: ENDCSHOW
+<div class = "text">
+
+何も言わなかった。
+
+<img class="kensa">\
+<p class="side_text">「……………………」</p>
+
+<img class="kensa">\
+<p class="side_text">「あれ、聞こえてますよね？」</p>
+
+ぱたぱたと手を振る検査官。
+何も言わなかった。
+
+<img class="kensa">\
+<p class="side_text">「あれぇ………故障かなぁ……えぇ…っと……」</p>
+
+何も言わなかった。
+何も言わなかった。
+何も言わなかった。
+……無言のまま数十分が過ぎた。
+
+<img class="kensa">\
+<p class="side_text">「セブンサン様、こういうときはどうすればよろしいのでしょうか
+　死体のフリをしているのは承知です。どうか、お導きください。」</p>
+
+何も言わなかった。
+
+<img class="kensa">\
+<p class="side_text">「セブンサン様？」</p>
+
+死体は喋らない。
+
+<img class="kensa">\
+<p class="side_text">「え？うそ、ウソですよね？
+　あれ、おかしいですよね？そんな、え？」</p>
+
+<img class="kensa">\
+<p class="side_text">「導いてくれるって言ったじゃないですか
+　救いになるって言ってくれたじゃないですか
+　どうして？どうして死んでいるんですか？
+　本当に死んでいるんですか？」</p>
+
+死体は喋らない。
+
+<img class="kensa">\
+<p class="side_text">「え、うそ、うそうそうそ！
+　なんで勝手に死んでいるんですか？
+　あたしは、一人にされたんですか？え、あ」</p>
+
+検査官は髪をかきむしりながら、必死にモニターを覗き込む。
+……それでも、死体は死んでいる。
+
+<img class="kensa">\
+<p class="side_text">「あ/あぁ！見捨てられ/た
+　神は違っ/た/私を/救っ/たわけじゃ/なかったんだ」</p>
+
+検査官はそのまま机を両手で持ち上げた。
+モニターの映像がぐらぐらと揺れ、何も映らなくなる。
+
+<img class="kensa">\
+<p class="side_text">「神/のいないこの世界/私もすぐ行きま/すからね」</p>
+
+警報が部屋に鳴り響く。
+モニターからは検査官が椅子を投げ、壁を蹴りつけ、泣きわめき、
+気の、狂いのままに暴れる音が鳴り響いていた。
+……そして、偶然か。
+それとも必然か。
+
+鉄格子が音を立ててゆっくりと上がっていく。
+脱出だ。
+
+三人は、警報の鳴り響く廊下を駆け抜ける。
+
+<img class="hidamari">\
+<p class="side_text">「ひゃー☆　こんなにうまくいくなんてねっ！」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「全く非合理的だ。もっといい策はいくらでもあっただろう」</p>
+
+<img class="minn">\
+<p class="side_text">「とりあえず地上にさえ出れば何とかなるはず！
+　進め！ボクが怪我しないように前を！」</p>
+
+必死に廊下を走っていた3人は
+『EXIT』
+出口と書かれたドアの前でふと、足を止めた。
+そのドアの横にもう一つ。
+『監視室』と書かれたドアがあったからだ。
+
+<img class="minn">\
+<p class="side_text">「あら～」</p>
+
+<img class="fusigumo">\
+<p class="side_text">「中には検査官、か」</p>
+
+<img class="hidamari">\
+<p class="side_text">「どうする～？
+　あの感じだと自分で脱出とかはする気無さそうだけどにぃ」</p>
+
+
+[[検査官を助ける場合|END D]]
+[[検査官を助けない場合|END E]]
+
+
+</div>\

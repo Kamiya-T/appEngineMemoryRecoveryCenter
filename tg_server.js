@@ -1,6 +1,8 @@
-var express = require('express');
+const express = require('express');
 const { emit } = require('process');
-var app = express();
+const app = express();
+
+
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
