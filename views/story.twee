@@ -12,6 +12,7 @@ if (document.location.href.toLowerCase().includes("/temp/") || document.location
 	setup.Path = "client/";  // Running in a browser
 }
 setup.JSLoaded = false;
+
 var lockID = LoadScreen.lock();  // Lock loading screen
 importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(function() {
     importScripts(setup.Path + "tg_client.js").then(function() {
@@ -99,7 +100,16 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 :: Start [mv]
 <div class = "text" id = "center">
-<h1>キャラクター選択</h1>
+<<script>>	
+$(function() {
+  history.pushState(null, null, null);
+  $(window).on("popstate", function(){
+    history.pushState(null, null, null);
+	alert('ブラウザバックを用いることはできません。')
+  });
+}); 
+<</script>>
+<h1>キャラクター選択</h1><<set $startFlag to true>>
 <div  id = "loginList">	<a data-passage="Login" data-setter="$name to 'ヒダマリ'"><img class="hidamarib"></a>\     
 		<a data-passage="Login" data-setter="$name to 'フシグモ'"><img class="fusigumob"></a>\
 		<a data-passage="Login" data-setter="$name to 'ミン'"><img class="minnb"></a>\
@@ -112,7 +122,8 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
     <p><font size="5">進行マニュアル</font></p>
 	<p style="text-align:left">1. 進行役が『新規ルーム作成』をすること。
 	2. 部屋番号を他被験者と共有する。
-	3. 他被験者は共有された部屋番号を用いて『既存ルームに接続』する。</p>
+	3. 他被験者は共有された部屋番号を用いて『既存ルームに接続』する。
+	4. 何かエラーが発生した際は左下の『やり直す』ボタンを用いること。</p>
 </div>
 <div class="flex between">
 <div class="item">
@@ -185,7 +196,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 	</span>\
 </div>
 	<<silently>><<repeat 1s>><<script>>
-		if(setup.passageGoNumber[0] == setup.memberNumber){
+		if(setup.passageGoNumber[0] == setup.memberNumber && setup.memberNumber > 0){
 			Engine.play("検査官の質問");
 		}
 		if(setup.memberNumber >= 1 && setup.tempflag){
@@ -199,27 +210,30 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 
 :: 検査官の質問
 <div class = "text">
-<<type 100ms none>>\
 個室に戻り、ドアを閉める。
 ドアの閉まる音が、やけに重く響いた。
 
 検査官がモニター越しにこちらを見ている。
 
-「………………」
-「さて、心の準備は出来ましたか」
-「では、お聞きしますね」
+<img class="kensa">\
+<p class="side_text">「………………」</p>
+<img class="kensa">\
+<p class="side_text">「さて、心の準備は出来ましたか」</p>
+<img class="kensa">\
+<p class="side_text">「では、お聞きしますね」</p>
 
-「あなたにとってその『死んだフリをしている』男……
-　死体と呼んでいるその人は何者ですか？」
+<img class="kensa">\
+<p class="side_text">「あなたにとってその『死んだフリをしている』男……
+　死体と呼んでいるその人は何者ですか？」</p>
+
 どくん。
 <font size="5">どくん。</font>
 <font size="6">どくん。
 鼓動が大きくなる。
 
 検査官の質問に対し、3分以内に回答すること。</font>
-<</type>>
-<div class = "bottomdiv">
 
+<div class = "bottomdiv">
 <span id="hidbtn" style="display: initial">\
 	@@.buttonLarge;<<button '次へ<span id="passageGoCheck">0/0</span>'>>
 		<<script>>
@@ -261,7 +275,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		$('#ans').css('display', 'none');
 		$('#escape').css('display', 'none');
 		$('#quiet').css('display', 'none');
-		$('#ansbtn').css('display', 'none');
+		$("#ansbtn button").prop("disabled", true);
 		$('#escapeChoice').css('display', 'none');
 		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
 		if(State.variables.answer == ""){
@@ -271,7 +285,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
 <</script>><</button>>@@</span>
 <span id="quiet" style="display: none">
-<<button "何も答えない">><<script>>	
+@@.buttonLarge;<<button "何も答えない">><<script>>	
 		$('#ans').css('display', 'none');
 		$('#escape').css('display', 'none');
 		$('#quiet').css('display', 'none');
@@ -283,13 +297,13 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		}
 		else{setup.wrongAnswer++;}
 		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / " + setup.memberNumber);
-	<</script>><</button>>
+	<</script>><</button>>@@
 </span>
 <span id="escape" style="display: initial">
-<<button "脱出を試みる">><<script>>
+@@.buttonLarge;<<button "脱出を試みる">><<script>>
 	$('#escape').css('display', 'none');
 	$('#escapeChoice').css('display', 'inline');
-	<</script>><</button>>
+	<</script>><</button>>@@
 </span>\
 
 <span id = "escapeChoice" style="display:none"><table><tr>
@@ -351,6 +365,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		if(setup.answer == ""){
 			$('#quiet').css('display', 'inline-block');
 		}
+		setup.hintflag = true;
 	<</script>>
 <</timed>>
 <<silently>><<repeat 1s>><<script>>
@@ -358,8 +373,16 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		Engine.play("エンディング判定");
 		setup.countdown.stop();
 	}
+	if(setup.hintflag){
+		if(setup.answer == ""){
+			$('#quiet').css('display', 'inline-block');
+		}
+	}
 <</script>><</repeat>><</silently>>
 <<script>>
+	setup.hintflag = false;
+<</script>>
+	/* 
 	$(document).one(':passagedisplay', function (ev) {
 		const textareaElem = document.getElementById("textarea-answer");
 		textareaElem.addEventListener('input', (event) => {
@@ -375,8 +398,9 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 				$('#hidquiet').css('display', 'none');
 			}
 		});
+
 	});
-<</script>>
+	*/
 </div>\
 <<script>>
 	$(document).one(':passagedisplay', function (ev) {
@@ -1124,8 +1148,25 @@ Bエンド
 <p class="side_text">「どうする～？
 　あの感じだと自分で脱出とかはする気無さそうだけどにぃ」</p>
 
-
-[[次へ|ENDDorE]]
+<span id="hidbtn" style="display: initial">\
+	@@.buttonLarge;<<button '次へ<span id="passageGoCheck">0/0</span>'>>
+		<<script>>
+			$("#hidbtn button").prop("disabled", true);
+			TwineGang.clickButton(5);
+			setup.passageGoNumber[5]++;
+			$("#passageGoCheck").text(setup.passageGoNumber[5]+" / "+setup.memberNumber);
+		<</script>><</button>>@@
+</span>\
+<<silently>><<repeat 1s>><<script>>
+	if(setup.passageGoNumber[5] == setup.memberNumber){
+		Engine.play("ENDDorE");
+	}
+<</script>><</repeat>><</silently>>
+<<script>>
+    $(document).on(':passagedisplay', function (ev) {
+		$("#passageGoCheck").text(0+" / "+setup.memberNumber);
+    });
+<</script>>
 
 
 </div>\
@@ -1173,21 +1214,23 @@ Bエンド
 検査官を「助ける」？
 <label><<radiobutton "$help" 'help' >> 助ける　</label>　<span id="helpnum"></span>
 <label><<radiobutton "$help" 'nohelp' checked>> 助けない</label>　<span id="nohelpnum"></span>
-
-<span id="passageGoCheck">0 / 0</span>
+<<script>>
+    $(document).on(':passagedisplay', function (ev) {
+		$("#passageGoCheck").text(0+" / "+setup.memberNumber);
+    });
+<</script>>
 <span id="hidbtn" style="display: initial">\
-		<<button "決断する">>
+		@@.buttonLarge;<<button '決断する<span id="passageGoCheck">0/0</span>'>>
 		<<script>>
-			$('#hidbtn').css('display', 'none');
+			$("#hidbtn button").prop("disabled", true);
 			$('#helpDecision').css('display', 'none');
 			TwineGang.clickButton(2);
 			setup.passageGoNumber[2]++;
 			$("#passageGoCheck").text(setup.passageGoNumber[2]+" / "+setup.memberNumber);
-		<</script>>
-		<</button>>
+		<</script>><</button>>@@
 </span>\
 <<silently>><<repeat 1s>><<script>>
-	if(setup.passageGoNumber[2] == setup.memberNumber){
+	if(setup.passageGoNumber[2] >= setup.memberNumber){
 		if(State.variables.nohelpnum == 0){
 			Engine.play("END D");
 		}else{
@@ -1405,7 +1448,6 @@ $(document).one(":passagedisplay", function (event) {
 "https://drive.google.com/uc?id=1BPfQaJAInwwQgKQ4pYecfIVAWcHW8tF0" 
 "https://drive.google.com/uc?id=1BHQWP3o_OYnl2qpMN0bf9cvNZm05_U0e" 
 "https://drive.google.com/uc?id=1BLEKL2foEZKwgZ6-DILSBftJFI8_o2jc">>
-
 :: END LIST
 <div class = "text">\
 
@@ -1431,11 +1473,11 @@ $(document).one(":passagedisplay", function (event) {
 <p class="side_text">「……違いますよ。あなた達にとって、彼は、セブンサン様は。」</p>
 <img class="kensa">\
 <p class="side_text">「もっともっと尊くて素晴らしいものですよ？」</p>」
-<<if setup.escapeName != ''>>
+<<if setup.escapeName != "">>
 <img class="kensa">\
-<p class="side_text">「そうですよね？<<name>>さん？」</p>
-突然モニターが切り替わり通気口から脱出しようとしていた<<name>>の姿が映し出される。
-検査官が手元を弄ると通気口が開き<<name>>は自室に落とされる。
+<p class="side_text">「そうですよね？<<print setup.escapeName>>さん？」</p>
+突然モニターが切り替わり通気口から脱出しようとしていた<<print setup.escapeName>>の姿が映し出される。
+検査官が手元を弄ると通気口が開き<<print setup.escapeName>>は自室に落とされる。
 <</if>>
 <img class="kensa">\
 <p class="side_text">「マニュアル23P、7項の項目『被験者が服従を示さない場合』のプロセスに則り、
