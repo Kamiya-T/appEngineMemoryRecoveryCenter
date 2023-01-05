@@ -444,11 +444,11 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 <p class="side_text">「……違いますよ。あなた達にとって、彼は、セブンサン様は。」</p>
 <img class="kensa">\
 <p class="side_text">「もっともっと尊くて素晴らしいものですよ？」</p>」
-<<if setup.escapeName != ''>>
+<<if setup.escapeName != "">>
 <img class="kensa">\
-<p class="side_text">「そうですよね？<<name>>さん？」</p>
-突然モニターが切り替わり通気口から脱出しようとしていた<<name>>の姿が映し出される。
-検査官が手元を弄ると通気口が開き<<name>>は自室に落とされる。
+<p class="side_text">「そうですよね？<<print setup.escapeName>>さん？」</p>
+突然モニターが切り替わり通気口から脱出しようとしていた<<print setup.escapeName>>の姿が映し出される。
+検査官が手元を弄ると通気口が開き<<print setup.escapeName>>は自室に落とされる。
 <</if>>
 <img class="kensa">\
 <p class="side_text">「マニュアル23P、7項の項目『被験者が服従を示さない場合』の

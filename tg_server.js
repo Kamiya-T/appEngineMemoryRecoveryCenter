@@ -13,7 +13,7 @@ app.use('/client', express.static(__dirname + '/client'));
 //まずページを返す
 app.get('/', function (req, res) {
   console.log('app.get => sendFile');
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/views/index.html');
 });
 //接続があった
 io.on('connection', (socket) => {
