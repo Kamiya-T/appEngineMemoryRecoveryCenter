@@ -185,7 +185,7 @@ $(function() {
 	2. 被験者全員の準備が出来次第、検査官との面談を実施する。</span>
 	
 	<span id="hidbtn" style="display: initial">\
-		@@.buttonLarge;<<button '次へ<span id="passageGoCheck">0/0</span>'>>
+		@@.buttonLarge;<<button '次へ<span id="passageGoCheck">0 / 0</span>'>>
 		  	<<script>>
 				$("#hidbtn button").prop("disabled", true);
 				TwineGang.clickButton(0);
@@ -235,7 +235,7 @@ $(function() {
 
 <div class = "bottomdiv">
 <span id="hidbtn" style="display: initial">\
-	@@.buttonLarge;<<button '次へ<span id="passageGoCheck">0/0</span>'>>
+	@@.buttonLarge;<<button '次へ<span id="passageGoCheck">0 / 3</span>'>>
 		<<script>>
 			$("#hidbtn button").prop("disabled", true);
 			TwineGang.clickButton(1);
@@ -271,7 +271,7 @@ $(function() {
 
 <span id="ans" style="display: initial"><<textarea "$answer" "">></span>
 <span id="ansbtn" style="display: inline-block">\
-@@.buttonLarge;<<button '回答する<span id="passageGoCheck">0/0</span>'>><<script>>
+@@.buttonLarge;<<button '回答する<span id="passageGoCheck">0 / 3</span>'>><<script>>
 		$('#ans').css('display', 'none');
 		$('#escape').css('display', 'none');
 		$('#quiet').css('display', 'none');
@@ -582,10 +582,10 @@ $(function() {
 …………。
 終わったはずなのに。
 再度、話し合いが始まる。 
-<span id="passageGoCheck">0/3</span>
+
 <span id="hidbtn" style="display: initial">\
-<<button "次へ">><<script>>
-	$('#hidbtn').css('display', 'none');
+@@.buttonLarge;<<button '次へ<span id="passageGoCheck">0 / 3</span>'>><<script>>
+	$("#hidbtn button").prop("disabled", true);
 	TwineGang.clickButton(4);
 	setup.passageGoNumber[4]++;
 	$("#passageGoCheck").text(setup.passageGoNumber[4]+" / "+setup.memberNumber);
@@ -629,10 +629,9 @@ $(function() {
 <label><<radiobutton "$sacrifice" 'フシグモ' autocheck>><img class="fusigumo">フシグモ　</label>
 <label><<radiobutton "$sacrifice" 'ミン' autocheck>><img class="minn">ミン　　　</label>
 </div>
-<span id="passageGoCheck">0 / 0</span>
 <span id="hidbtn" style="display: initial">\
-		<<button "投票する">><<script>>
-			$('#hidbtn').css('display', 'none');
+		@@.buttonLarge;<<button '投票する<span id="passageGoCheck">0 / 3</span>'>><<script>>
+			$("#hidbtn button").prop("disabled", true);
 			$('#sacDecision').css('display', 'none');
 			TwineGang.clickButton(3);
 			setup.passageGoNumber[3]++;
@@ -651,7 +650,7 @@ $(function() {
 			TwineGang.sendSacrifice(sacrinum);
 			setup.sacrifice[sacrinum]++;
 			$("#passageGoCheck").text(setup.passageGoNumber[3]+" / "+setup.memberNumber);
-		<</script>><</button>>
+		<</script>><</button>>@@
 </span>\
 <<silently>><<repeat 1s>><<script>>
 	if(setup.passageGoNumber[3] >= setup.memberNumber){
@@ -1149,7 +1148,7 @@ Bエンド
 　あの感じだと自分で脱出とかはする気無さそうだけどにぃ」</p>
 
 <span id="hidbtn" style="display: initial">\
-	@@.buttonLarge;<<button '次へ<span id="passageGoCheck">0/0</span>'>>
+	@@.buttonLarge;<<button '次へ<span id="passageGoCheck">0 / 3</span>'>>
 		<<script>>
 			$("#hidbtn button").prop("disabled", true);
 			TwineGang.clickButton(5);
@@ -1220,7 +1219,7 @@ Bエンド
     });
 <</script>>
 <span id="hidbtn" style="display: initial">\
-		@@.buttonLarge;<<button '決断する<span id="passageGoCheck">0/0</span>'>>
+		@@.buttonLarge;<<button '決断する<span id="passageGoCheck">0 / 0</span>'>>
 		<<script>>
 			$("#hidbtn button").prop("disabled", true);
 			$('#helpDecision').css('display', 'none');
