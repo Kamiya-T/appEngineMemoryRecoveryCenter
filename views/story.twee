@@ -592,7 +592,7 @@ $(function() {
 	TwineGang.clickButton(4);
 	setup.passageGoNumber[4]++;
 	$("#passageGoCheck").text(setup.passageGoNumber[4]+" / "+setup.memberNumber);
-<</script>><</button>>
+<</script>><</button>>@@
 <<silently>><<repeat 1s>><<script>>
 	if(setup.passageGoNumber[4] >= setup.memberNumber){
 		Engine.play("ENDAExtra");
