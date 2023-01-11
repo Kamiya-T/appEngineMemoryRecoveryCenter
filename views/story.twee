@@ -179,7 +179,7 @@ $(function() {
 			setup.tempflag = true;
         }
 		$("#passageGoCheck").text(setup.passageGoNumber[0]+" / "+setup.memberNumber);
-		
+		$("#passageRoomNum").text(""+setup.RoomNum);
 		$("#hidbtn button").prop("disabled", true);
     });
     <</script>>
