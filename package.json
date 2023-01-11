@@ -1,27 +1,7 @@
 {
-  "name": "twine-gang",
-  "description": "Twine communication/synchronization server",
-  "homepage": "https://github.com/mildmojo/twine-gang",
+  "name": "memoryrecoverycenter",
   "version": "1.0.0",
-  "license": "MIT",
   "private": true,
-  "author": {
-    "name": "mildmojo",
-    "url": "https://github.com/mildmojo"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/mildmojo/twine-gang.git"
-  },
-  "bugs": {
-    "url": "https://github.com/mildmojo/twine-gang/issues"
-  },
-  "keywords": [
-   "twine",
-    "websocket",
-    "synchronize",
-    "server"
-  ],
   "dependencies": {
     "express": "4.x",
     "socket.io": "4.5.x"

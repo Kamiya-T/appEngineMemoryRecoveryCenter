@@ -1,7 +1,5 @@
 const express = require('express');
-const { emit } = require('process');
 const app = express();
-
 
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
@@ -20,7 +18,6 @@ io.on('connection', (socket) => {
   console.log('イベント発生、クライアントとの接続が確立されました.');
   var roomName = 0;
   //********************SOCKET BIND*************************/
-
   //新規部屋作成
   socket.on('createNewRoom', (userName) =>{
     console.log('イベント発生、createRoomNameを受信しました.');

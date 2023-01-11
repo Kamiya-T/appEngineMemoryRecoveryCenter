@@ -62,10 +62,10 @@
   //********************STORY EVENT*************************/
   
   //新規部屋の作成
-  TGClient.prototype.createNewRoom = function(data){
+  TGClient.prototype.createNewRoom = async function(data){
     this.userName = data;
     console.log("TGClient.prototype.createNewRoom");
-    this._socket.emit("createNewRoom", this.userName);
+    await this._socket.emit("createNewRoom", this.userName);
   }
 
   TGClient.prototype.joinExistRoom = function(room, name) {
