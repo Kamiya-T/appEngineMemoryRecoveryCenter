@@ -31,6 +31,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 //*******************************BIND HERE**************************
     TwineGang.bind("roomInfo", (data)=>{
       	setup.RoomNum = data;
+		$("#passageRoomNum").text(""+setup.RoomNum);
     });
     TwineGang.bind("newList", (data)=>{
       	setup.MemberList = data;
@@ -130,7 +131,9 @@ $(function() {
 
 <span id="RoomIdDisplay"></span>
 		@@.buttonLarge;<<button '新規ルーム作成'>>
-    		<<script>>TwineGang.createNewRoom(State.variables.name);<</script>>
+    		<<script>>
+			TwineGang.createNewRoom(State.variables.name);
+			<</script>>
 			<<timed 100ms>>
 				<<set $RoomID to setup.RoomNum>>
 			    <<script>>
@@ -163,7 +166,7 @@ $(function() {
 :: ルームロビー
 <div class = "text">
 <div class="roomNumber">\
-<font size="7">	部屋番号：<<print $RoomID>></font></div>
+<font size="7">	部屋番号：<span id="passageRoomNum"></span></font></div>
   	<ul id="memberlist"></ul>
     <<script>>
     $(document).one(':passagedisplay', function (ev) {

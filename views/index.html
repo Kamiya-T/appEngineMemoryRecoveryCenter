@@ -533,6 +533,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 //*******************************BIND HERE**************************
     TwineGang.bind("roomInfo", (data)=>{
       	setup.RoomNum = data;
+		$("#passageRoomNum").text(""+setup.RoomNum);
     });
     TwineGang.bind("newList", (data)=>{
       	setup.MemberList = data;
@@ -623,7 +624,9 @@ $(function() {
 
 &lt;span id=&quot;RoomIdDisplay&quot;&gt;&lt;/span&gt;
 		@@.buttonLarge;&lt;&lt;button &#39;新規ルーム作成&#39;&gt;&gt;
-    		&lt;&lt;script&gt;&gt;TwineGang.createNewRoom(State.variables.name);&lt;&lt;/script&gt;&gt;
+    		&lt;&lt;script&gt;&gt;
+			TwineGang.createNewRoom(State.variables.name);
+			&lt;&lt;/script&gt;&gt;
 			&lt;&lt;timed 100ms&gt;&gt;
 				&lt;&lt;set $RoomID to setup.RoomNum&gt;&gt;
 			    &lt;&lt;script&gt;&gt;
@@ -654,7 +657,7 @@ $(function() {
 &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="ルームロビー" tags="" position="350,100" size="100,100">&lt;div class = &quot;text&quot;&gt;
 &lt;div class=&quot;roomNumber&quot;&gt;\
-&lt;font size=&quot;7&quot;&gt;	部屋番号：&lt;&lt;print $RoomID&gt;&gt;&lt;/font&gt;&lt;/div&gt;
+&lt;font size=&quot;7&quot;&gt;	部屋番号：&lt;span id=&quot;passageRoomNum&quot;&gt;&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;
   	&lt;ul id=&quot;memberlist&quot;&gt;&lt;/ul&gt;
     &lt;&lt;script&gt;&gt;
     $(document).one(&#39;:passagedisplay&#39;, function (ev) {

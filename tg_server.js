@@ -155,7 +155,7 @@ function joinRoom(socket, roomName, userName) {
   }
 }
 
-var port = process.env.PORT || 8080;
+var port = 80;
 console.log('Start Listening');
 server.listen(port);
 server.setTimeout();
