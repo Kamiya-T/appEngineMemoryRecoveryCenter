@@ -75,7 +75,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		setup.escapeAnswer++;
 		if(State.variables.name == '検査官'){
 			let li = document.createElement('li');
-            li.textContent = "脱出を試みた: "name + " : " + answer;
+            li.textContent = "脱出を試みた: "+ name + " : " + answer;
             document.getElementById('answerlist').appendChild(li);
 		}
 	});
