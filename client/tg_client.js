@@ -97,11 +97,11 @@
 
   TGClient.prototype.sendEscape = function(password, name) {
     console.log("TGClient.sendEscape");
-    this._socket.emit('sendAnswer', password, name);
+    this._socket.emit('sendEscape', password, name);
     // console.log('emitted click');
   };
   TGClient.prototype.sendSacrifice = function(num) {
-    console.log("TGClient.sendEscape");
+    console.log("TGClient.sendSacrifice");
     this._socket.emit('sendSacrifice', num);
     // console.log('emitted click');
   };
