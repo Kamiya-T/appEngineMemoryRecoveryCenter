@@ -457,6 +457,8 @@ $("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnsw
 <<if setup.escapeName != "">>
 <img class="kensa">\
 <p class="side_text">「そうですよね？<<print setup.escapeName>>さん？」</p>
+
+
 突然モニターが切り替わり通気口から脱出しようとしていた<<print setup.escapeName>>の姿が映し出される。
 検査官が手元を弄ると通気口が開き<<print setup.escapeName>>は自室に落とされる。
 <</if>>

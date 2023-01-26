@@ -577,7 +577,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		setup.escapeAnswer++;
 		if(State.variables.name == '検査官'){
 			let li = document.createElement('li');
-            li.textContent = "脱出を試みた: "+ name + " : " + answer;
+            li.textContent = "通気口から脱出を試みた: "+ name;
             document.getElementById('answerlist').appendChild(li);
 		}
 	});
@@ -936,6 +936,8 @@ $(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.
 &lt;&lt;if setup.escapeName != &quot;&quot;&gt;&gt;
 &lt;img class=&quot;kensa&quot;&gt;\
 &lt;p class=&quot;side_text&quot;&gt;「そうですよね？&lt;&lt;print setup.escapeName&gt;&gt;さん？」&lt;/p&gt;
+
+
 突然モニターが切り替わり通気口から脱出しようとしていた&lt;&lt;print setup.escapeName&gt;&gt;の姿が映し出される。
 検査官が手元を弄ると通気口が開き&lt;&lt;print setup.escapeName&gt;&gt;は自室に落とされる。
 &lt;&lt;/if&gt;&gt;
