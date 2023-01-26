@@ -381,6 +381,7 @@ $("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnsw
 	if(setup.hintflag && setup.answer == ""){
 		$('#quiet').css('display', 'inline-block');
 	}
+	$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer+" / "+setup.memberNumber);
 <</script>><</repeat>><</silently>>
 </div>\
 <<script>>
