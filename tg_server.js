@@ -1,18 +1,33 @@
+//expressモジュールの読み込み
 const express = require('express');
+//expressのインスタンス化
 const app = express();
+app.use('/assets', express.static(__dirname + '/assets'));
+app.use('/client', express.static(__dirname + '/client'));
 
+var fs = require('fs');
+var https = require ('https');
+var options = {
+  key: fs.readFileSync( "/etc/letsencrypt/live/mivsflightlessairship.com/privkey.pem" ),
+  cert: fs.readFileSync( "/etc/letsencrypt/live/mivsflightlessairship.com/fullchain.pem" )
+};
+var https_server = https.createServer(options, app);
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-// Room name => client count
-var rooms = {};
-app.use('/assets', express.static(__dirname + '/assets'));
-app.use('/client', express.static(__dirname + '/client'));
+
+
 //まずページを返す
+app.get('/memRecCenter', function (req, res) {
+  console.log('app.get => sendFile');
+  res.sendFile(__dirname + '/views/index.html');
+});
 app.get('/', function (req, res) {
   console.log('app.get => sendFile');
   res.sendFile(__dirname + '/views/index.html');
 });
+// Room name => client count
+var rooms = {};
 //接続があった
 io.on('connection', (socket) => {
   console.log('イベント発生、クライアントとの接続が確立されました.');
@@ -155,9 +170,10 @@ function joinRoom(socket, roomName, userName) {
   }
 }
 
-var port = 80;
+var http_port = 80;
+var https_port = 443;
 console.log('Start Listening');
-server.listen(port);
-server.setTimeout();
+https_server.listen(https_port);
+server.listen(http_port);
 
-console.log('Listening on port ' + port);
+console.log('Listening on port ' + http_port + ', and port '+ https_port);
