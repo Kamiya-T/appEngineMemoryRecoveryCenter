@@ -25,10 +25,14 @@ app.get('/memRecCenter', function (req, res) {
   console.log('app.get => sendFile');
   res.sendFile(__dirname + '/views/index.html');
 });
-app.get('/', function (req, res) {
+app.get('/test', function (req, res) {
   res.contentType( "text/plain" );
   res.writeHead( 200 );
   res.end( "接続が確認できました。ありがとうございます。" );
+});
+app.get('/', function (req, res) {
+  console.log('app.get => sendFile');
+  res.sendFile(__dirname + '/views/index.html');
 });
 // Room name => client count
 var rooms = {};
