@@ -179,6 +179,6 @@ var https_port = 443;
 var http_port = 80;
 console.log('Start Listening');
 https_server.listen(https_port);
-http_server.listen(https_port);
+http_server.listen(http_port);
 
 console.log( "server starging on " + http_port + ' / ' + https_port + ' ...' );
