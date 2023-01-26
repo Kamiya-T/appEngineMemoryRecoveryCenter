@@ -46,8 +46,8 @@
     socket.on('otherAnswer', function(answer, name, id) {
       self.trigger("otherAnswer", answer, name, id);
     });
-    socket.on('escapeAnswer', function(id) {
-      self.trigger("escapeAnswer", id);
+    socket.on('escapeAnswer', function(name) {
+      self.trigger("escapeAnswer", name);
     });
     socket.on('returnHelp', function(id) {
       self.trigger("returnHelp", id);

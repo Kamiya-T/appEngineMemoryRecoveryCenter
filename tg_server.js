@@ -85,7 +85,7 @@ io.on('connection', (socket) => {
     else{
       console.log("間違ったパスワードが入力されました。残念！")
     }
-    console.log("脱出を受けました:" + name + ":"+ answer);
+    console.log("脱出を受けました:" + name);
   });
 
   socket.on('sendSacrifice', (num) =>{
