@@ -12,8 +12,7 @@ var options = {
   cert: fs.readFileSync( "/etc/letsencrypt/live/mivsflightlessairship.com/fullchain.pem" )
 };
 var https_server = https.createServer(options, app);
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+var io = require('socket.io')(https_server);
 
 
 
@@ -170,10 +169,8 @@ function joinRoom(socket, roomName, userName) {
   }
 }
 
-var http_port = 80;
 var https_port = 443;
 console.log('Start Listening');
 https_server.listen(https_port);
-server.listen(http_port);
 
-console.log('Listening on port ' + http_port + ', and port '+ https_port);
+console.log('Listening on port ' + https_port);
