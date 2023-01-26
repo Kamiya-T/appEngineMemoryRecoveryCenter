@@ -22,6 +22,7 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
 		setup.passageGoNumber.fill(0)
 		setup.memberNumber = 0;
 		setup.correctAnswer = 0;
+		setup.escapeAnswer = 0;
 		setup.wrongAnswer = 0;
 		setup.escapeName = "";
 		setup.answer = "";
@@ -67,11 +68,11 @@ importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(fu
             li.textContent = name + " : " + answer;
             document.getElementById('answerlist').appendChild(li);
 		}
-		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
+		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer+" / "+setup.memberNumber);
 	});
 	TwineGang.bind("escapeAnswer", (name)=>{
 		setup.escapeName = name;
-		setup.correctAnswer++;
+		setup.escapeAnswer++;
 	});
 
 	TwineGang.bind("returnHelp", (help)=>{
@@ -275,38 +276,36 @@ $(function() {
 <span id="ans" style="display: initial"><<textarea "$answer" "">></span>
 <span id="ansbtn" style="display: inline-block">\
 @@.buttonLarge;<<button '回答する<span id="passageGoCheck">0 / 3</span>'>><<script>>
-		$('#ans').css('display', 'none');
-		$('#escape').css('display', 'none');
-		$('#quiet').css('display', 'none');
-		$("#ansbtn button").prop("disabled", true);
-		$('#escapeChoice').css('display', 'none');
-		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
-		if(State.variables.answer == ""){
-			setup.correctAnswer++;
-		}
-		else{setup.wrongAnswer++;}
-		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
+	$('#ans').css('display', 'none');
+	$("#ansbtn button").prop("disabled", true);
+	$('#escape').css('display', 'none');
+	$('#quiet').css('display', 'none');
+	setup.hintflag = false;
+	$('#escapeChoice').css('display', 'none');
+	TwineGang.sendAnswer(State.variables.answer, State.variables.name);
+	if(State.variables.answer == ""){
+		setup.correctAnswer++;}
+	else{
+		setup.wrongAnswer++;}
+	$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer+" / "+setup.memberNumber);
 <</script>><</button>>@@</span>
 <span id="quiet" style="display: none">
 @@.buttonLarge;<<button "何も答えない">><<script>>	
-		$('#ans').css('display', 'none');
-		$('#escape').css('display', 'none');
-		$('#quiet').css('display', 'none');
-		$('#ansbtn').css('display', 'none');
-		$('#escapeChoice').css('display', 'none');
-		TwineGang.sendAnswer(State.variables.answer, State.variables.name);
-		if(State.variables.answer == ""){
-			setup.correctAnswer++;
-		}
-		else{setup.wrongAnswer++;}
-		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / " + setup.memberNumber);
-	<</script>><</button>>@@
-</span>
+	$('#ans').css('display', 'none');
+	$("#ansbtn button").prop("disabled", true);
+	$('#escape').css('display', 'none');
+	$('#quiet').css('display', 'none');
+	setup.hintflag = false;
+	$('#escapeChoice').css('display', 'none');
+	TwineGang.sendAnswer("", State.variables.name);
+	setup.correctAnswer++;
+	$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer+" / " + setup.memberNumber);
+<</script>><</button>>@@</span>
 <span id="escape" style="display: initial">
 @@.buttonLarge;<<button "脱出を試みる">><<script>>
 	$('#escape').css('display', 'none');
 	$('#escapeChoice').css('display', 'inline');
-	<</script>><</button>>@@
+<</script>><</button>>@@
 </span>\
 
 <span id = "escapeChoice" style="display:none"><table><tr>
@@ -334,40 +333,38 @@ $(function() {
 貴方は天井の通気口を見つけた。
 だが、鉄格子に阻まれ進むことができない。
 パスワードを入力しなければ開かなそうだ。
-	<<textbox "$password" "">>　<<button "入力">><<script>>
-	TwineGang.sendEscape(State.variables.password, State.variables.name);
-	if(State.variables.password == "SEVENSUN"){
-		setup.escapeName = State.variables.name;
-		setup.correctAnswer++;
-		$('#ans').css('display', 'none');
-		$('#escape').css('display', 'none');
-		$('#quiet').css('display', 'none');
-		$('#ansbtn').css('display', 'none');
-		$('#escapeChoice').css('display', 'none');
-		$('#escapeResultTrue').css('display', 'none');
-		$('#escapeResultText').css('display', 'inline');
-		$('#escapeResultText').text("鉄格子が開いた！時間があれば脱出できるかもしれない。")
-	}
-	else{
-		$('#escapeChoice').css('display', 'none');
-		$('#escapeResultTrue').css('display', 'none');
-		$('#escapeResultText').css('display', 'inline');
-		$('#escapeResultText').text("パスワードが違ったようだ…もうなにも反応しない。")
-	}
-	$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
-	<</script>><</button>>
+<<textbox "$password" "">>　<<button "入力">><<script>>
+TwineGang.sendEscape(State.variables.password, State.variables.name);
+if(State.variables.password == "SEVENSUN"){
+	setup.escapeName = State.variables.name;
+	setup.escapeAnswer++;
+	$('#ans').css('display', 'none');
+	$("#ansbtn button").prop("disabled", true);
+	$('#escape').css('display', 'none');
+	$('#quiet').css('display', 'none');
+	setup.hintflag = false;
+	$('#escapeChoice').css('display', 'none');
+	$('#escapeResultTrue').css('display', 'none');
+	$('#escapeResultText').css('display', 'inline');
+	$('#escapeResultText').text("鉄格子が開いた！時間があれば脱出できるかもしれない。")
+}
+else{
+	$('#escapeChoice').css('display', 'none');
+	$('#escapeResultTrue').css('display', 'none');
+	$('#escapeResultText').css('display', 'inline');
+	$('#escapeResultText').text("パスワードが違ったようだ…もうなにも反応しない。")
+}
+$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer+" / "+setup.memberNumber);
+<</script>><</button>>
 </span>\
 <span id="escapeResultText" style="display:none"></span>\
 <<timed 182s>>
 	<<script>>
-		$('#ans').css('display', 'none');
+		$('#ans textarea').prop('disabled', true);
 	<</script>>
 <</timed>>
 <<timed 30s>>
 	<<script>>
-		if(setup.answer == ""){
-			$('#quiet').css('display', 'inline-block');
-		}
 		setup.hintflag = true;
 	<</script>>
 <</timed>>
@@ -376,42 +373,19 @@ $(function() {
 		Engine.play("エンディング判定");
 		setup.countdown.stop();
 	}
-	if(setup.hintflag){
-		if(setup.answer == ""){
-			$('#quiet').css('display', 'inline-block');
-		}
+	if(setup.hintflag && setup.answer == ""){
+		$('#quiet').css('display', 'inline-block');
 	}
 <</script>><</repeat>><</silently>>
-<<script>>
-	setup.hintflag = false;
-<</script>>
-	/* 
-	$(document).one(':passagedisplay', function (ev) {
-		const textareaElem = document.getElementById("textarea-answer");
-		textareaElem.addEventListener('input', (event) => {
-			setup.answer = event.target.value;
-			if (event.target.value == ""){
-				$('#hidansbtn').css('display', 'none');
-				$('#hidesc').css('display', 'none');
-				$('#hidquiet').css('display', 'inline');
-			}
-			else{
-				$('#hidansbtn').css('display', 'inline');
-				$('#hidesc').css('display', 'none');
-				$('#hidquiet').css('display', 'none');
-			}
-		});
-
-	});
-	*/
 </div>\
 <<script>>
 	$(document).one(':passagedisplay', function (ev) {
+		setup.hintflag = false;
 		var span = document.getElementById('time');
 		setup.countdown = new Countdown(span, 181);
 		setup.countdown.init();
 		setup.countdown.start();
-		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / "+setup.memberNumber);
+		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer+" / "+setup.memberNumber);
 	});
 <</script>>
 :: 監視フェーズ
@@ -421,7 +395,7 @@ $(function() {
   	<ul id="answerlist"></ul>
     <<script>>
     $(document).one(':passagedisplay', function (ev) {
-		$("#passageGoCheck").text(setup.passageGoNumber[0]+" / "+setup.memberNumber);
+		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer+" / "+setup.memberNumber);
 		
 		$("#hidbtn button").prop("disabled", true);
     });
@@ -429,13 +403,6 @@ $(function() {
 	<span id="hidbtn" style="display: initial">\
 		<<button "次へ">>
 			<<script>>	
-				TwineGang.sendAnswer("", State.variables.name);
-				if(State.variables.answer == ""){
-					setup.correctAnswer++;
-				}
-				else{
-					setup.wrongAnswer++;
-				}
 				$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / " + setup.memberNumber);
 			<</script>>
 		<</button>>
