@@ -906,14 +906,15 @@ $(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.
 	$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[6]+&quot; / &quot;+setup.memberNumber);
 &lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;@@
 &lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
-	if(setup.wrongAnswer != 0){
-		Engine.play(&quot;END A&quot;);
-	}else if(setup.escapeName != &quot;&quot;){
-		Engine.play(&quot;END B&quot;);
-	}else{
-		Engine.play(&quot;END C&quot;);
+	if(setup.passageGoNumber[6] == setup.memberNumber){
+		if(setup.wrongAnswer != 0){
+			Engine.play(&quot;END A&quot;);
+		}else if(setup.escapeName != &quot;&quot;){
+			Engine.play(&quot;END B&quot;);
+		}else{
+			Engine.play(&quot;END C&quot;);
+		}
 	}
-}
 &lt;&lt;/script&gt;&gt;&lt;&lt;/repeat&gt;&gt;&lt;&lt;/silently&gt;&gt;
 
 

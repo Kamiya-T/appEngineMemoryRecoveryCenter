@@ -425,14 +425,15 @@ $("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnsw
 	$("#passageGoCheck").text(setup.passageGoNumber[6]+" / "+setup.memberNumber);
 <</script>><</button>>@@
 <<silently>><<repeat 1s>><<script>>
-	if(setup.wrongAnswer != 0){
-		Engine.play("END A");
-	}else if(setup.escapeName != ""){
-		Engine.play("END B");
-	}else{
-		Engine.play("END C");
+	if(setup.passageGoNumber[6] == setup.memberNumber){
+		if(setup.wrongAnswer != 0){
+			Engine.play("END A");
+		}else if(setup.escapeName != ""){
+			Engine.play("END B");
+		}else{
+			Engine.play("END C");
+		}
 	}
-}
 <</script>><</repeat>><</silently>>
 
 
