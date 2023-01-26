@@ -369,7 +369,7 @@ $("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnsw
 	<</script>>
 <</timed>>
 <<silently>><<repeat 1s>><<script>>
-	if(setup.correctAnswer + setup.wrongAnswer == setup.memberNumber){
+	if(setup.correctAnswer + setup.wrongAnswer + setup.escapeAnswer == setup.memberNumber){
 		Engine.play("エンディング判定");
 		setup.countdown.stop();
 	}
@@ -403,12 +403,12 @@ $("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnsw
 	<span id="hidbtn" style="display: initial">\
 		<<button "次へ">>
 			<<script>>	
-				$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+" / " + setup.memberNumber);
+				$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer" / " + setup.memberNumber);
 			<</script>>
 		<</button>>
 	</span>\
 	<<silently>><<repeat 1s>><<script>>
-		if(setup.correctAnswer + setup.wrongAnswer == setup.memberNumber){
+		if(setup.correctAnswer + setup.wrongAnswer + setup.escapeAnswer == setup.memberNumber){
 		Engine.play("エンディング判定");
 		setup.countdown.stop();
 	}
@@ -418,13 +418,22 @@ $("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnsw
 :: エンディング判定
 <div class = "text" id = "center">\
 <font size="6">通話チャンネルの休憩室にお戻りください。</font>
-<<if setup.wrongAnswer gt 0>>
-	[[エンディングへ|END A]]
-<<elseif setup.escapeName != "">>
-	[[エンディングへ|END B]]
-<<else>>
-	[[エンディングへ|END C]]
-<</if>>
+@@.buttonLarge;<<button '次へ<span id="passageGoCheck">0 / 3</span>'>><<script>>
+	$("#hidbtn button").prop("disabled", true);
+	TwineGang.clickButton(6);
+	setup.passageGoNumber[6]++;
+	$("#passageGoCheck").text(setup.passageGoNumber[6]+" / "+setup.memberNumber);
+<</script>><</button>>@@
+<<silently>><<repeat 1s>><<script>>
+	if(setup.wrongAnswer != 0){
+		Engine.play("END A");
+	}else if(setup.escapeName != ""){
+		Engine.play("END B");
+	}else{
+		Engine.play("END C");
+	}
+}
+<</script>><</repeat>><</silently>>
 
 
 </div>

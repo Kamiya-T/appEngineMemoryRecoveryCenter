@@ -854,7 +854,7 @@ $(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.
 	&lt;&lt;/script&gt;&gt;
 &lt;&lt;/timed&gt;&gt;
 &lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
-	if(setup.correctAnswer + setup.wrongAnswer == setup.memberNumber){
+	if(setup.correctAnswer + setup.wrongAnswer + setup.escapeAnswer == setup.memberNumber){
 		Engine.play(&quot;エンディング判定&quot;);
 		setup.countdown.stop();
 	}
@@ -886,12 +886,12 @@ $(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.
 	&lt;span id=&quot;hidbtn&quot; style=&quot;display: initial&quot;&gt;\
 		&lt;&lt;button &quot;次へ&quot;&gt;&gt;
 			&lt;&lt;script&gt;&gt;	
-				$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+&quot; / &quot; + setup.memberNumber);
+				$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer&quot; / &quot; + setup.memberNumber);
 			&lt;&lt;/script&gt;&gt;
 		&lt;&lt;/button&gt;&gt;
 	&lt;/span&gt;\
 	&lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
-		if(setup.correctAnswer + setup.wrongAnswer == setup.memberNumber){
+		if(setup.correctAnswer + setup.wrongAnswer + setup.escapeAnswer == setup.memberNumber){
 		Engine.play(&quot;エンディング判定&quot;);
 		setup.countdown.stop();
 	}
@@ -899,13 +899,22 @@ $(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.
 &lt;/div&gt;
 &lt;/div&gt;\</tw-passagedata><tw-passagedata pid="7" name="エンディング判定" tags="" position="850,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
 &lt;font size=&quot;6&quot;&gt;通話チャンネルの休憩室にお戻りください。&lt;/font&gt;
-&lt;&lt;if setup.wrongAnswer gt 0&gt;&gt;
-	[[エンディングへ|END A]]
-&lt;&lt;elseif setup.escapeName != &quot;&quot;&gt;&gt;
-	[[エンディングへ|END B]]
-&lt;&lt;else&gt;&gt;
-	[[エンディングへ|END C]]
-&lt;&lt;/if&gt;&gt;
+@@.buttonLarge;&lt;&lt;button &#39;次へ&lt;span id=&quot;passageGoCheck&quot;&gt;0 / 3&lt;/span&gt;&#39;&gt;&gt;&lt;&lt;script&gt;&gt;
+	$(&quot;#hidbtn button&quot;).prop(&quot;disabled&quot;, true);
+	TwineGang.clickButton(6);
+	setup.passageGoNumber[6]++;
+	$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[6]+&quot; / &quot;+setup.memberNumber);
+&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;@@
+&lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
+	if(setup.wrongAnswer != 0){
+		Engine.play(&quot;END A&quot;);
+	}else if(setup.escapeName != &quot;&quot;){
+		Engine.play(&quot;END B&quot;);
+	}else{
+		Engine.play(&quot;END C&quot;);
+	}
+}
+&lt;&lt;/script&gt;&gt;&lt;&lt;/repeat&gt;&gt;&lt;&lt;/silently&gt;&gt;
 
 
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="END A" tags="" position="975,100" size="100,100">&lt;div class = &quot;text&quot;&gt;\
