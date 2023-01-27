@@ -117,6 +117,10 @@ $(function() {
 }); 
 <</script>>
 <h1>キャラクター選択</h1><<set $startFlag to true>>
+<div class = "text" id = "center">
+自身の選択したPCのアイコンをクリックしてください。
+「検査官」はGMがいる場合にのみ、GMがクリックして使用します。
+</div>\
 <div  id = "loginList">	<a data-passage="Login" data-setter="$name to 'ヒダマリ'"><img class="hidamarib"></a>\     
 		<a data-passage="Login" data-setter="$name to 'フシグモ'"><img class="fusigumob"></a>\
 		<a data-passage="Login" data-setter="$name to 'ミン'"><img class="minnb"></a>\
