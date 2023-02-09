@@ -439,6 +439,7 @@ $("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnsw
 <</script>><</button>>@@
 </span>\
 <<silently>><<repeat 1s>><<script>>
+	$("#passageGoCheck").text(setup.passageGoNumber[6]+" / "+setup.memberNumber);
 	if(setup.passageGoNumber[6] == setup.memberNumber){
 		if(setup.wrongAnswer != 0){
 			Engine.play("END A");

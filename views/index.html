@@ -427,9 +427,9 @@ div.box{
   align-items: center;
   margin: 0 auto;
   padding: 1em 2em;
-  width: 300px;
+  width: 325px;
   color: #333;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   background-color: #cccccc;
   box-shadow: 0 5px 0 #aaaaaa;
@@ -930,6 +930,7 @@ $(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.
 &lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;@@
 &lt;/span&gt;\
 &lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
+	$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[6]+&quot; / &quot;+setup.memberNumber);
 	if(setup.passageGoNumber[6] == setup.memberNumber){
 		if(setup.wrongAnswer != 0){
 			Engine.play(&quot;END A&quot;);
