@@ -496,6 +496,14 @@ h1::after{
 !function(n,e,s){function o(n){var e=r.className,s=Modernizr._config.classPrefix||"";if(c&&(e=e.baseVal),Modernizr._config.enableJSClass){var o=new RegExp("(^|\\s)"+s+"no-js(\\s|$)");e=e.replace(o,"$1"+s+"js$2")}Modernizr._config.enableClasses&&(e+=" "+s+n.join(" "+s),c?r.className.baseVal=e:r.className=e)}function a(n,e){return typeof n===e}function i(){var n,e,s,o,i,l,r;for(var c in f)if(f.hasOwnProperty(c)){if(n=[],e=f[c],e.name&&(n.push(e.name.toLowerCase()),e.options&&e.options.aliases&&e.options.aliases.length))for(s=0;s<e.options.aliases.length;s++)n.push(e.options.aliases[s].toLowerCase());for(o=a(e.fn,"function")?e.fn():e.fn,i=0;i<n.length;i++)l=n[i],r=l.split("."),1===r.length?Modernizr[r[0]]=o:(!Modernizr[r[0]]||Modernizr[r[0]]instanceof Boolean||(Modernizr[r[0]]=new Boolean(Modernizr[r[0]])),Modernizr[r[0]][r[1]]=o),t.push((o?"":"no-")+r.join("-"))}}var t=[],f=[],l={_version:"3.6.0",_config:{classPrefix:"",enableClasses:!0,enableJSClass:!0,usePrefixes:!0},_q:[],on:function(n,e){var s=this;setTimeout(function(){e(s[n])},0)},addTest:function(n,e,s){f.push({name:n,fn:e,options:s})},addAsyncTest:function(n){f.push({name:null,fn:n})}},Modernizr=function(){};Modernizr.prototype=l,Modernizr=new Modernizr;var r=e.documentElement,c="svg"===r.nodeName.toLowerCase();i(),o(t),delete l.addTest,delete l.addAsyncTest;for(var u=0;u<Modernizr._q.length;u++)Modernizr._q[u]();n.Modernizr=Modernizr}(window,document);</script>
 <meta http-equiv="Content-Language" content="ja">
 <meta name="google" content="notranslate">
+<script src="/socket.io/socket.io.js"></script>
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
 </head>
 <body>
 	<div id="init-screen">
@@ -518,7 +526,7 @@ if (document.location.href.toLowerCase().includes("/temp/") || document.location
 setup.JSLoaded = false;
 
 var lockID = LoadScreen.lock();  // Lock loading screen
-importScripts(setup.Path + "socket.io.js", setup.Path + "microevent.js").then(function() {
+importScripts(setup.Path + "microevent.js").then(function() {
     importScripts(setup.Path + "tg_client.js").then(function() {
 		setup.JSLoaded = true;
 		setup.memberUpdate = false;
@@ -688,7 +696,8 @@ $(function() {
     &lt;&lt;/script&gt;&gt;
 &lt;div class=&quot;manual&quot;&gt;
     &lt;span id=&quot;message&quot;&gt;1. 被験者全員のログインを確認する。
-	2. 被験者全員の準備が出来次第、検査官との面談を実施する。&lt;/span&gt;
+	2. ログインが確認でき次第、被験者は全員個室へ移動する。
+	3. 被験者全員の準備が出来次第、検査官との面談を実施する。&lt;/span&gt;
 	
 	&lt;span id=&quot;hidbtn&quot; style=&quot;display: initial&quot;&gt;\
 		@@.buttonLarge;&lt;&lt;button &#39;次へ&lt;span id=&quot;passageGoCheck&quot;&gt;0 / 0&lt;/span&gt;&#39;&gt;&gt;
@@ -696,7 +705,7 @@ $(function() {
 				$(&quot;#hidbtn button&quot;).prop(&quot;disabled&quot;, true);
 				TwineGang.clickButton(0);
 				setup.passageGoNumber[0]++;
-				$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[0]+&quot; / &quot;+setup.memberNumber);
+				$(&quot;#passageGoCheck&quot;).text(&quot;個室へ移動してください &quot; + setup.passageGoNumber[0]+&quot; / &quot;+setup.memberNumber);
 			&lt;&lt;/script&gt;&gt;
 		&lt;&lt;/button&gt;&gt;@@
 	&lt;/span&gt;\
@@ -911,12 +920,14 @@ $(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.
 &lt;/div&gt;
 &lt;/div&gt;\</tw-passagedata><tw-passagedata pid="7" name="エンディング判定" tags="" position="850,100" size="100,100">&lt;div class = &quot;text&quot; id = &quot;center&quot;&gt;\
 &lt;font size=&quot;6&quot;&gt;通話チャンネルの休憩室にお戻りください。&lt;/font&gt;
+&lt;span id=&quot;hidbtn&quot; style=&quot;display: initial&quot;&gt;\
 @@.buttonLarge;&lt;&lt;button &#39;次へ&lt;span id=&quot;passageGoCheck&quot;&gt;0 / 3&lt;/span&gt;&#39;&gt;&gt;&lt;&lt;script&gt;&gt;
 	$(&quot;#hidbtn button&quot;).prop(&quot;disabled&quot;, true);
 	TwineGang.clickButton(6);
 	setup.passageGoNumber[6]++;
 	$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[6]+&quot; / &quot;+setup.memberNumber);
 &lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;@@
+&lt;/span&gt;\
 &lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
 	if(setup.passageGoNumber[6] == setup.memberNumber){
 		if(setup.wrongAnswer != 0){
@@ -1889,7 +1900,8 @@ $(document).one(&quot;:passagedisplay&quot;, function (event) {
 &quot;https://drive.google.com/uc?id=1BLEKL2foEZKwgZ6-DILSBftJFI8_o2jc&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="END LIST" tags="" position="100,350" size="100,100">&lt;div class = &quot;text&quot;&gt;\
 
 お疲れさまでした。
-以下がエンディングのリストになります。
+真相を知るためには、真相PDFをご確認ください。
+また、以下が他のエンディングになります。
 
 [[誰かが検査官の質問に回答している場合|ENDASHOW]]
 
