@@ -700,12 +700,13 @@ $(function() {
 	3. 被験者全員の準備が出来次第、検査官との面談を実施する。&lt;/span&gt;
 	
 	&lt;span id=&quot;hidbtn&quot; style=&quot;display: initial&quot;&gt;\
-		@@.buttonLarge;&lt;&lt;button &#39;次へ&lt;span id=&quot;passageGoCheck&quot;&gt;0 / 0&lt;/span&gt;&#39;&gt;&gt;
+		@@.buttonLarge;&lt;&lt;button &#39;&lt;span id=&quot;gonextpls&quot;&gt;次へ &lt;/span&gt;&lt;span id=&quot;passageGoCheck&quot;&gt;0 / 0&lt;/span&gt;&#39;&gt;&gt;
 		  	&lt;&lt;script&gt;&gt;
 				$(&quot;#hidbtn button&quot;).prop(&quot;disabled&quot;, true);
 				TwineGang.clickButton(0);
 				setup.passageGoNumber[0]++;
-				$(&quot;#passageGoCheck&quot;).text(&quot;個室へ移動してください &quot; + setup.passageGoNumber[0]+&quot; / &quot;+setup.memberNumber);
+				$(&quot;#gonextpls&quot;).text(&quot;個室へ移動して下さい &quot;);
+				$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[0]+&quot; / &quot;+setup.memberNumber);
 			&lt;&lt;/script&gt;&gt;
 		&lt;&lt;/button&gt;&gt;@@
 	&lt;/span&gt;\
