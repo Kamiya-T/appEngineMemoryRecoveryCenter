@@ -79,7 +79,10 @@ io.on('connection', (socket) => {
   });
 
   socket.on('sendAnswer', (answer, name) =>{
-    if(answer == ""){
+    if(name == '検査官'){
+      socket.broadcast.to(roomName).emit('otherAnswer', answer, name, 2);
+    }
+    else if(answer == ""){
       socket.broadcast.to(roomName).emit('otherAnswer', answer, name, 0);
     }
     else{

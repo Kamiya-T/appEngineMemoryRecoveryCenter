@@ -533,6 +533,8 @@ importScripts(setup.Path + "microevent.js").then(function() {
 		setup.passageGoNumber = Array(10);
 		setup.passageGoNumber.fill(0)
 		setup.memberNumber = 0;
+		setup.adminNumber = 0;
+		setup.adminAnswer = 0;
 		setup.correctAnswer = 0;
 		setup.escapeAnswer = 0;
 		setup.wrongAnswer = 0;
@@ -552,12 +554,14 @@ importScripts(setup.Path + "microevent.js").then(function() {
 	TwineGang.bind("newMember", (data)=>{
 		setup.MemberList.push(data);
 		setup.memberNumber = 0;
+		setup.adminNumber = 0;
 		let element = document.getElementById('memberlist');
 		while(element.firstChild){
 			element.removeChild(element.firstChild);
 		}
 		for (let member of setup.MemberList) {
 			if(member  != '検査官'){setup.memberNumber++;}
+			else{setup.adminNumber++;}
 			let li = document.createElement('li');
 			li.textContent = member;
 			document.getElementById('memberlist').appendChild(li);
@@ -572,15 +576,19 @@ importScripts(setup.Path + "microevent.js").then(function() {
 		if(id == 0){
 			setup.correctAnswer++;
 		}
-		else{
+		else if (id == 1){
 			setup.wrongAnswer++;
+		}
+		else if (id == 2){
+			setup.adminAnswer++;
 		}
 		if(State.variables.name == '検査官'){
 			let li = document.createElement('li');
-            li.textContent = name + " : " + answer;
-            document.getElementById('answerlist').appendChild(li);
+      li.textContent = name + " : " + answer;
+      document.getElementById('answerlist').appendChild(li);
+			$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer +"/" + setup.memberNumber +" : "+setup.adminAnswer + "/" +setup.adminNumber);
 		}
-		$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer+" / "+setup.memberNumber);
+		else{$("#passageGoCheck").text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer+" / "+setup.memberNumber);}
 	});
 	TwineGang.bind("escapeAnswer", (name)=>{
 		setup.escapeName = name;
@@ -682,13 +690,15 @@ $(function() {
     &lt;&lt;script&gt;&gt;
     $(document).one(&#39;:passagedisplay&#39;, function (ev) {
 		setup.memberNumber = 0;
-        for (let member of setup.MemberList) {
-			if(member  != &#39;検査官&#39;){setup.memberNumber++;}
-            let li = document.createElement(&#39;li&#39;);
-            li.textContent = member;
-            document.getElementById(&#39;memberlist&#39;).appendChild(li);
-			setup.tempflag = true;
-        }
+		setup.adminNumber = 0;
+      for (let member of setup.MemberList) {
+				if(member  != &#39;検査官&#39;){setup.memberNumber++;}
+				else{setup.adminNumber++;}
+        let li = document.createElement(&#39;li&#39;);
+        li.textContent = member;
+        document.getElementById(&#39;memberlist&#39;).appendChild(li);
+				setup.tempflag = true;
+      }
 		$(&quot;#passageGoCheck&quot;).text(setup.passageGoNumber[0]+&quot; / &quot;+setup.memberNumber);
 		$(&quot;#passageRoomNum&quot;).text(&quot;&quot;+setup.RoomNum);
 		$(&quot;#hidbtn button&quot;).prop(&quot;disabled&quot;, true);
@@ -871,28 +881,29 @@ $(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.
 &lt;&lt;/timed&gt;&gt;
 &lt;&lt;timed 30s&gt;&gt;
 	&lt;&lt;script&gt;&gt;
-		setup.hintflag = true;
+		setup.hintShow = true;
 	&lt;&lt;/script&gt;&gt;
 &lt;&lt;/timed&gt;&gt;
 &lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
-	if(setup.correctAnswer + setup.wrongAnswer + setup.escapeAnswer == setup.memberNumber){
+	if(setup.correctAnswer + setup.wrongAnswer + setup.escapeAnswer + setup.adminAnswer == (setup.memberNumber+setup.adminNumber)){
 		Engine.play(&quot;エンディング判定&quot;);
 		setup.countdown.stop();
 	}
-	if(setup.hintflag &amp;&amp; setup.answer == &quot;&quot;){
+	if(setup.hintShow &amp;&amp; setup.hintflag &amp;&amp; setup.answer == &quot;&quot;){
 		$(&#39;#quiet&#39;).css(&#39;display&#39;, &#39;inline-block&#39;);
-	}
+	}else{$(&#39;#quiet&#39;).css(&#39;display&#39;, &#39;none&#39;);}
 	$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer+&quot; / &quot;+setup.memberNumber);
 &lt;&lt;/script&gt;&gt;&lt;&lt;/repeat&gt;&gt;&lt;&lt;/silently&gt;&gt;
 &lt;/div&gt;\
 &lt;&lt;script&gt;&gt;
 	$(document).one(&#39;:passagedisplay&#39;, function (ev) {
-		setup.hintflag = false;
+		setup.hintflag = true;
+		setup.hintShow = false;
 		var span = document.getElementById(&#39;time&#39;);
 		setup.countdown = new Countdown(span, 181);
 		setup.countdown.init();
 		setup.countdown.start();
-		$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer+&quot; / &quot;+setup.memberNumber);
+		$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer +&quot; / &quot;+setup.memberNumber);
 	});
 &lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="6" name="監視フェーズ" tags="" position="725,100" size="100,100">&lt;div class=&quot;text&quot;&gt;\
 
@@ -900,20 +911,18 @@ $(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.
   	&lt;ul id=&quot;answerlist&quot;&gt;&lt;/ul&gt;
     &lt;&lt;script&gt;&gt;
     $(document).one(&#39;:passagedisplay&#39;, function (ev) {
-		$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer+&quot; / &quot;+setup.memberNumber);
-		
-		$(&quot;#hidbtn button&quot;).prop(&quot;disabled&quot;, true);
+		$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer +&quot;/&quot; + setup.memberNumber +&quot; : &quot;+setup.adminAnswer + &quot;/&quot; +setup.adminNumber);
     });
     &lt;&lt;/script&gt;&gt;
 	&lt;span id=&quot;hidbtn&quot; style=&quot;display: initial&quot;&gt;\
-		&lt;&lt;button &quot;次へ&quot;&gt;&gt;
-			&lt;&lt;script&gt;&gt;	
-				$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer&quot; / &quot; + setup.memberNumber);
-			&lt;&lt;/script&gt;&gt;
-		&lt;&lt;/button&gt;&gt;
+	@@.buttonLarge;&lt;&lt;button &#39;次へ&lt;span id=&quot;passageGoCheck&quot;&gt;0 / 3&lt;/span&gt;&#39;&gt;&gt;&lt;&lt;script&gt;&gt;
+		$(&quot;#passageGoCheck&quot;).text(setup.correctAnswer+setup.wrongAnswer+setup.escapeAnswer +&quot;/&quot; + setup.memberNumber +&quot; : &quot;+setup.adminAnswer + &quot;/&quot; +setup.adminNumber);
+		setup.adminAnswer++;
+		TwineGang.sendAnswer(&quot;&quot;, State.variables.name);
+	&lt;&lt;/script&gt;&gt;&lt;&lt;/button&gt;&gt;@@
 	&lt;/span&gt;\
 	&lt;&lt;silently&gt;&gt;&lt;&lt;repeat 1s&gt;&gt;&lt;&lt;script&gt;&gt;
-		if(setup.correctAnswer + setup.wrongAnswer + setup.escapeAnswer == setup.memberNumber){
+		if(setup.correctAnswer + setup.wrongAnswer + setup.escapeAnswer + setup.adminAnswer &gt;= (setup.memberNumber+setup.adminNumber)){
 		Engine.play(&quot;エンディング判定&quot;);
 		setup.countdown.stop();
 	}
