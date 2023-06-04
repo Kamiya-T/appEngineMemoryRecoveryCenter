@@ -30,15 +30,14 @@ var http_server = http.createServer( app );
 //ディレクトリ内を提供
 app.use(express.static('public'));
 
-//
-console.log('Start Listening');
-https_server.listen(https_port);
 
 //add HSTS
 app.use( function( req, res, next ){
   res.setHeader( 'Strict-Transport-Security', 'max-age=15552000' );
   next();
 });
+
+console.log('Start Listening');
 http_server.listen(http_port);
 https_server.listen(https_port);
 
