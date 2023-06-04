@@ -1,0 +1,400 @@
+@charset "utf8";
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Share+Tech+Mono&display=swap');
+
+/* 時計の共通スタイル */
+#escapeClock.clock{
+  text-shadow: 0 0 0 #000000; /* 文字を発光させる */
+  font-family: 'Open Sans'
+}
+.clock {
+  font-family: 'Share Tech Mono', monospace;
+  color: #000; /* 文字の色 */
+  text-shadow: 0 0 20px #0aafe6; /* 文字を発光させる */
+  line-height: 1.2; /* 文字の高さ */
+  text-align: center; /* 文字を中央に寄せる */
+}
+/* 日付のスタイル */
+.clock-date {
+  font-size: 25px;
+}
+
+/* 時間のスタイル */
+.clock-time {
+  font-size: 100px;
+}
+.base-timer {
+  position: relative;
+  width: 300px;
+  height: 300px;
+}
+
+/* 文字サイズ調整 */
+@media screen and (max-width: 500px) {
+  .clock-date {
+    font-size: 5vw;
+  }
+  .clock-time {
+    font-size: 20vw;
+  }
+}
+/* テキスト入力 */
+input:not(:disabled):focus, input:not(:disabled):hover, select:not(:disabled):focus, select:not(:disabled):hover, textarea:not(:disabled):focus, textarea:not(:disabled):hover {
+  background-color: white;
+  border-color: black;
+  color:#000
+}
+input[type="text"] {
+	background-color: white;
+  color:#000
+}
+input[type="text"]:hover {
+	background-color: white;
+  color:#000
+}
+input[type="text"]:focus {
+	background-color: white;
+  color:#000
+}
+input[type="number"]{
+  background-color: white;
+  color:#000
+}
+input[type="number"]:hover {
+	background-color: white;
+  color:#000
+}
+input[type="number"]:focus{
+  background-color: white;
+  color:#000
+}
+.macro-textarea{
+  background-color: white;
+  color:#000;
+  padding: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  margin:auto;
+}
+.macro-textarea:hover{
+  background-color: white;
+  color:#000
+}
+.macro-textarea:focus{
+  background-color: white;
+  color:#000
+}
+
+/* 背景、全体 */
+body {
+  background-image: url("https://drive.google.com/uc?id=1AmA4XyXI0pB-wi4c0rvnkxCTw7Fybebr");
+  background-attachment: fixed; 
+  background-repeat: repeat;
+  height:auto;
+  min-height: 90vh;
+  font-size: 110%;
+}
+
+#ui-overlay{
+  height :auto;
+}
+#passages{
+  height:auto;
+  width:auto;
+  min-width: 80vw;
+  min-height: 80vh;
+}
+
+.text{
+  border: 7px solid white;
+  color: #444444;
+  background-color: white;
+  padding-right: 5em;
+  padding-left: 5em;
+  min-height:80vh;
+  height:auto;
+  position: relative;
+	padding-bottom: 3rem;
+}
+
+#center{
+  text-align: center;
+  align-items: center;
+}
+.btn-group button {
+	text-align: center;
+	margin: auto;
+}
+/* Bottom Bar styling - Start */
+#bottombar {
+	position: fixed;
+	left: 0;
+  bottom: 0;
+	width: 100%;
+	background-color: transparent;
+  z-index: 40;
+}
+.bottomdiv{
+  position:absolute;
+  bottom:0;
+  left:auto;
+}
+#bbblock {
+	margin-left: 2.5em;
+	margin-right: 2.5em;
+	-o-transition: margin .2s ease-in;
+    transition: margin .2s ease-in;
+}
+#bbtext {
+	text-align: left;
+    max-width: 25em;
+}
+#ui-bar.stowed~#story #bbblock {
+	margin-left: 4.5em;
+}
+@media screen and (max-width: 1136px) {
+	#bbblock {
+		margin-left: 1.5em;
+		margin-right: 1.5em;
+	}
+	#ui-bar.stowed~#story #bbblock {
+		margin-left: 1.5em;
+	}
+}
+@media screen and (max-width: 768px) {
+	#bbblock {
+		margin-left: 1.5em;
+	}
+}
+/* Bottom Bar styling - End */
+
+/* SugarCube's built-in Font Awesome icons - Start */
+.sc-fa {
+	font-family: tme-fa-icons;
+	font-style: normal;
+	font-weight: 400;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	speak: none;
+}
+.sc-icon {
+	padding-left: 4px;
+}
+.sc-icon::before {
+	font-family: tme-fa-icons;
+	font-style: normal;
+	font-weight: 400;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	speak: none;
+}
+.sc-power::before {
+	content: "\e82c\00a0";
+}
+.sc-backward::before {
+	content: "\e845\00a0";
+}
+/* SugarCube's built-in Font Awesome icons - End */
+
+.macro-button {
+	background-color: #ddd;
+	color: black;
+	border: none;
+	border-radius: 16px;
+	padding: 10px 20px;
+	text-align: left;
+	margin-right: 1em;
+}
+button:disabled {
+    background-color: #444;
+    border: 0px;
+}
+
+img.fusigumo{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1BJ-L0M9PVctUgoTRvhVQdnZ53Eo3dxWO);
+  width:100px;height:100px;
+}
+img.hidamari{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1BHQWP3o_OYnl2qpMN0bf9cvNZm05_U0e);
+  width:100px;height:100px;
+}
+img.minn{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1BLEKL2foEZKwgZ6-DILSBftJFI8_o2jc);
+  width:100px;height:100px;
+}
+img.fusigumo2{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1BoImjSBoCtBPVBJvB5ELG0tYQMq3QaD3);
+  width:100px;height:100px;
+}
+img.hidamari2{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1Bk5NTi6CM8WyLWoWyESuSuYk7eMLms1c);
+  width:100px;height:100px;
+}
+img.minn2{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1BcWCA2TCX0aUaVQutMwJRisnWlUZRonT);
+  width:100px;height:100px;
+}
+img.fusigumob{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1BJ-L0M9PVctUgoTRvhVQdnZ53Eo3dxWO);
+  width:200px;height:200px;
+}
+img.hidamarib{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1BHQWP3o_OYnl2qpMN0bf9cvNZm05_U0e);
+  width:200px;height:200px;
+}
+img.minnb{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1BLEKL2foEZKwgZ6-DILSBftJFI8_o2jc);
+  width:200px;height:200px;
+}
+
+img.kensa{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1BPfQaJAInwwQgKQ4pYecfIVAWcHW8tF0);
+  width:100px;height:100px;
+}
+
+img.kensab{
+  display:inline-block;
+  vertical-align: middle;
+  content:url(https://drive.google.com/uc?id=1BPfQaJAInwwQgKQ4pYecfIVAWcHW8tF0);
+  width:200px;height:200px;
+}
+p.side_text{
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.passage table {
+  margin :auto;
+}
+
+div.box{
+  text-align: center;
+}
+
+#loginList{
+  height:auto;
+  width:100%;
+  position: absolute;          /* 位置指定 */
+  top: 50%;                    /* 親要素の半分下にずらす */
+  left: 50%;                   /* 親要素の半分右にずらす */
+  transform: translateY(-50%) translateX(-50%);    /* 要素自体の半分、上と左にずらす */
+}
+
+
+.flex{
+  display:flex;
+}
+.between{
+  justify-content: space-between;
+}
+
+.item{
+  border-top: solid 5px #5d627b;
+  display:flex;
+  flex-direction:column;
+  width:40%;
+  padding:20px;
+  height:auto;
+}
+.manual{
+  padding: 0.5em 1em;
+  margin: auto;
+  color: #5d627b;
+  background: white;
+  border-top: solid 5px #5d627b;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
+  width: fit-content;
+}
+.buttonLarge{
+  margin-top: auto;
+}
+.buttonLarge button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  padding: 1em 2em;
+  width: 325px;
+  color: #333;
+  font-size: 16px;
+  font-weight: 700;
+  background-color: #cccccc;
+  box-shadow: 0 5px 0 #aaaaaa;
+  transition: 0.3s;
+}
+
+.buttonLarge button::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-top: 3px solid #333333;
+  border-right: 3px solid #333333;
+  transform: rotate(45deg);
+}
+
+.buttonLarge button:hover {
+  transform: translateY(3px);
+  text-decoration: none;
+  box-shadow: 0 2px 0 #aaaaaa;
+}
+
+.roomNumber {
+  padding: 0.5em 1em;
+  margin: 2em 0;
+  color: #232323;
+  background: #e8ecff;
+  border-left: solid 10px #333333;
+}
+.roomNumber p {
+  margin: 0; 
+  padding: 0;
+}
+
+ul, ol {
+  color: #1e366a;
+  border-top: solid #1e366a 2px;/*上のボーダー*/
+  border-bottom: solid #1e366a 2px;/*下のボーダー*/
+  padding: 0.5em 0 0.5em 1.5em;
+}
+
+ul li, ol li {
+  line-height: 1.5;
+  padding: 0.5em 0;
+}
+
+
+h1 {
+     text-align: center;
+     position: relative;
+     padding: 0 0 12px;
+}
+h1::after{
+     position: absolute;
+     content: "";
+     left: 0;
+     right: 0;
+     bottom: 0;
+     width: 300px;
+     margin: auto;
+     border-bottom: 2px solid #1e366a;
+} 

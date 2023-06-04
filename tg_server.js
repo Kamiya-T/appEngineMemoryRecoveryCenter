@@ -1,43 +1,53 @@
-//expressモジュールの読み込み
+//　モジュールの読み込み
+const fs = require('fs');
+const http = require ('http');
+const https = require ('https');
 const express = require('express');
+
+// 定数
+const https_port = 443;
+const http_port = 80;
 //expressのインスタンス化
 const app = express();
-app.use('/assets', express.static(__dirname + '/assets'));
-app.use('/client', express.static(__dirname + '/client'));
 
-var fs = require('fs');
-var https = require ('https');
-var http = require ('http');
+//認証
 var options = {
   key: fs.readFileSync( "/etc/letsencrypt/live/mivsflightlessairship.com/privkey.pem" ),
   cert: fs.readFileSync( "/etc/letsencrypt/live/mivsflightlessairship.com/fullchain.pem" )
 };
-var https_server = https.createServer(options, app);
-var http_server = http.createServer(app);
+
+app.use('/assets', express.static(__dirname + '/public/assets'));
+app.use('/client', express.static(__dirname + '/public/client'));
 
 app.use( function( req, res, next ){
   res.setHeader( 'Strict-Transport-Security', 'max-age=15552000' );
   next();
 });
 
-//まずページを返す
-app.get('/memRecCenter', function (req, res) {
-  console.log('app.get => sendFile');
-  res.sendFile(__dirname + '/views/index.html');
+var https_server = https.createServer( options, app );
+var http_server = http.createServer( app );
+
+//ディレクトリ内を提供
+app.use(express.static('public'));
+
+//
+console.log('Start Listening');
+https_server.listen(https_port);
+
+//add HSTS
+app.use( function( req, res, next ){
+  res.setHeader( 'Strict-Transport-Security', 'max-age=15552000' );
+  next();
 });
-app.get('/test', function (req, res) {
-  res.contentType( "text/plain" );
-  res.writeHead( 200 );
-  res.end( "接続が確認できました。ありがとうございます。" );
-});
-app.get('/', function (req, res) {
-  console.log('app.get => sendFile');
-  res.sendFile(__dirname + '/views/index.html');
-});
-// Room name => client count
+http_server.listen(http_port);
+https_server.listen(https_port);
+
+console.log( "server starting on " + http_port + ' / ' + https_port + ' ...' );
+
+//ここからログイン処理
 var rooms = {};
 //接続があった
-var io = require('socket.io')(https_server);
+const io = require('socket.io')(https_server);
 io.on('connection', (socket) => {
   console.log('イベント発生、クライアントとの接続が確立されました.');
   var roomName = 0;
@@ -126,13 +136,11 @@ io.on('connection', (socket) => {
   //********************BIND END*************************/
 });
 
-
-
-// Build a room number like '867-5309'
+// Build a room number
 function createRoomName() {
   console.log('createRoomNameを実行しました.');
   let room;
-  do {room =  Math.floor(Math.random() * 9999);}
+  do {room =  1000 + Math.floor(Math.random() * 9000);}
   while (room in rooms);
   return room;
 }
@@ -158,6 +166,8 @@ function leaveRoom(socket, roomName, userName) {
   } else {
     delete rooms[roomName];
     console.log('部屋を破壊します.');
+    let len = Object.values(rooms).length;
+    console.log('残部屋数:'+len);
   }
 }
 
@@ -181,11 +191,3 @@ function joinRoom(socket, roomName, userName) {
     socket.isServer = true;
   }
 }
-
-var https_port = 443;
-var http_port = 80;
-console.log('Start Listening');
-https_server.listen(https_port);
-http_server.listen(http_port);
-
-console.log( "server starging on " + http_port + ' / ' + https_port + ' ...' );

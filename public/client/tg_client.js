@@ -86,24 +86,20 @@
   TGClient.prototype.clickButton = function(id) {
     console.log("TGClient.clickButton");
     this._socket.emit('clickButton', id);
-    // console.log('emitted click');
   };
 
   TGClient.prototype.sendAnswer = function(answer, name) {
     console.log("TGClient.sendAnswer");
     this._socket.emit('sendAnswer', answer, name);
-    // console.log('emitted click');
   };
 
   TGClient.prototype.sendEscape = function(password, name) {
     console.log("TGClient.sendEscape");
     this._socket.emit('sendEscape', password, name);
-    // console.log('emitted click');
   };
   TGClient.prototype.sendSacrifice = function(num) {
     console.log("TGClient.sendSacrifice");
     this._socket.emit('sendSacrifice', num);
-    // console.log('emitted click');
   };
 
   TGClient.prototype.sendHelp = function(help) {
