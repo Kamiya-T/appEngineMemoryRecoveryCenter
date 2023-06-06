@@ -56,6 +56,8 @@ io.on('connection', (socket) => {
     console.log('イベント発生、createRoomNameを受信しました.');
     roomName = createRoomName();
     joinRoom(socket, roomName, userName);
+    let len = Object.values(rooms).length;
+    console.log('残部屋数:'+len);
     socket.emit("roomInfo", roomName);
   })
 
