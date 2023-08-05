@@ -1431,11 +1431,6 @@ Eエンド
 	<</script>>
 <</button>>
 </span>
-<span id="backbtn" class="inline">
-<<button '<span class="sc-icon sc-backward" style="display: inline-block;"></span> 一つ戻る'>>
-<<run Engine.backward()>>
-<</button>>
-</span>
 
 <<script>>
 $(document).one(":passagedisplay", function (event) {
