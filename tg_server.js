@@ -28,7 +28,7 @@ var https_server = https.createServer( options, app );
 var http_server = http.createServer( app );
 
 //ディレクトリ内を提供
-app.use(express.static('public'), {dotfiles: 'allow'}));
+app.use(express.static(('public'), {dotfiles: 'allow'}));
 
 
 //add HSTS
