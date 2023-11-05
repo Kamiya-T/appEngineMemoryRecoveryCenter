@@ -3,7 +3,7 @@ const fs = require('fs');
 const http = require ('http');
 const https = require ('https');
 const express = require('express');
-
+const sslKeyPath = "/etc/letsencrypt/live/mivsflightlessairship.com/privkey.pem";
 // 定数
 const https_port = 443;
 const http_port = 80;
@@ -11,10 +11,12 @@ const http_port = 80;
 const app = express();
 
 //認証
-var options = {
-  key: fs.readFileSync( "/etc/letsencrypt/live/mivsflightlessairship.com/privkey.pem" ),
-  cert: fs.readFileSync( "/etc/letsencrypt/live/mivsflightlessairship.com/fullchain.pem" )
-};
+function readCertsSync() {
+  return {
+      key: fs.readFileSync(sslKeyPath),
+      cert: fs.readFileSync("/etc/letsencrypt/live/mivsflightlessairship.com/fullchain.pem")
+  }
+}
 
 app.use('/assets', express.static(__dirname + '/public/assets'));
 app.use('/client', express.static(__dirname + '/public/client'));
@@ -24,7 +26,7 @@ app.use( function( req, res, next ){
   next();
 });
 
-var https_server = https.createServer( options, app );
+var https_server = https.createServer( readCertsSync(), app );
 var http_server = http.createServer( app );
 
 //ディレクトリ内を提供
@@ -39,9 +41,18 @@ app.use( function( req, res, next ){
 
 console.log('Start Listening');
 http_server.listen(http_port);
-https_server.listen(https_port);
+let httpsd = https_server.listen(https_port);
+//証明書の更新を行う
 
-console.log( "server starting on " + http_port + ' / ' + https_port + ' ...' );
+let waitForCertAndFullChainToGetUpdatedTooTimeout;
+fs.watch(sslKeyPath, () =>{
+  clearTimeout(waitForCertAndFullChainToGetUpdatedTooTimeout);
+  waitForCertAndFullChainToGetUpdatedTooTimeout = setTimeout(() => {
+    httpsd.setSecureContext(readCertsSync());
+  }, 1000);
+});
+
+console.log( "server started on " + http_port + ' / ' + https_port + ' ...' );
 
 //ここからログイン処理
 var rooms = {};
