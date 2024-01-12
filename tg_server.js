@@ -59,7 +59,7 @@ var rooms = {};
 //接続があった
 const io = require('socket.io')(https_server);
 io.on('connection', (socket) => {
-  let now = new Date();
+  let now = new new Date().toLocaleString({ timeZone: 'Asia/Tokyo' })
   console.log(now);
   console.log('イベント発生、クライアントとの接続が確立されました.');
   var roomName = 0;
